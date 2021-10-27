@@ -1,0 +1,84 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | WIOA </title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{% static 'lib/adminlte-3.1.0/plugins/fontawesome-free/css/all.min.css' %}">
+    
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{% static 'lib/adminlte-3.1.0/css/adminlte.min.css' %}">
+
+</head>
+<body class="hold-transition login-page">
+
+    <div class="login-box">
+        <!-- /.login-logo -->
+        <div class="card card-outline card-primary">
+            <div class="card-header text-center">
+                <h1><b>WIOA</b></h1>
+            </div>
+            <div class="card-body">
+                <p class="login-box-msg">Ingrese sus datos..</p>
+
+                <form method="post">
+                    {% csrf_token %}
+                    {% if form.non_fields.error %}
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            {{ form.non_fields.error }}
+                        </div>
+                    {% endif %}
+                    
+                    <div class="input-group mb-3" action="{% url 'login' %}">
+                        {% if request.method == 'POST' %} 
+                            {% if form.error_messages %}
+                                <div class="alert alert-danger alert-dismissible" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                                        <span aria-hiden="true">&times;</span>
+                                    </button>
+                                    <strong>Advertencia: </strong> {{ form.get_invalid_login_error }}
+                                </div>
+                            {% endif %}
+                        {% endif %}
+
+                        {{ form.username }}
+                        <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-fas fa-user"></span>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        {{ form.password }}
+                        <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                        <button type="submit" class="btn btn-primary btn-block">LOG-IN</button>
+                        </div>
+                    </div>
+                </form>
+            </div> <!-- /.card-body -->
+        </div> <!-- /.card -->
+    </div> <!-- /.login-box -->
+    
+
+    <!-- Scripts -->
+    <!-- jQuery -->
+    <script src="{% static 'lib/adminlte-3.1.0/plugins/jquery/jquery.min.js' %}"></script>
+    <!-- Bootstrap 4 -->
+    <script src="{% static 'lib/adminlte-3.1.0/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <!-- AdminLTE App -->
+    <script src="{% static 'lib/adminlte-3.1.0/js/adminlte.min.js' %}"></script>
+    
+</body>
+</html>
