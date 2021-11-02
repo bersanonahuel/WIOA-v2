@@ -1,28 +1,39 @@
 from django.contrib import admin
-from.models import Alumno, Maestro ,CentroGestion ,Servicio 
+from .models import Alumno, Maestro, Escuela, Municipio, EncargadoLegal, Cliente, Proveedor
 
 class AlumnoAdmin(admin.ModelAdmin):
-    search_fields=['apellido']
-    list_display = ('apellido', 'nombre')
+    search_fields=['apellidoPaterno', 'apellidoMaterno', 'nombre']
+    list_display = ('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno', 'nivelEscolar', 'direccion', 'email', 'telefono', 'escuela', 'escargado_legal')
+
+class EncargadoLegalAdmin(admin.ModelAdmin):
+    search_fields=['nombre']
+    list_display=('id', 'nombre', 'email', 'telefono')
 
 class MaestroAdmin(admin.ModelAdmin):
     search_fields=['apellido']
-    list_display = ('apellido', 'nombre')
+    list_display = ('id', 'nombre', 'apellido')
 
-class CentroGestionAdmin(admin.ModelAdmin):
+class EscuelaAdmin(admin.ModelAdmin):
     search_fields=['nombre']
-    list_display = ('nombre',)
+    list_display=('id', 'nombre', 'municipio')
 
-class ServicioAdmin(admin.ModelAdmin):
+class MunicipioAdmin(admin.ModelAdmin):
     search_fields=['nombre']
-    list_display = ('nombre',)
+    list_display=('id', 'nombre')
 
-# class AlumnoMaestroAdmin(admin.ModelAdmin):
-#     search_fields=['alumno']
-#     list_display=('alumno', 'maestro')
+class ClienteAdmin(admin.ModelAdmin):
+    search_fields=['nombre']
+    list_display=('id', 'nombre')
+
+class ProveedorAdmin(admin.ModelAdmin):
+    search_fields=['nombre']
+    list_display=('id', 'nombre', 'telefono', 'fax', 'direccionFisica', 'direccionPostal')
+
 
 admin.site.register(Alumno, AlumnoAdmin)
 admin.site.register(Maestro, MaestroAdmin)
-admin.site.register(CentroGestion, CentroGestionAdmin)
-admin.site.register(Servicio, ServicioAdmin)
-# admin.site.register(AlumnoMaestro, oAdmin)
+admin.site.register(Escuela, EscuelaAdmin)
+admin.site.register(Municipio, MunicipioAdmin)
+admin.site.register(EncargadoLegal, EncargadoLegalAdmin)
+admin.site.register(Cliente, ClienteAdmin)
+admin.site.register(Proveedor, ProveedorAdmin)

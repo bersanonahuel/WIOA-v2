@@ -15,25 +15,25 @@
         {% if error %}
           <h2>{{ error }}</h2>
         {% else %} 
-          {% comment %} FECHA INICIO FIN {% endcomment %}
+          {% comment %} FECHA INICIO FIN 
           <input type="hidden" name="fechaHoraInicio" id="fInicio" />
-          <input type="hidden" name="fechaHoraFin" id="fFin" />
+          <input type="hidden" name="fechaHoraFin" id="fFin" />{% endcomment %}
           
-          <div class="form-group ">
+          {% comment %} <div class="form-group ">
             <label class="control-label font-weight-bold " >Fecha de inicio y fin de tutoría: </label>
             <input class="reservationtime form-control" name="fechaHora" >
-          </div>
+          </div> {% endcomment %}
           <div class="row">
             <div class="col-6">
-              <div class="form-group {% if form.estudiante.errors %}has-error{% endif %}">
-                <label class="control-label font-weight-bold" for="{{ form.estudiante.auto_id }}"> {{ form.estudiante.label }}: </label>
-                {{ form.estudiante}}
+              <div class="form-group {% if form.proyecto_servicio.errors %}has-error{% endif %}">
+                <label class="control-label font-weight-bold" for="{{ form.proyecto_servicio.auto_id }}"> {{ form.proyecto_servicio.label }}: </label>
+                {{ form.proyecto_servicio}}
               </div>
             </div>
             <div class="col-6">
-              <div class="form-group {% if form.servicio.errors %}has-error{% endif %}">
-                <label class="control-label font-weight-bold" for="{{ form.servicio.auto_id }}"> {{ form.servicio.label }}: </label>
-                {{ form.servicio}}
+              <div class="form-group {% if form.alumno.errors %}has-error{% endif %}">
+                <label class="control-label font-weight-bold" for="{{ form.alumno.auto_id }}"> {{ form.alumno.label }}: </label>
+                {{ form.alumno }}
               </div>
             </div>
           </div>

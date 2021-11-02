@@ -1,7 +1,6 @@
 var date_range=null;
 var date_now= new moment().format('YYYY-MM-DD hh:mm ');
 
-
 function get_fechas(){
     if (date_range!= null){
         $('#fInicio').val(date_range.startDate.format('YYYY-MM-DD hh:mm:ss'));
@@ -9,8 +8,6 @@ function get_fechas(){
         
     }
 }
-
-
 
 $(function() {
   $('.reservationtime').daterangepicker({
@@ -35,4 +32,12 @@ $(function() {
         date_range=picker;
         get_fechas();
   });
+
+
+  //Listar los Alumnos del Proyecto seleccionado.
+  $('id_proyecto_servicio.proyectoRegistro').on('change', function(){
+    alert('cambio proy.');
+  });
+
+
 });

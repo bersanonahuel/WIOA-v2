@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'apps.administracion',
     'apps.registros',
     'apps.session',
+    'apps.proyecto',
 
 ]
 

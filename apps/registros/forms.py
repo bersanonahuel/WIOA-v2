@@ -1,5 +1,5 @@
 from django import forms
-from .models import RegistroHora
+from .models import Registro
 
 class RegistroForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -8,32 +8,23 @@ class RegistroForm(forms.ModelForm):
             self.fields[field].widget.attrs = {
                 'class': 'form-control mb-3'
             }
-        self.fields['estudiante'].widget.attrs = {
+        self.fields['alumno'].widget.attrs = {
             'class': 'form-control select2'
         }
-        self.fields['servicio'].widget.attrs = {
-            'class': 'form-control select2'
-        }
-        self.fields['fechaHoraInicio'].widget.attrs = {
-            'class': 'form-control '
-        }
-        self.fields['fechaHoraFin'].widget.attrs = {
-            'class': 'form-control '
+        self.fields['proyecto_servicio'].widget.attrs = {
+            'class': 'form-control select2 proyectoRegistro'
         }
     
     class Meta:
-        model = RegistroHora
+        model = Registro
         fields = [
             'comentario', 
-            'estudiante', 
-            'servicio',
-            'fechaHoraInicio',
-            'fechaHoraFin'
+            'alumno',
+            'proyecto_servicio'
         ]
         labels = {
             'comentario':'Comentario',
-            'estudiante':'Estudiante',
-            'servicio':'Servicio',
+            'alumno':'Alumno',
         }
         widgets={
             'comentario': forms.Textarea(
