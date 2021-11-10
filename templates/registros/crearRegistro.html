@@ -7,7 +7,7 @@
 {% block contentTitulo %}{% endblock contentTitulo %}
 {% block conteiner %}
 
-  <div class="card card-secondary">
+  <div class="card card-primary">
     <div class="card-header">CREAR REGISTRO</div>
     <form id="formRegistro" method="POST">
       <div class="card-body card-block col-12 col-lg-10">
@@ -15,14 +15,6 @@
         {% if error %}
           <h2>{{ error }}</h2>
         {% else %} 
-          {% comment %} FECHA INICIO FIN 
-          <input type="hidden" name="fechaHoraInicio" id="fInicio" />
-          <input type="hidden" name="fechaHoraFin" id="fFin" />{% endcomment %}
-          
-          {% comment %} <div class="form-group ">
-            <label class="control-label font-weight-bold " >Fecha de inicio y fin de tutoría: </label>
-            <input class="reservationtime form-control" name="fechaHora" >
-          </div> {% endcomment %}
           <div class="row">
             <div class="col-6">
               <div class="form-group {% if form.proyecto_servicio.errors %}has-error{% endif %}">
@@ -51,8 +43,3 @@
   </div>    
     
 {% endblock conteiner %}
-
-{% block extrajs %}
-  {% comment %} $('#fInicio').val()=datetime.strptime(fechaHoraInicio,'%Y-%m-%d %I-%M-%S %p')
-  $('#fFin').val()=datetime.strptime(fechaHoraFin,'%Y-%m-%d %I:%M:%S %p') {% endcomment %}
-{% endblock extrajs %}

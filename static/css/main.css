@@ -2,3 +2,28 @@
 .bg-warning-light {
     background-color: #ffc10780!important;
 }
+.bg-header-tabla {
+    background-color: #5188c4!important;
+    color: white !important;
+}
+
+.info-box-content .info-box-number{
+    font-size: 1.5rem !important;
+}
+.info-box-content .info-box-text{
+    font-size: 1.3rem !important;
+}
+
+
+@media (max-width: 1200px) {
+    body{
+        font-size: 0.8rem;
+    }
+    .info-box-content .info-box-number {
+        font-size: 1.1rem !important;
+    }
+
+    .info-box-content .info-box-text {
+        font-size: 1.0rem !important;
+    }
+}

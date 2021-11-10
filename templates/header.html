@@ -10,12 +10,14 @@
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
-    <li class="nav-item d-none d-sm-inline-block">
-        <a href="{% url 'admin:index' %}" target="_blank"  class="nav-link">Administración</a>
-    </li>
-    <li class="nav-item d-none d-sm-inline-block">
-        <a class="nav-link" href="{% url 'logout' %}"><i class="fa fa-power-off"></i></a>
-    </li>
+        {% if user.is_staff %}
+            <li class="nav-item d-sm-inline-block">
+                <a href="{% url 'admin:index' %}" target="_blank"  class="nav-link">Administración</a>
+            </li>
+        {% endif %}
+        <li class="nav-item d-sm-inline-block">
+            <a class="nav-link" href="{% url 'logout' %}"><i class="fa fa-power-off"></i></a>
+        </li>
     </ul>
 </nav>
 <!-- /.navbar -->

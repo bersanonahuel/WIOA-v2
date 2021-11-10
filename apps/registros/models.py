@@ -16,7 +16,7 @@ class Registro(models.Model):
     
 class RegistroDetalle(models.Model):
     id = models.AutoField(primary_key=True)
-    registro = models.ForeignKey(Registro, on_delete=models.PROTECT, blank=False, null=False)
     fechaHoraInicio=models.DateTimeField(auto_now=False)
     fechaHoraFin=models.DateTimeField(auto_now=False)
+    registro = models.ForeignKey(Registro, on_delete=models.PROTECT, blank=False, null=False)
 
