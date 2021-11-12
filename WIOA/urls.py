@@ -27,5 +27,4 @@ urlpatterns = [
     path('logout/', login_required(logoutUsuario), name = 'logout'),
     path('administracion/',include(('apps.administracion.urls', 'administracion'))),
     path('registros/',include(('apps.registros.urls', 'registros'))),
-
 ]

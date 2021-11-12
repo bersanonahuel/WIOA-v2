@@ -21,7 +21,6 @@ class CrearRegistro(CreateView):
     models=Registro
     form_class=RegistroForm
     template_name= 'registros/crearRegistro.html'
-    success_url=reverse_lazy('registros:crearRegistroDetalle')
     
     @method_decorator(csrf_exempt)
     @method_decorator(login_required)
@@ -56,15 +55,19 @@ class CrearRegistro(CreateView):
         
         if request.method == 'POST':
             form = RegistroForm(request.POST)
-            form.save()
+            registro = form.save(commit=False)
+            registro.save()
             
-            return super().form_valid(form)
+            self.kwargs['registropk'] = registro.id
 
+            return super().form_valid(form)
 
     def get_context_data(self, *args, **kwargs):
         kwargs['titulo'] = 'Crear registro'
-        
-        return  redirect('registros:crearRegistroDetalle') #super(CrearRegistro,self).get_context_data(**kwargs)
+        return  super(CrearRegistro,self).get_context_data(**kwargs)
+    
+    def get_success_url(self):
+        return reverse_lazy('registros:crearRegistroDetalle',args=[self.kwargs['registropk']])
 
 
 class ListarRegistro(ListView):
