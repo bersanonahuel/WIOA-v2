@@ -1,7 +1,5 @@
 
 window.addEventListener('load', function () {
-    console.log("Windows loading");
-
     //Getting dashboard  ( Checking if we are in dashboard or not)
     var dashboard = document.getElementById("formRegistro");
     //Start button 
@@ -13,6 +11,7 @@ window.addEventListener('load', function () {
     var mint = document.getElementById("min");
     var secd = document.getElementById("sec");
     
+    $("#timer_submit").prop("disabled", true);
 
     //console.log('start_button: ',start_button);
 
@@ -41,7 +40,7 @@ window.addEventListener('load', function () {
             start_button.innerHTML = "Iniciado";
 
             $("#crearRegistro").prop("disabled", true);
-            
+            $("#timer_submit").prop("disabled", false);
 
             // var total_time = document.getElementById("total_time");
             // if (total_time) {

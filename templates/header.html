@@ -45,17 +45,34 @@
                     with font-awesome or any other icon font library -->
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon fa fa-file-text"></i> <p> REGISTRO <i class="right fas fa-angle-left"></i></p>
+                        <i class="nav-icon fa fa-list-alt"></i> <p> REGISTRO <i class="right fas fa-angle-left"></i></p>
                     </a>
                     <ul class="nav nav-treeview pl-3">
                         <li class="nav-item">
                             <a href="{% url 'registros:crearRegistro' %}" class="nav-link">
-                                <i class="nav-icon fa fa-pencil-square-o"></i> <p>Crear registro</p>
+                                <i class="nav-icon fa fa-plus-square"></i> <p>Crear registro</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{% url 'registros:listarRegistro' %}" class="nav-link">
                                 <i class="far fa fa-list nav-icon"></i> <p>Listado registros</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fa fa-file-text"></i> <p> FACTURA <i class="right fas fa-angle-left"></i></p>
+                    </a>
+                    <ul class="nav nav-treeview pl-3">
+                        <li class="nav-item">
+                            <a href="{% url 'registros:crearRegistro' %}" class="nav-link">
+                                <i class="nav-icon fa fa-plus-square"></i> <p>Registrar facturación</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'registros:listarRegistro' %}" class="nav-link">
+                                <i class="far fa fa-list nav-icon"></i> <p>Listado facturas</p>
                             </a>
                         </li>
                     </ul>
