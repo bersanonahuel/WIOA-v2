@@ -14,6 +14,10 @@
     font-size: 1.3rem !important;
 }
 
+.registro-manual{
+    border-right: 1px solid #dee2e6!important;
+    border-bottom: 0px !important;
+}
 
 @media (max-width: 1200px) {
     body{
@@ -25,5 +29,16 @@
 
     .info-box-content .info-box-text {
         font-size: 1.0rem !important;
+    }
+}
+
+
+/* Tamaño mas pequeño hasta md */
+@media (max-width: 768px) {
+    
+    .registro-manual{
+        border-bottom: 1px solid #dee2e6!important;
+        border-right: 0px !important;
+        padding-bottom: 20px;
     }
 }

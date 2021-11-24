@@ -18,8 +18,15 @@
 
   <div class="card card-primary">
     <div class="card-header">CREAR REGISTRO</div>
+
+    <div class="text-center">
+      <small class="badge badge-warning"><i class="fas fa-info"></i> Elija una de las dos opciones para crear el registro de horas.</small>
+    </div>
+
+
     <form id="formRegistro" method="POST">
-      <div class="card-body card-block col-12 col-lg-10">
+
+      <div class="card-body card-block col-12">
         {% csrf_token %}
         {% if error %}
           <h2>{{ error }}</h2>
@@ -27,23 +34,56 @@
         
           {% comment %} FECHA INICIO FIN {% endcomment %}
           <input type="hidden" name="fechaHoraInicio" id="fInicio" />
-          <input type="hidden" name="fechaHoraFin" id="fFin" />          
+          <input type="hidden" name="fechaHoraFin" id="fFin" />
 
-          <div class="form-group ">
-            <label class="control-label font-weight-bold " >Fecha de inicio y fin de tutoría: </label>
-            <input class="reservationtime form-control" name="fechaHora" >
-          </div>
+          <div class="row">
+            {% comment %} Registro manual {% endcomment %}
+            <div class="form-group col-12 col-md-6 text-center registro-manual">
+              <label class="control-label font-weight-bold" >Fecha de inicio y fin de tutoría: </label>
+              <input class="reservationtime form-control mx-auto w-75" name="fechaHora" >
+
+              <button type="submit" class="btn btn-primary mt-4" id="crearRegistro" >Crear</button>
+              {% comment %} <a href="#" class="btn btn-secondary mt-4" >Cancelar</a> {% endcomment %}
+            </div>
+
+            {% comment %} Registro cronometro {% endcomment %}
+            <div class="text-center item col-12 col-md-6">
+              <label>Crónometro:</label>
+              <div class="countup" id="countup1">
+                <span id="hour" class="timeel hours">00</span>
+                <span class="timeel timeRefHours">horas</span>
+                <span id="min" class="timeel minutes">00</span>
+                <span class="timeel timeRefMinutes">minutos</span>
+                <span id="sec" class="timeel seconds">00</span>
+                <span class="timeel timeRefSeconds">segundos</span>
+              </div>
+              <div class=" row">
+                <div class="col-6 d-flex justify-content-end">
+                  <button type="button" class="btn btn-primary timer_button" id="start_button"><i class="fa fa-clock-o" aria-hidden="true"></i> Iniciar</button>
+                </div>
+                <div class="col-6 d-flex justify-content-start">
+                  <button class="btn btn-success timer_button" id="timer_submit" data-toggle="tooltip" data-placement="bottom" title="Al parar el cronómetro se creará el registro con los minutos contados hasta el momento.">
+                    <i class="fa fa-stop-circle" aria-hidden="true"></i> Stop
+                  </button>
+                </div>
+              </div>
+              {% comment %} <div class="row">
+                <div class="col-auto mx-auto pt-4">
+                  <h1> 
+                    <div id="total_time" ></div> 
+                  </h1>
+                </div>
+              </div> {% endcomment %}
+            </div>
+          </div><!-- /row -->
           
         {% endif %}
       </div>
-      <div class="card-footer">
-        <button type="submit" class="btn btn-primary mt-4">Crear</button>
-        <a href="#" class="btn btn-secondary mt-4">Cancelar</a> 
-      </div>
+      <div class="card-footer"></div>
     </form>
   </div>    
 
-
+  <!-- Listado -->
   <div class="table-stats order-table ov-h table-responsive">
     {% if registrosDet %}
       <table id="tablaDetalleRegistro" class="table table-bordered table-hover dataTable table-head-fixed text-nowrap bg-white">
@@ -58,14 +98,14 @@
           <tbody>
 
               {% for det in registrosDet %}
-              <tr>
+              <tr class="text-center">
                   <td>{{ det.fechaHoraInicio | date:"d-m-Y h:i a" }}</td>
                   <td>{{ det.fechaHoraFin | date:"d-m-Y h:i a" }}</td>
-                  <td>{{ det.fechaHoraInicio | timesince:det.fechaHoraFin }}</td>
+                  <td>{{ det.calcular_total_hs_detalle }}</td>
 
                   <td>
-                      {% comment %} <a class="btn btn-primary btn-sm" href="{% url 'venta:editarDetalle' det.id %}" rel="editar"><icon class="fas fa-fas fa-pencil-alt"></icon></a> 
-                      <a class="btn btn-danger btn-sm" rel="eliminar" href="#" onClick="eliminarRegistro({{ det.id }}, '../eliminarDetalleVenta/')" ><icon class="fa fa-trash"></icon></a>  {% endcomment %}
+                      {% comment %} <a class="btn btn-primary btn-sm" href="{% url 'venta:editarDetalle' det.id %}" rel="editar"><icon class="fas fa-fas fa-pencil-alt"></icon></a> {% endcomment %}
+                      <a class="btn btn-danger btn-sm" rel="eliminar" href="#" onClick="eliminarRegistro({{ det.id }}, '../eliminarRegistroDetalle/')" ><icon class="fa fa-trash"></icon></a> 
                   </td>
               </tr>
               {% endfor %}
@@ -75,7 +115,7 @@
               <tr>
                   <td></td>
                   <td class="text-right text-bold"> TOTAL:</td>
-                  <td class="text-right text-bold"> {{ totalHs }} </td>
+                  <td class="text-right text-bold text-center"> {{ registro.calcular_total_horas_por_alumno }} </td>
               </tr>
           </tfoot>
       </table>
@@ -83,6 +123,11 @@
       <h3 class="pl-2">No existen Horas registradas.</h3>
     {% endif %}
   </div>
-
     
 {% endblock conteiner %}
+
+{% block extrajs %}
+<script>
+  
+</script>
+{% endblock extrajs %}

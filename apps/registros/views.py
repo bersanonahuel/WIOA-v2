@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, DeleteView
 from .models import *
 from django.urls.base import reverse_lazy
 from .forms import RegistroForm,RegistroDetalleForm
@@ -93,8 +93,6 @@ class CrearRegistroDetalle(CreateView):
 
             #Pruebas convertir time AM/PM
             format = '%Y-%m-%d %H:%M'
-            print('POST***')
-            print(request.POST)
             date_string_inicio = request.POST['fechaHoraInicio']  #'2009-11-29 03:17:00.0000'
             inicio = datetime.strptime(date_string_inicio, format)
     
@@ -116,21 +114,25 @@ class CrearRegistroDetalle(CreateView):
         kwargs['registro'] = Registro.objects.get(id=self.kwargs['registropk'])
         kwargs['registrosDet'] = RegistroDetalle.objects.filter(registro=self.kwargs['registropk'])
         
-        segundos=0
-        for det in kwargs['registrosDet']:
-            timediff = det.fechaHoraFin - det.fechaHoraInicio
-            segundos+=timediff.seconds
-        
-        kwargs['totalHs'] = timedelta(seconds=segundos)
-        
         return super(CrearRegistroDetalle,self).get_context_data(**kwargs)
     
     def form_valid(self, form):
-        #self.cleaned_data 
         return super().form_valid(form)
 
     def get_success_url(self):
-        print('SUCCESS URL:')
-        print(self.kwargs['registropk'])
         return reverse_lazy('registros:crearRegistroDetalle',args=[self.kwargs['registropk']])
+
+class EliminarRegistroDetalle(DeleteView):
+    model = RegistroDetalle
+
+    def delete(self, request, *args, **kwargs):
+        if request.is_ajax():
+            registroDetalle = self.get_object()
+
+            registroDetalle.delete()
+            
+            res = {
+                'mensaje': 'El detalle se elimino con éxito.'
+            }
+            return JsonResponse(res, safe=False)
 

@@ -1,10 +1,11 @@
 var date_range=null;
 
 function set_fechas(inicio, fin){
-    if (inicio!= null && fin!=null){
-        $('#fInicio').val(inicio);
-        $('#fFin').val(fin);
+    if (inicio != null){
+      $('#fInicio').val(inicio);
     }
+
+    $('#fFin').val(fin);
 }
 
 $(function() {
@@ -29,7 +30,7 @@ $(function() {
   $('.reservationtime').on('apply.daterangepicker', function(ev, picker) {
       $(this).val(picker.startDate.format('YYYY-MM-DD hh:mm a') + ' - ' + picker.endDate.format('YYYY-MM-DD hh:mm a'));
       console.log(picker)
-      date_range=picker;
+      date_range = picker;
       set_fechas(date_range.startDate.format('YYYY-MM-DD HH:mm'), date_range.endDate.format('YYYY-MM-DD HH:mm'));
   });
   $('.reservationtime').on('cancel.daterangepicker', function(ev, picker) {
@@ -77,8 +78,10 @@ $(function() {
 
   // **************** FUNCIONES GENERALES **************** //
   function vaciarCombo(combo){
-    for (var i = combo.length - 1; i > 0; --i) {
-        combo.remove(i);
+    if(combo){
+      for (var i = combo.length - 1; i > 0; --i) {
+          combo.remove(i);
+      }
     }
   }
 

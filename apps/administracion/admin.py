@@ -1,17 +1,13 @@
 from django.contrib import admin
-from .models import Alumno, Maestro, Escuela, Municipio, EncargadoLegal, Cliente, Proveedor
+from .models import Alumno, Maestro, Escuela, Municipio, Cliente, Proveedor, Cargo
 
 class AlumnoAdmin(admin.ModelAdmin):
     search_fields=['apellidoPaterno', 'apellidoMaterno', 'nombre']
-    list_display = ('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno', 'nivelEscolar', 'direccion', 'email', 'telefono', 'escuela', 'escargado_legal')
-
-class EncargadoLegalAdmin(admin.ModelAdmin):
-    search_fields=['nombre']
-    list_display=('id', 'nombre', 'email', 'telefono')
+    list_display = ('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno', 'nivelEscolar', 'direccion', 'email', 'telefono', 'escuela', 'tipoEncargado', 'nombreEncargado', 'emailEncargado', 'telefonoEncargado')
 
 class MaestroAdmin(admin.ModelAdmin):
     search_fields=['apellido']
-    list_display = ('id', 'nombre', 'apellido')
+    list_display = ('id', 'nombre', 'apellido', 'cargo', 'usuario')
 
 class EscuelaAdmin(admin.ModelAdmin):
     search_fields=['nombre']
@@ -29,11 +25,15 @@ class ProveedorAdmin(admin.ModelAdmin):
     search_fields=['nombre']
     list_display=('id', 'nombre', 'telefono', 'fax', 'direccionFisica', 'direccionPostal')
 
+class CargoAdmin(admin.ModelAdmin):
+    search_fields=['nombre']
+    list_display=('id', 'nombre')
+
 
 admin.site.register(Alumno, AlumnoAdmin)
 admin.site.register(Maestro, MaestroAdmin)
 admin.site.register(Escuela, EscuelaAdmin)
 admin.site.register(Municipio, MunicipioAdmin)
-admin.site.register(EncargadoLegal, EncargadoLegalAdmin)
 admin.site.register(Cliente, ClienteAdmin)
 admin.site.register(Proveedor, ProveedorAdmin)
+admin.site.register(Cargo, CargoAdmin)

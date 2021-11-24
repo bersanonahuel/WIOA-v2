@@ -27,21 +27,12 @@ class Escuela(models.Model):
     def __str__(self) :
         return self.nombre
 
-class EncargadoLegal(models.Model):
-    id = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=50, blank=False,null=False)
-    email = models.CharField(max_length=150, blank=False,null=False)
-    telefono = models.CharField(max_length=100, blank=False,null=False)
-    
-    class Meta:
-        verbose_name='Encargado Legal'
-        verbose_name_plural='Encargados Legales'
-        ordering=['nombre']
-    
-    def __str__(self) :
-        return self.nombre
-    
 class Alumno(models.Model):
+    TIPO = (
+       ('Madre', ('Madre')),
+       ('Padre', ('Padre')),
+       ('Otro',  ('Otro')),
+    )
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=50, blank=False,null=False)
     apellidoPaterno = models.CharField(max_length=100, verbose_name='Apellido Paterno', blank=True, null=True)
@@ -50,9 +41,13 @@ class Alumno(models.Model):
     direccion = models.CharField(max_length=100, blank=True, null=True)
     email = models.CharField(max_length=150, blank=True, null=True)
     telefono = models.CharField(max_length=100, blank=True, null=True)
+
+    tipoEncargado = models.CharField(max_length=32, choices=TIPO, default='Madre', blank= False, null=False)
+    nombreEncargado = models.CharField(max_length=50, verbose_name='Nombre del Encargado Legal', blank=True,null=True)
+    emailEncargado = models.CharField(max_length=150, verbose_name='Email del Encargado Legal', blank=True,null=True)
+    telefonoEncargado = models.CharField(max_length=100, verbose_name='Teléfono del Encargado Legal', blank=True,null=True)
     
     escuela = models.ForeignKey(Escuela, on_delete=models.PROTECT, blank=False, null=False)
-    escargado_legal = models.ForeignKey(EncargadoLegal, on_delete=models.PROTECT, blank=False, null=True)
     
     class Meta:
         verbose_name='Alumno'
@@ -66,17 +61,30 @@ class Alumno(models.Model):
 
         return res 
 
+class Cargo(models.Model):
+    id = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=50, blank=False,null=False)
+
+    class Meta:
+        verbose_name='Cargo'
+        verbose_name_plural='Cargos'
+        ordering=['nombre']
+    
+    def __str__(self) :
+        return self.nombre
+
 class Maestro(models.Model):
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=50, blank=False,null=False)
     apellido = models.CharField(max_length=50, blank=False, null=False)
 
     usuario = models.ForeignKey(User, on_delete=models.PROTECT, blank=False, null=False)
+    cargo = models.ForeignKey(Cargo, on_delete=models.PROTECT, blank=False, null=False)
     alumnos = models.ManyToManyField(Alumno, related_name='maestro')
 
     class Meta:
-        verbose_name='Maestro'
-        verbose_name_plural='Maestros'
+        verbose_name='Persona'
+        verbose_name_plural='Personas'
         ordering=['apellido']
     
     def __str__(self) :

@@ -81,6 +81,7 @@
                     <th>PROYECTO || SERVICIO</th>
                     <th>ALUMNO</th>
                     <th>COMENTARIO</th>
+                    <th>CANTIDAD HORAS</th>
                     <th></th>
                 </tr>
             </thead>
@@ -91,7 +92,8 @@
                     <td>{{ registro.id }}</td>
                     <td>{{ registro.proyecto_servicio }}</td>
                     <td>{{ registro.alumno }}</td>
-                    <td>{{ registro.comentario}}</td>
+                    <td>{{ registro.comentario | default:""}}</td>
+                    <td>{{ registro.calcular_total_horas_por_alumno}}</td>
                     <td> 
                         <a class="btn btn-success btn-sm" href="{% url 'registros:crearRegistroDetalle' registro.id%}"><i class="fa fa-list"></i></a>
                     </td>
