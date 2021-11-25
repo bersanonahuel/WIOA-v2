@@ -3,7 +3,7 @@ from django.conf import settings
 from django.db.models.fields import DateTimeField
 from django.db.models.fields.related import ForeignKey
 from django.contrib.auth.models import User
-from apps.administracion.models import Alumno, Maestro
+from apps.administracion.models import Alumno, Maestro, Cliente
 from apps.proyecto.models import ServiciosProyecto
 
 
@@ -56,3 +56,30 @@ def convertir_tiempo(segundos):
 
     return tiempo
 
+class Factura(models.Model):
+    TERMINOS_PAGO = (
+       ('Due upon reciept', ('Due upon reciept')),
+       ('Net 30 days', ('Net 30 days')),
+       ('Other', ('Other')),
+    )
+
+    # TAXES = (
+    #     'Si (0%)',
+    #     'Si (10.5%)',
+    #     'No',
+    # )
+
+    id = models.AutoField(primary_key=True)
+    fechaCreacion = models.DateTimeField(auto_now=False)
+    fechaInicio = models.DateTimeField(auto_now=False)
+    fechaFin = models.DateTimeField(auto_now=False)
+    eliminada = models.BooleanField()
+    descripcion = models.CharField(max_length=500, blank=True, null=True)
+    terminosPago = models.CharField(max_length=32, choices=TERMINOS_PAGO, default='', blank=True, null=False)
+    saleTax = models.CharField(max_length=15, blank=True, null=True)
+    mensajeInstitucional = models.CharField(max_length=500, blank=True, null=True)
+    
+    cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT, blank=False, null=False)
+    #centroGestionId
+    
+    

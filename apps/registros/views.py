@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import ListView, CreateView, DeleteView
 from .models import *
 from django.urls.base import reverse_lazy
-from .forms import RegistroForm,RegistroDetalleForm
+from .forms import RegistroForm, RegistroDetalleForm, FacturaForm
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.forms import formset_factory
@@ -14,8 +14,11 @@ from django.http import HttpResponse
 from datetime import datetime, timedelta
 
 from apps.proyecto.models import ServiciosProyecto, Proyecto
+#Filtro
+from .filters import RegistroFilter
 
 CREAR_REGISTRO_FILE  = 'registros/crearRegistro.html'
+LISTAR_REGISTRO_FILE = 'registros/listarRegistro.html'
 
 class CrearRegistro(CreateView):
     models=Registro
@@ -72,15 +75,17 @@ class CrearRegistro(CreateView):
 
 class ListarRegistro(ListView):
     model = Registro
-    template_name = 'registros/listarRegistro.html'
-    context_object_name = 'registros'
-    queryset = Registro.objects.all()
+    template_name = LISTAR_REGISTRO_FILE
+    
+    def get(self, request, *args, **kwargs):
+        registro_filter = RegistroFilter(request.GET, queryset=Registro.objects.all())
+        
+        return render(request, LISTAR_REGISTRO_FILE, {'filter': registro_filter})
 
 class CrearRegistroDetalle(CreateView):
-    models=RegistroDetalle
-    form_class=RegistroDetalleForm
-    template_name= 'registros/crearRegistroDetalle.html'
-    #success_url=reverse_lazy('registros:listarRegistro')
+    models = RegistroDetalle
+    form_class = RegistroDetalleForm
+    template_name = 'registros/crearRegistroDetalle.html'
 
     @method_decorator(csrf_exempt)
     @method_decorator(login_required)
@@ -136,3 +141,15 @@ class EliminarRegistroDetalle(DeleteView):
             }
             return JsonResponse(res, safe=False)
 
+class CrearFactura(CreateView):
+    models = Factura
+    form_class = FacturaForm
+    template_name = 'registros/crearFactura.html'
+
+    def get_context_data(self, *args, **kwargs):
+        kwargs['facturas'] = Factura.objects.all()
+        
+        return super(CrearFactura,self).get_context_data(**kwargs)
+    
+    def get_success_url(self):
+        return reverse_lazy('factura:crearFactura')

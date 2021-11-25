@@ -1,10 +1,12 @@
-
 .bg-warning-light {
     background-color: #ffc10780!important;
 }
 .bg-header-tabla {
     background-color: #5188c4!important;
     color: white !important;
+}
+.bg-gris-claro {
+    background-color: #c9c9c9;
 }
 
 .info-box-content .info-box-number{

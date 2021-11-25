@@ -77,3 +77,23 @@ function eliminarRegistro(id, url){
       }
   });   
 }
+
+// **** COMBOS SEARCH ****
+// Inicialiso los combos que tienen la clase select2, con la fncion para buscar.
+$('.select2').select2({
+    theme: "bootstrap4",
+    //allowClear: true,
+    language: 'es'
+});
+
+//Hacer focus en el input de busqueda.
+$(document).on('select2:open', (e) => {
+    const selectId = e.target.id
+
+    $(".select2-search__field[aria-controls='select2-" + selectId + "-results']").each(function (
+        key,
+        value,
+    ) {
+        value.focus()
+    })
+});

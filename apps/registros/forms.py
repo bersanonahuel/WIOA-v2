@@ -1,5 +1,5 @@
 from django import forms
-from .models import Registro, RegistroDetalle
+from .models import Registro, RegistroDetalle, Factura
 
 class RegistroForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -9,7 +9,7 @@ class RegistroForm(forms.ModelForm):
                 'class': 'form-control mb-3'
             }
         self.fields['alumno'].widget.attrs = {
-            'class': 'form-control select2'
+            'class': 'form-control select2 alumnoRegistro'
         }
         self.fields['proyecto_servicio'].widget.attrs = {
             'class': 'form-control select2 proyectoRegistro'
@@ -36,8 +36,6 @@ class RegistroForm(forms.ModelForm):
         }
 
 class RegistroDetalleForm(forms.ModelForm):
-    #fechaHoraInicio = forms.DateTimeField(widget=forms.HiddenInput)
-
     def __init__(self, *args, **kwargs):
         super(RegistroDetalleForm, self).__init__(*args, **kwargs)
         for field in self.fields:
@@ -48,11 +46,16 @@ class RegistroDetalleForm(forms.ModelForm):
     class Meta:
         model = RegistroDetalle
         fields = '__all__'
+    
+class FacturaForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(FacturaForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs = {
+                'class': 'form-control mb-3'
+            }
 
-        # widgets={
-        #     'fechaHoraInicio': forms.DateTimeField(
-        #         input_formats=['%Y-%m-%d %I:%M %p'],
-        #     ),
-        # }
-        
+    class Meta:
+        model = Factura
+        fields = '__all__'
     

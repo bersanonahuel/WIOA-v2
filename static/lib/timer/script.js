@@ -47,7 +47,7 @@ window.addEventListener('load', function () {
             //     total_time.innerHTML = "Counting...";
             // }
 
-            var date_start = new moment().format('YYYY-MM-DD hh:mm');
+            var date_start = new moment().format('YYYY-MM-DD HH:mm');
             set_fechas(date_start, null);
             
             timerCycle();
@@ -57,7 +57,7 @@ window.addEventListener('load', function () {
         stop_button.addEventListener('click', function () {
             
             //Guardo la fecha de fin
-            var date_stop = new moment().format('YYYY-MM-DD hh:mm');
+            var date_stop = new moment().format('YYYY-MM-DD HH:mm');
             set_fechas(null, date_stop);
 
             // saveData(hr, min, sec);                          To get data after stop button active this fuction

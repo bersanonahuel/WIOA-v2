@@ -19,14 +19,15 @@
   <div class="card card-primary">
     <div class="card-header">CREAR REGISTRO</div>
 
-    <div class="text-center">
-      <small class="badge badge-warning"><i class="fas fa-info"></i> Elija una de las dos opciones para crear el registro de horas.</small>
-    </div>
-
-
     <form id="formRegistro" method="POST">
 
       <div class="card-body card-block col-12">
+        <div class="row">
+          <div class="text-center col-12">
+            <small class="badge badge-warning px-2 py-3 mt-mb-3 mb-3" style="font-size: 0.8rem;"><label class="mb-0">Elija una de las dos opciones para crear <br class="d-md-none d-flex"> el registro de horas.</label></small>
+          </div>
+        </div>
+
         {% csrf_token %}
         {% if error %}
           <h2>{{ error }}</h2>
@@ -35,7 +36,7 @@
           {% comment %} FECHA INICIO FIN {% endcomment %}
           <input type="hidden" name="fechaHoraInicio" id="fInicio" />
           <input type="hidden" name="fechaHoraFin" id="fFin" />
-
+        
           <div class="row">
             {% comment %} Registro manual {% endcomment %}
             <div class="form-group col-12 col-md-6 text-center registro-manual">
@@ -89,10 +90,10 @@
       <table id="tablaDetalleRegistro" class="table table-bordered table-hover dataTable table-head-fixed text-nowrap bg-white">
           <thead class="text-center bg-header-tabla">
               <tr>
-                  <th class="bg-light">FECHA INICIO</th>
-                  <th class="bg-light">FECHA FIN</th>
-                  <th class="bg-light">CANTIDAD HS</th>
-                  <th class="bg-light"></th>
+                  <th class="">FECHA INICIO</th>
+                  <th class="">FECHA FIN</th>
+                  <th class="">CANTIDAD HS</th>
+                  <th class=""></th>
               </tr>
           </thead>
           <tbody>
@@ -115,7 +116,7 @@
               <tr>
                   <td></td>
                   <td class="text-right text-bold"> TOTAL:</td>
-                  <td class="text-right text-bold text-center"> {{ registro.calcular_total_horas_por_alumno }} </td>
+                  <td class="text-right text-bold text-center bg-gris-claro"> {{ registro.calcular_total_horas_por_alumno }} </td>
               </tr>
           </tfoot>
       </table>

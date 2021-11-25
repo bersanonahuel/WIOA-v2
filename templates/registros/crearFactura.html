@@ -1,0 +1,116 @@
+{% extends 'index.html' %}
+{% load static %}
+<!--Para que herede todo de index.html -->
+
+{% block titulo %} Detalle Registro Hs {% endblock titulo %}
+
+{% block contentTitulo %} {% endblock contentTitulo %}
+
+{% block conteiner %}
+
+  <div class="card card-primary">
+    <div class="card-header">REGISTRAR FACTURACION</div>
+
+    <form id="formRegistro" method="POST">
+
+      <div class="card-body card-block col-12">
+        {% csrf_token %}
+        {% if error %}
+          <h2>{{ error }}</h2>
+        {% else %} 
+        
+          {% comment %} FECHA INICIO FIN {% endcomment %}
+          <input type="hidden" name="fechaInicio" id="fInicio" />
+          <input type="hidden" name="fechaFin" id="fFin" />
+
+          <div class="row">
+
+            
+            <div class="form-group col-12 col-md-6">
+              <label class="control-label font-weight-bold" >Ingrese el período de facturación: </label>
+              <input class="reservationtime form-control" name="fechaFactura" >
+            </div>
+
+            <div class="col-6">
+              <div class="form-group {% if form.descripcion.errors %}has-error{% endif %}">
+                <label class="control-label font-weight-bold" for="{{ form.descripcion.auto_id }}"> {{ form.descripcion.label }}: </label>
+                {{ form.descripcion}}
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group {% if form.terminosPago.errors %}has-error{% endif %}">
+                <label class="control-label font-weight-bold" for="{{ form.terminosPago.auto_id }}"> {{ form.terminosPago.label }}: </label>
+                {{ form.terminosPago }}
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group {% if form.saleTax.errors %}has-error{% endif %}">
+                <label class="control-label font-weight-bold" for="{{ form.saleTax.auto_id }}"> {{ form.saleTax.label }}: </label>
+                {{ form.saleTax }}
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group {% if form.mensajeInstitucional.errors %}has-error{% endif %}">
+                <label class="control-label font-weight-bold" for="{{ form.mensajeInstitucional.auto_id }}"> {{ form.mensajeInstitucional.label }}: </label>
+                {{ form.mensajeInstitucional }}
+              </div>
+            </div>
+
+
+          </div><!-- /row -->
+          
+        {% endif %}
+      </div>
+      <div class="card-footer">
+        <button type="submit" class="btn btn-primary mt-4" id="crearRegistro" >Crear</button>
+      </div>
+    </form>
+  </div>    
+
+  <!-- Listado -->
+  <div class="table-stats order-table ov-h table-responsive">
+    {% if registrosDet %}
+      <table id="tablaDetalleRegistro" class="table table-bordered table-hover dataTable table-head-fixed text-nowrap bg-white">
+          <thead class="text-center bg-header-tabla">
+              <tr>
+                  <th class="bg-light">FECHA INICIO</th>
+                  <th class="bg-light">FECHA FIN</th>
+                  <th class="bg-light">CANTIDAD HS</th>
+                  <th class="bg-light"></th>
+              </tr>
+          </thead>
+          <tbody>
+
+              {% for facrura in facturas %}
+              <tr class="text-center">
+                  <td>{{ facrura.fechaInicio | date:"d-m-Y h:i a" }}</td>
+                  <td>{{ facrura.fechaFin | date:"d-m-Y h:i a" }}</td>
+                  <td></td>
+
+                  <td>
+                    {% comment %} <a class="btn btn-danger btn-sm" rel="eliminar" href="#" onClick="eliminarRegistro({{ facrura.id }}, '../eliminarFactura/')" ><icon class="fa fa-trash"></icon></a>  {% endcomment %}
+                  </td>
+              </tr>
+              {% endfor %}
+
+          </tbody>
+          <tfoot>
+              <tr>
+                  <td></td>
+                  <td class="text-right text-bold"> TOTAL:</td>
+                  <td class="text-right text-bold text-center"> {{ registro.calcular_total_horas_por_alumno }} </td>
+              </tr>
+          </tfoot>
+      </table>
+    {% else %}
+      <h3 class="pl-2">No existen Facturas registradas.</h3>
+    {% endif %}
+  </div>
+    
+{% endblock conteiner %}
+
+{% block extrajs %}
+<script>
+  
+</script>
+{% endblock extrajs %}

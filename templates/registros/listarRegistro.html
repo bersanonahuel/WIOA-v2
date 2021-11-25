@@ -9,7 +9,7 @@
 {% block contentTitulo %}REGISTRO HORAS{% endblock contentTitulo %}
 
 {% block conteiner %}
-{% comment %} 
+
 <div class="accordion" id="filtros">
     <div class="card card-outline card-info">
         <div class="card-header">
@@ -20,7 +20,6 @@
                     <i class="fas fa-minus"></i>
                 </button>
             </div>
-
         
         </div>
 
@@ -29,26 +28,26 @@
                 <form method="GET">
 
                     <div class="form-group d-flex ">
-                        <div class="form-group-filters {% if filter.form.id.errors %}has-error{% endif %}">
-                            <label class="control-label font-weight-bold" for="{{ filter.form.id.auto_id }}"> {{ filter.form.id.label }}: </label>
-                            <div>{{filter.form.id}}</div>
+                        <div class="form-group-filters mr-2 {% if filter.form.alumno.errors %}has-error{% endif %}">
+                            <label class="control-label font-weight-bold" for="{{ filter.form.alumno.auto_id }}"> {{ filter.form.alumno.label }}: </label>
+                            <div>{{filter.form.alumno}}</div>
                         </div>
-                        <div class="form-group-filters {% if filter.form.fechaCreacion.errors %}has-error{% endif %}">
-                            <label class="control-label font-weight-bold" for="{{ filter.form.fechaCreacion.auto_id }}"> {{ filter.form.fechaCreacion.label }}: </label>
-                            <div class="d-block">{{filter.form.fechaCreacion}}</div>
+                        <div class="form-group-filters mr-2 {% if filter.form.proyecto_servicio.errors %}has-error{% endif %}">
+                            <label class="control-label font-weight-bold" for="{{ filter.form.proyecto_servicio.auto_id }}"> {{ filter.form.proyecto_servicio.label }}: </label>
+                            <div>{{filter.form.proyecto_servicio}}</div>
                         </div>
-                        <div class="form-group-filters {% if filter.form.usuario.errors %}has-error{% endif %}">
-                            <label class="control-label font-weight-bold" for="{{ filter.form.usuario.auto_id }}"> {{ filter.form.usuario.label }}: </label>
-                            <div>{{filter.form.usuario}}</div>
+                        <div class="form-group-filters mr-2 {% if filter.form.proyecto_servicio__servicio.errors %}has-error{% endif %}">
+                            <label class="control-label font-weight-bold" for="{{ filter.form.proyecto_servicio__servicio.auto_id }}"> {{ filter.form.proyecto_servicio__servicio.label }}: </label>
+                            <div>{{filter.form.proyecto_servicio__servicio}}</div>
                         </div>
-                        <div class="form-group-filters {% if filter.form.tipoCobro.errors %}has-error{% endif %}">
-                            <label class="control-label font-weight-bold" for="{{ filter.form.tipoCobro.auto_id }}"> {{ filter.form.tipoCobro.label }}: </label>
-                            <div>{{filter.form.tipoCobro}}</div>
+                        <div class="form-group-filters mr-2 {% if filter.form.proyecto_servicio__proyecto.errors %}has-error{% endif %}">
+                            <label class="control-label font-weight-bold" for="{{ filter.form.proyecto_servicio__proyecto.auto_id }}"> {{ filter.form.proyecto_servicio__proyecto.label }}: </label>
+                            <div>{{filter.form.proyecto_servicio__proyecto}}</div>
                         </div>
 
                     </div>
                     <button type="submit" class="btn btn-primary">Filtrar</button>
-                    <a class="btn btn-secondary" href="{% url 'venta:listarVenta'%}">Limpiar</a>
+                    <a class="btn btn-secondary" href="{% url 'registros:listarRegistro'%}">Limpiar</a>
                     
                 </form>
             </div>
@@ -57,8 +56,7 @@
         <div class="card-footer">
         </div>
     </div>
-</div> 
-{% endcomment %}
+</div>
 
 <div class="card card-secondary">
     <div class="card-header">
@@ -87,7 +85,7 @@
             </thead>
             <tbody>
 
-                {% for registro in registros %}
+                {% for registro in filter.qs %}
                 <tr>
                     <td>{{ registro.id }}</td>
                     <td>{{ registro.proyecto_servicio }}</td>

@@ -11,10 +11,10 @@ function set_fechas(inicio, fin){
 $(function() {
   
   //Setear por defecto fecha hora Inicio y Fin.
-  var date_now = new moment().format('YYYY-MM-DD hh:mm');
-  var date_now_fin = new moment().add(1, 'h').format('YYYY-MM-DD hh:mm'); 
+  var date_now = new moment().format('YYYY-MM-DD HH:mm');
+  var date_now_fin = new moment().add(1, 'h').format('YYYY-MM-DD HH:mm'); 
   set_fechas(date_now, date_now_fin);
-
+  
   //##### DATE TIME PICKER #####
   $('.reservationtime').daterangepicker({
     timePicker: true,
@@ -44,7 +44,7 @@ $(function() {
     getAlumnosDelProyecto(servicioProyectoId);
   });
 
-  vaciarCombo(document.getElementById('id_alumno'));
+  verificarComboAlumnos();
   
   function getAlumnosDelProyecto(servicioProyectoId) {
     $.ajax({
@@ -76,9 +76,20 @@ $(function() {
     });
   } 
 
+  //Verifica si el combo de Alumnos tiene que vaciarlo o dejarlo completo. Cuando se registran hs hay que vaciarlo, para el filtro del listado queda completo
+  function verificarComboAlumnos(){
+    var selectAlumnos = document.getElementById("id_alumno");
+    var selectAlumnosResult = selectAlumnos.classList.contains('alumnoRegistro');
+    if(selectAlumnosResult){
+      vaciarCombo(document.getElementById('id_alumno'));
+    }
+  }
+
+
   // **************** FUNCIONES GENERALES **************** //
   function vaciarCombo(combo){
     if(combo){
+      console.log('long: ', combo.length);
       for (var i = combo.length - 1; i > 0; --i) {
           combo.remove(i);
       }
