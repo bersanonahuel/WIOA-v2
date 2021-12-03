@@ -1,0 +1,64 @@
+{% extends 'index.html' %}
+{% load static %}
+<!--Para que herede todo de index.html -->
+
+{% block titulo %} Detalle Registro Hs {% endblock titulo %}
+
+{% block contentTitulo %} {% endblock contentTitulo %}
+
+{% block conteiner %}
+
+  <!-- Listado -->
+  <div class="table-stats order-table ov-h table-responsive">
+    {% if filter.qs %}
+      <table id="tablaFacturacion" class="table table-bordered table-hover dataTable table-head-fixed text-nowrap bg-white">
+          <thead class="text-center bg-header-tabla">
+              <tr>
+                  <th>INVOICE</th>
+                  <th>FECHA CREACIÓN</th>
+                  <th>PREÍODO</th>
+                  <th>CLIENTE</th>
+                  <th>PROVEEDOR</th>
+                  <th>TERMINOS DE PAGO</th>
+                  <th>TAXES</th>
+                  <th></th>
+              </tr>
+          </thead>
+          <tbody>
+
+              {% for facrura in filter.qs %}
+              <tr class="text-center">
+                  <td>{{ facrura.id }}</td>
+                  <td>{{ facrura.fechaCreacion | date:"d-m-Y h:i a" }}</td>
+                  <td>{{ facrura.fechaInicio | date:"d-m-Y" }} al {{ facrura.fechaFin | date:"d-m-Y" }}</td>
+                  <td>{{ facrura.cliente }}</td>
+                  <td>{{ facrura.proveedor }}</td>
+                  <td>
+                    {% if facrura.terminosPago == "Other" %}
+                      {{ facrura.terminosPagoOtro }}
+                    {% else %}
+                      {{ facrura.terminosPago }}
+                    {% endif %}
+                  </td>
+                  <td>{{ facrura.saleTax }}</td>
+                  
+                  <td>
+                    <a class="btn btn-warning btn-sm" href="{% url 'registros:imprimirFactura' facrura.id %}" target="_blank"><i class="fas fa-fas fa-print"></i></a>
+                    <a class="btn btn-error btn-sm" href="{% url 'registros:printPdf' facrura.id %}" target="_blank"><i class="fas fa-fas fa-print"></i></a>
+                    {% comment %} <a class="btn btn-primary btn-sm" href="{% url 'registros:editarFactura' factura.id %}"><i class="fas fa-fas fa-pencil-alt"></i></a> {% endcomment %}
+                                
+                    {% comment %} <a class="btn btn-danger btn-sm" rel="eliminar" href="#" onClick="eliminarRegistro({{ facrura.id }}, '../eliminarFactura/')" ><icon class="fa fa-trash"></icon></a>  {% endcomment %}
+                  </td>
+              </tr>
+              {% endfor %}
+
+          </tbody>
+      </table>
+    {% else %}
+      <h3 class="pl-2">No existen Facturas registradas.</h3>
+    {% endif %}
+  </div>
+    
+{% endblock conteiner %}
+
+

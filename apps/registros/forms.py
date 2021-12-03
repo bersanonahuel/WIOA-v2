@@ -54,8 +54,32 @@ class FacturaForm(forms.ModelForm):
             self.fields[field].widget.attrs = {
                 'class': 'form-control mb-3'
             }
+        self.fields['cliente'].widget.attrs = {
+            'class': 'form-control select2 clienteFactura'
+        }
+        self.fields['proveedor'].widget.attrs = {
+            'class': 'form-control select2 proveedorFactura'
+        }
+        self.fields['terminosPago'].widget.attrs = {
+            'class': 'form-control selectTerminoPagoFactura'
+        }
 
     class Meta:
         model = Factura
         fields = '__all__'
+
+        widgets={
+            'descripcion': forms.Textarea(
+                attrs = {
+                    'placeholder':'',
+                    'rows':'4'
+                }
+            ),
+            'mensajeInstitucional': forms.Textarea(
+                attrs = {
+                    'placeholder':'',
+                    'rows':'4'
+                }
+            ),
+        }
     

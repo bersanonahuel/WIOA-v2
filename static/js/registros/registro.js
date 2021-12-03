@@ -1,21 +1,18 @@
 var date_range=null;
 
 function set_fechas(inicio, fin){
-    if (inicio != null){
-      $('#fInicio').val(inicio);
-    }
-
-    $('#fFin').val(fin);
+  if (inicio != null){
+    $('#fInicio').val(inicio);
+  }
+  console.log('SET FECHAS fin', fin);
+  $('#fFin').val(fin);
 }
 
 $(function() {
   
-  //Setear por defecto fecha hora Inicio y Fin.
-  var date_now = new moment().format('YYYY-MM-DD HH:mm');
-  var date_now_fin = new moment().add(1, 'h').format('YYYY-MM-DD HH:mm'); 
-  set_fechas(date_now, date_now_fin);
   
-  //##### DATE TIME PICKER #####
+  
+  //##### DATE TIME PICKER REGISTRO HORAS #####
   $('.reservationtime').daterangepicker({
     timePicker: true,
     startDate: moment(),
@@ -29,11 +26,33 @@ $(function() {
   });
   $('.reservationtime').on('apply.daterangepicker', function(ev, picker) {
       $(this).val(picker.startDate.format('YYYY-MM-DD hh:mm a') + ' - ' + picker.endDate.format('YYYY-MM-DD hh:mm a'));
-      console.log(picker)
       date_range = picker;
       set_fechas(date_range.startDate.format('YYYY-MM-DD HH:mm'), date_range.endDate.format('YYYY-MM-DD HH:mm'));
+      //Desp que selecciona la fecha habilito el boton para crear.
+      $("#crearRegistro").prop("disabled", false);
   });
   $('.reservationtime').on('cancel.daterangepicker', function(ev, picker) {
+      $(this).val('');
+  });
+  
+  //##### DATE TIME PICKER PERIODO FACTURACION #####
+  $('#periodoFacturacion').daterangepicker({
+    timePicker: false,
+    startDate: moment(),
+    endDate: moment().add(1, 'M'),
+    autoUpdateInput: false,
+    locale: {
+      format: 'YYYY-MM-DD',
+      applyLabel:'<i class="fa fa-check"></i> Aplicar',
+      cancelLabel:'<i class="fa fa-times"></i> Cancelar',
+    }
+  });
+  $('#periodoFacturacion').on('apply.daterangepicker', function(ev, picker) {
+      $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+      date_range = picker;
+      set_fechas(date_range.startDate.format('YYYY-MM-DD'), date_range.endDate.format('YYYY-MM-DD'));
+  });
+  $('#periodoFacturacion').on('cancel.daterangepicker', function(ev, picker) {
       $(this).val('');
   });
   
@@ -79,9 +98,12 @@ $(function() {
   //Verifica si el combo de Alumnos tiene que vaciarlo o dejarlo completo. Cuando se registran hs hay que vaciarlo, para el filtro del listado queda completo
   function verificarComboAlumnos(){
     var selectAlumnos = document.getElementById("id_alumno");
-    var selectAlumnosResult = selectAlumnos.classList.contains('alumnoRegistro');
-    if(selectAlumnosResult){
-      vaciarCombo(document.getElementById('id_alumno'));
+
+    if(selectAlumnos){
+      var selectAlumnosResult = selectAlumnos.classList.contains('alumnoRegistro');
+      if(selectAlumnosResult){
+        vaciarCombo(document.getElementById('id_alumno'));
+      }
     }
   }
 

@@ -1,8 +1,8 @@
 import django_filters
-from django.forms import NumberInput, Select
+from django.forms import NumberInput, Select, DateInput, MultiWidget
 from django_filters import filters
 
-from apps.registros.models import Registro
+from apps.registros.models import Registro, Factura
 from apps.administracion.models import Alumno
 from apps.proyecto.models import Proyecto, Servicio, ServiciosProyecto
 
@@ -31,3 +31,18 @@ class RegistroFilter(django_filters.FilterSet):
     
     class Meta:
         model: Registro
+
+class FacturaFilter(django_filters.FilterSet):
+    fechaCreacion = django_filters.DateTimeFromToRangeFilter(
+        widget=MultiWidget(
+            widgets={
+                'from': DateInput(attrs={'class': 'datepicker form-control', 'placeholder':'Desde'}),
+                'to': DateInput(attrs={'class': 'datepicker form-control', 'placeholder':'Hasta'})
+            }
+        ),
+        label='Rango de Fechas'
+    )
+    
+    
+    class Meta:
+        model: Factura

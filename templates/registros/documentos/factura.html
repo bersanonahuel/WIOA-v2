@@ -1,0 +1,423 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <title>Factura</title>
+    
+    <style type="text/css">
+        @page hoja_1{
+            size: letter portrait;
+        }
+
+        @page hoja_2{
+            size: letter landscape;
+            @frame content_frame {
+                left: 50pt; top: 50pt; right:50pt;
+            }
+        }
+        @page hoja_3{
+            size: letter portrait;
+            @frame content_frame {
+                left: 50pt; top: 50pt; right:50pt;
+            }
+        }
+        @page hoja_4{
+            size: letter portrait;
+            @frame content_frame {
+                left: 50pt; top: 50pt; right:50pt;
+            }
+            @frame footer_frame {
+                -pdf-frame-content: footer_hoja_4;
+                left: 50pt; top: 720pt; height: 100pt;
+            }
+        }
+        @page hoja_5{
+            size: letter portrait;
+            @frame content_frame {
+                left: 50pt; top: 50pt; right:50pt;
+            }
+        }
+
+
+        body{
+            font-family: sans-serif;
+            font-size: 12px;
+        }
+        .bg-gris{
+            background-color: #EBF1DE;
+        }
+        .text-center  { text-align: center; }
+        .text-right   { text-align: right; }
+        .text-left    { text-align: left; }
+        .text-justify { text-align: justify; }
+
+        .mt-20{ margin-top: 20px; }
+        .mb-20{ margin-bottom: 20px; }
+        .ml-20{ margin-left: 20px; }
+        
+        .pl-30{ padding-left: 30px; }
+        .pl-10{ padding-left: 10px; }
+
+        .pl-2{ padding-left: 2px; }
+        .pr-2{ padding-right: 2px; }
+        .pt-2{ padding-top: 2px; }
+        .pb-2{ padding-bottom: 2px; }
+        
+        .pt-10{ padding-top: 10px; }
+        .pb-10{ padding-bottom: 10px; }
+        
+        p, h3{ line-height: 8px !important; }
+
+        
+        .w-40 { width: 40px; }
+        .w-60 { width: 60px; }
+        .w-100{ width: 100px; }
+        .w-120{ width: 120px; }
+        .w-230{ width: 230px; }
+        .w-350{ width: 350px; }
+
+        .border-r{ border-right: 1px solid gray; }
+        .border-l{ border-left: 1px solid gray; }
+        .border-b{ border-bottom: 1px solid gray; }
+        .border{ border: 1px solid gray; }
+
+        #tablaDetallesAlumnos thead tr th{
+            border: 1px solid gray;
+            background-color: #EBF1DE;
+        }
+        #tablaInvoice tr td{
+            border: 1px solid gray;
+            padding: 4px 4px 1px 4px;
+        }
+        .tablaInvoiceDetalles tr td{
+            padding: 3px 4px 0px 3px;
+        }
+
+        #hoja4 tr td{
+            font-size: 11px;
+        }
+        div.hoja4-descrip p, div.hoja4-descrip p {
+            font-size: 16px;
+            line-height: 20px;
+        }
+
+    </style>
+</head>
+<body>
+    
+    <!-- 1° hoja -->
+    <hr>
+    <div>
+        <div class="text-center">
+            <img src="./{{ logoCgi }}" style="width:150px;"/>
+        </div>
+        <div class="text-center" style="margin: 280px 0px 50px; border-top:0px !important;">
+            <img src="./{{ logoCgi }}" style="width:350px;"/>
+        </div>
+        <div class="text-center">
+            <h1>INFORME DE FACTURACIÓN FINAL</h1>
+            <h1>COMPONENTE DE CONSEJERIA</h1>
+            <h1>CENTRO: GUAYAMA</h1>
+            <h1>DESDE <u>1 DE FEBRERO</u> HASTA EL <u>30 DE JULIO</u> 2021</h1>
+        </div>
+    </div>
+    <hr>
+
+
+    <!-- 2° hoja -->
+    <pdf:nexttemplate name="hoja_2" />
+    <div style="page-break-after: always"></div>
+    <section>
+        <table>
+            <tr>
+                <td>
+                    <h2>CASA GRANDE INTERACTIVE COMMUNICATIONS, INC.</h2>
+                    <p>807 Ave Ponce de León</p>
+                    <p>San Juan, Puerto Rico 00907</p>
+                    <p>Teléfono: 787-977-5055 Fax: 787-977-5058</p>
+                    <p>SS# 66-0706660</p>
+                </td>
+                <td style="margin-left: 180px;">
+                    <img src="./{{ logoCgi }}" style="width:300px;"/>
+                </td>
+            </tr>
+        </table>
+        <br>
+        
+        <h1 class="text-center" style="margin-bottom: 0px; font-size:24px; color:gray; margin-left: 700px;">INVOICE</h1>
+        <table id="tablaInvoice">
+            <tbody>
+                <tr>
+                    <td style="width: 700px; border:0px;"></td>
+                    <td class="w-100 text-right">DATE: </td>
+                    <td class="w-120">XXXXXXXX</td>
+                </tr>
+                <tr>
+                    <td style="width: 700px; border:0px;"></td>
+                    <td class="w-100 text-right">Invoice #: </td>
+                    <td class="w-120">XXXXXXXX</td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        <p>A FAVOR DE:</p>
+                        <p>Alianza Municipal de Servicios Integrados, Inc.</p>
+                        <p>Att: Edwin Colón Santini</p>
+                        <p>Área de Asuntos Administrativos</p>
+                        <p>Divsion de Finanzas</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br><br>
+
+        <table class="tablaInvoiceDetalles">
+            <thead>
+                <tr class="text-center pt-2">
+                    <th style="width: 600px;"></th>
+                    <th class="w-230 border bg-gris">TERMS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="width: 600;">Proyecto WIOA - AMSI Municipio de Guayama (32 participantes)</td>
+                    <td style="width: 200px;" class="border text-center">Payable Upon Receipt</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="tablaInvoiceDetalles">
+            <thead>
+                <tr class="text-center pt-2">
+                    <th style="width: 600px;" class="border bg-gris">DESCRIPCIÓN</th>
+                    <th class="w-230 border bg-gris">TOTAL</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="border" style="width: 600;">Consejería 100%</td>
+                    <td class="border text-right" style="width: 200px;">$ 15,161.60</td>
+                </tr>
+                <tr>
+                    <td class="text-right" style="padding-right: 20px;">SUBTOTAL</td>
+                    <td class="border text-right">$ 15,161.60</td>
+                </tr>
+                <tr>
+                    <td class="text-right" style="padding-right: 20px;">TAXES</td>
+                    <td class="border text-right">$ -</td>
+                </tr>
+                <tr>
+                    <td class="text-right" style="padding-right: 20px;">TOTAL</td>
+                    <td class="border text-right">$ 15,161.60</td>
+                </tr>
+            </tbody>
+        </table>
+        <br><br><br><br>
+
+        <table>
+            <tr>
+                <td>
+                    <p>Thank you for your business.</p>
+                </td>
+                <td style="margin-left: 180px;" class="text-center">
+                    <p>____________________________________________</p>
+                    <p>Soraya M. Sesto Martínez, President</p>
+                </td>
+            </tr>
+        </table>
+    </section>
+
+
+    <!-- 3° hoja -->
+    <pdf:nexttemplate name="hoja_3" />
+    <div style="page-break-after: always"></div>
+    <div>
+        <h2 class="text-center" style="font-size:16px;">Certificación de Factura <u>XXXXX</u></h2>
+        <br><br>
+        <h2 style="text-align: justify; font-size:16px;">"Bajo pena de nulidad absoluta certifico que ningún servidor público de La Alianza Municipal de Servicios Integrados, Inc./ Área Local de Desarrollo Laboral Caguas-Guayama, es parte o tiene algún interés en las ganancias o beneficios producto del contrato objeto de esta factura y de ser parte o tener interés en las ganancias o beneficios producto del contrato objeto de esta factura y de ser parte o tener interés en las ganancias o beneficios producto del contrato, ha mediado una dispensa previa. La única consideración para suministrar los bienes o servicios objeto del contrato ha sido el pago acordado con el representant autorizado de La Alianza Municipal de Servicios Integrados/Área Local de Desarrollo Laboral Caguas-Guayama. El importe de esta factura es justo y correcto. Los servicios profesionales aquí facturados han sido prestados a la Alianza Municipal de Servicios Integrados/Área Local de Desarrollo Laboral Caguas-Guayama y no han sido pagados".</h2>
+        <br><br>
+        <p class="text-center">______________________________</p>
+        <p class="text-center">Firma</p>
+    </div>
+
+
+    <!-- 4° hoja -->
+    <pdf:nexttemplate name="hoja_4" />
+    <div style="page-break-after: always"></div>
+    
+    <section>
+        <table>
+            <tr>
+                <td class="w-120">
+                    <label>Modelo SC 2756</label><br>
+                    <label>Rev. 10 dic 19</label><br><br>
+                    <img src="./{{ logoGobPr }}" style="width:100px;"/>
+                </td>
+                <td class="text-center" style="font-size: 15px; font-weight: bold; margin-left: -35px;">
+                    <label>Gobierno de Puerto Rico</label><br>
+                    <label>DEPARTAMENTO DE HACIENDA</label><br>
+                    <label>Área de Rentas Internas</label><br><br>
+                    <label>Certificado de Relevo Total - Entidades Jurídicas</label>
+                </td>                
+            </tr>
+        </table>
+        <br>
+        
+        <table id="hoja4">
+            <tr>
+                <td style="width:450px;"></td>
+                <td>Fecha:</td>
+                <td class="text-right">16 diciembre 2020</td>
+            </tr>
+            <tr>
+                <td>ADP TAX FILING SERVICE</td>
+                <td>ID de Contribuyente:</td>
+                <td class="text-right">12874-34240</td>
+            </tr>
+            <tr>
+                <td>CASA GRANDE INTERACTIVE COMMUNICATIONS INC</td>
+                <td>ID de Correspondencia:</td>
+                <td class="text-right">L0823263872</td>
+            </tr>
+            <tr>
+                <td>807 AVE PONCE DE LEON</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>SAN JUAN PR 00907-3326</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>Número de Control:</td>
+                <td class="text-right">L0823263872</td>
+            </tr>
+        </table>
+        <br>
+        
+        <div class="hoja4-descrip">
+            <br>
+            <h1 class="text-center">Certificado de Relevo Total de la Retención en el Origen sobre Pagos por <br> Servicios Prestados por Corporaciones, Sociedades y otras Entidades</h1>
+            <br>
+            <p>De acuerdo a lo establecido en la Sección 1062.03(g) del Código de Rentas Internas de Puerto Rico del 2011, según enmendado, y conforme a los requisitos establecidos en dicha sección, se le concede este Certificado de Relevo Total de Retención sobre Pagos por Servicios Prestados en Puerto Rico. Este relevo estará en vigor con respecto a los pagos efectuados durante el año natural 2021.</p>
+            <p>Deberá entregar copia de este Certificado a toda persona responsable de efectuar la retención sobre los pagos por servicios prestados.</p>
+            <p>Si las condiciones bajo las que se emite este Certificado no aplican a su caso, favor de ignorar el mismo.</p>
+            <p>Para aclarar cualquier duda u obtener información sobre este particular, puede comunicarse al (787) 622-0123.</p>
+            <p>Este relevo no lo exime del pago de cualquier deuda contributiva.</p>
+            <br><br>
+            <label>Roxanna Santiago Ortiz</label><br>
+            <label>Secretaria Auxiliar</label><br><br>
+            <label>Área de Rentas Internas</label>
+        </div>
+
+        <div id="footer_hoja_4">
+            <p class="text-center">Vence el: 31 dic. 2021</p>
+            <label style="font-size:9px;">Para verificar si este Certificado es válido, acceda a <u>https://suri.hacienda.pr.gov</u> y presione el enlace "Validar un certificado o licencia".</label><br>
+            <table>
+                <tr>
+                    <td style="font-size:8px; width:650px;">Periodo de Conservación: Seis (6) años o una intervención del Contralor, lo que ocurra primero.</td>
+                    <td style="font-size:8px; text-right">mL072</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="font-size:8px; text-right; padding-left:10px;">4</td>
+                </tr>
+            </table>
+        </div>
+
+    </section>
+
+    <!-- 5° hoja -->
+    <pdf:nexttemplate name="hoja_5" />
+    <div style="page-break-after: always"></div>
+    
+    
+    <div class="border">
+        <div class="text-center" style="border:0px;">
+            <img src="./{{ logoCgi }}" style="width:150px;"/>
+            <h1>HOJA DE FACTURACIÓN #2 CONSEJERIA</h1>
+        </div>
+    </div>
+
+
+
+
+
+    <div style="page-break-after: always"></div>
+
+
+    <!-- Hoja detalle TITULO Componente -->
+    <div class="border" style="padding-top: 50%;">
+        <h1 class="text-center" style="">COMPONENTE DE MENTORÍA</h1>
+    </div>
+    <div style="page-break-after: always"></div>
+    
+    <!-- Hoja detalle HORAS -->
+    <table>
+        <tr class="border-b">
+            <td class="pb-2">
+                <img src="./{{ logoCgi }}" style="width:160px;"/>
+            </td>
+            <td class="w-350">
+                <h3>Hoja de Trabajo - evidencia de servicio para Proyecto Uno a Uno</h3>
+            </td>
+            <td class="border-l w-60 ml-20">
+                <img src="./{{ logoUno }}" class="w-40"/>
+            </td>
+            <td class="w-60">
+                <img src="./{{ logoAmsi }}" class="w-40"/>
+            </td>
+        </tr>
+    </table>
+    
+    <table class="mt-20 mb-20">
+        <tr>
+            <td class="border" style="width: 450px;">
+                <h3 class="pt-10 pb-10 pl-10">NOMBRE MENTOR:</h3>
+            </td>
+            <td class="border" style="width: 300px;">
+                <h3 class="pt-10 pb-10 pl-10">FECHA SEMANA:</h3>
+            </td>
+        </tr>
+    </table>
+    
+    <table id="tablaDetallesAlumnos">
+        <thead>
+            <tr class="text-center pt-2">
+                <th class="w-230 border bg-gris">NOMBRE DEL ESTUDIANTE</th>
+                <th class="w-230 border bg-gris">DÍA Y HORA (AM/PM)</th>
+                <th class="w-100 border bg-gris">CANTIDAD DE HORAS</th>
+                <th class="w-120 border bg-gris">COMENTARIO (Indique si es Seguimiento)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for det in registrosDetalle %}
+                <tr class="pt-2">
+                    <td class="w-110 text-left pl-2 border-r border-l">{{ det.registro.alumno }}</td>
+                    <td class="w-45 text-center border-r">{{ det.fechaHoraInicio | date:"l, F d, Y   h:i a"}}</td>
+                    <td class="w-100 pr-2 border-r text-right">{{ det.calcular_total_hs_detalle }}</td>
+                    <td class="w-120 text-center border-r"></td>
+                </tr>
+            {% endfor %}
+
+            <tr style="margin-top: 200px;">
+                <td>
+                    <p>Firma del tutor/consejero/mentor: ____________________________________________</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Firma de Coordinadora de Proyecto: ____________________________________________</p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,108 @@
+{% extends 'index.html' %}
+{% load static %}
+<!--Para que herede todo de index.html -->
+
+{% block titulo %} Detalle Registro Hs {% endblock titulo %}
+
+{% block contentTitulo %} {% endblock contentTitulo %}
+
+{% block conteiner %}
+
+  <div class="card card-primary">
+    <div class="card-header">REGISTRAR FACTURACION</div>
+
+    <form id="formRegistro" method="POST">
+
+      <div class="card-body card-block col-12">
+        {% csrf_token %}
+        {% if error %}
+          <h2>{{ error }}</h2>
+        {% else %} 
+        
+          {% comment %} FECHA INICIO FIN {% endcomment %}
+          <input type="hidden" name="fechaInicio" id="fInicio" />
+          <input type="hidden" name="fechaFin" id="fFin" />
+          <input type="hidden" name="eliminada" value="False" />
+
+          <div class="row">
+
+            
+            <div class="form-group col-12 col-md-6">
+              <label class="control-label font-weight-bold" >Ingrese el período de facturación: </label>
+              <input class="reservationtime form-control" name="fechaFactura" id="periodoFacturacion" >
+            </div>
+          </div>
+
+          <div class="row">            
+            <div class="col-12 col-md-6">
+              <div class="form-group {% if form.cliente.errors %}has-error{% endif %}">
+                <label class="control-label font-weight-bold" for="{{ form.cliente.auto_id }}"> {{ form.cliente.label }}: </label>
+                {{ form.cliente }}
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="form-group {% if form.proveedor.errors %}has-error{% endif %}">
+                <label class="control-label font-weight-bold" for="{{ form.proveedor.auto_id }}"> {{ form.proveedor.label }}: </label>
+                {{ form.proveedor }}
+              </div>
+            </div>
+          </div>
+
+          <div class="row">            
+            <div class="col-6 col-md-3">
+              <div class="form-group {% if form.terminosPago.errors %}has-error{% endif %}">
+                <label class="control-label font-weight-bold" for="{{ form.terminosPago.auto_id }}"> {{ form.terminosPago.label }}: </label>
+                {{ form.terminosPago }}
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="form-group {% if form.terminosPagoOtro.errors %}has-error{% endif %}">
+                <label class="control-label font-weight-bold" for="{{ form.terminosPagoOtro.auto_id }}"> {{ form.terminosPagoOtro.label }}: </label>
+                {{ form.terminosPagoOtro }}
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="form-group {% if form.saleTax.errors %}has-error{% endif %}">
+                <label class="control-label font-weight-bold" for="{{ form.saleTax.auto_id }}"> {{ form.saleTax.label }}: </label>
+                {{ form.saleTax }}
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12 col-md-6">
+              <div class="form-group {% if form.descripcion.errors %}has-error{% endif %}">
+                <label class="control-label font-weight-bold" for="{{ form.descripcion.auto_id }}"> {{ form.descripcion.label }}: </label>
+                {{ form.descripcion}}
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="form-group {% if form.mensajeInstitucional.errors %}has-error{% endif %}">
+                <label class="control-label font-weight-bold" for="{{ form.mensajeInstitucional.auto_id }}"> {{ form.mensajeInstitucional.label }}: </label>
+                {{ form.mensajeInstitucional }}
+              </div>
+            </div>
+
+
+          </div><!-- /row -->
+          
+        {% endif %}
+      </div>
+      <div class="card-footer">
+        <button type="submit" class="btn btn-primary mt-4" id="crearFactura" >Crear</button>
+      </div>
+    </form>
+  </div>
+
+{% endblock conteiner %}
+
+{% block extrasjs %}
+  <script type="text/javascript">
+
+    //Setear por defecto fecha hora Inicio y Fin.
+    var date_now = new moment().format('YYYY-MM-DD');
+    var date_now_fin = new moment().add(1, 'M').format('YYYY-MM-DD'); 
+    set_fechas(date_now, date_now_fin);
+    
+  </script>
+{% endblock extrasjs %}

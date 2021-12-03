@@ -41,12 +41,7 @@ window.addEventListener('load', function () {
 
             $("#crearRegistro").prop("disabled", true);
             $("#timer_submit").prop("disabled", false);
-
-            // var total_time = document.getElementById("total_time");
-            // if (total_time) {
-            //     total_time.innerHTML = "Counting...";
-            // }
-
+            
             var date_start = new moment().format('YYYY-MM-DD HH:mm');
             set_fechas(date_start, null);
             
@@ -65,10 +60,10 @@ window.addEventListener('load', function () {
             hour.innerHTML = '00';
             mint.innerHTML = '00';
             secd.innerHTML = '00';
-            var total_time = document.getElementById("total_time");
-            if (total_time) {
-                total_time.innerHTML = hr + ':' + min + ':' + sec;
-            }
+            // var total_time = document.getElementById("total_time");
+            // if (total_time) {
+            //     total_time.innerHTML = hr + ':' + min + ':' + sec;
+            // }
             //Stopping the cycle
             clearTimeout(cycle);
             hr = 0;

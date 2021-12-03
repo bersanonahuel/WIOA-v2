@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <title>Test</title>
+    <style>
+      @page :first {
+        margin: 10px;
+      }
+      @page hoja-2 {
+        margin: 0;
+        @top-left { content: none }
+        @top-center { content: none }
+        @top-right { content: none }
+      }
+    </style>
+  </head>
+
+
+  <body>
+    <!-- HOJA 1 -->
+    <article class="border border-dark">
+      <div class="text-center">
+          <img src="{% static 'img/logo-cgi.png' %}" style="width:150px;"/>
+      </div>
+      <div class="text-center" style="margin: 280px 0px 50px; border-top:0px !important;">
+          <img src="{% static 'img/logo-cgi.png' %}" style="width:350px;"/>
+      </div>
+      <div class="text-center">
+          <h1>INFORME DE FACTURACIÓN FINAL</h1>
+          <h1>COMPONENTE DE CONSEJERIA</h1>
+          <h1>CENTRO: GUAYAMA</h1>
+          <h1>DESDE <u>1 DE FEBRERO</u> HASTA EL <u>30 DE JULIO</u> 2021</h1>
+      </div>
+    </article>
+    
+    <article id="hoja-2">
+
+
+
+    
+      <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">First</th>
+              <th scope="col">Last</th>
+              <th scope="col">Handle</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+            </tr>
+            <tr>
+              <th scope="row">2</th>
+              <td>Jacob</td>
+              <td>Thornton</td>
+              <td>@fat</td>
+            </tr>
+            <tr>
+              <th scope="row">3</th>
+              <td colspan="2">Larry the Bird</td>
+              <td>@twitter</td>
+            </tr>
+          </tbody>
+      </table>
+    </article>
+
+  </body>
+</html>

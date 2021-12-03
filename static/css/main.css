@@ -16,6 +16,11 @@
     font-size: 1.3rem !important;
 }
 
+/* Tablas */
+#tablaFacturacion tbody{
+    font-size: 13px;;
+}
+
 .registro-manual{
     border-right: 1px solid #dee2e6!important;
     border-bottom: 0px !important;

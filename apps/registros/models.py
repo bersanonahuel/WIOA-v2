@@ -3,9 +3,38 @@ from django.conf import settings
 from django.db.models.fields import DateTimeField
 from django.db.models.fields.related import ForeignKey
 from django.contrib.auth.models import User
-from apps.administracion.models import Alumno, Maestro, Cliente
+from apps.administracion.models import Alumno, Maestro, Cliente, Proveedor
 from apps.proyecto.models import ServiciosProyecto
 
+
+class Factura(models.Model):
+    TERMINOS_PAGO = (
+       ('Due upon reciept', ('Due upon reciept')),
+       ('Net 30 days', ('Net 30 days')),
+       ('Other', ('Other')),
+    )
+
+    TAXES = (
+        ('Si (0%)', ('Si (0%)')),
+        ('Si (10.5%)', ('Si (10.5%)')),
+        ('No', ('No')),
+    )
+
+    id = models.AutoField(primary_key=True)
+    fechaCreacion = models.DateTimeField(auto_now=True)
+    fechaInicio = models.DateTimeField(auto_now=False)
+    fechaFin = models.DateTimeField(auto_now=False)
+    eliminada = models.BooleanField(default=False)
+    descripcion = models.CharField(max_length=500, blank=True, null=True)
+    terminosPago = models.CharField(max_length=32, choices=TERMINOS_PAGO, verbose_name="Terminos de Pago", default='', blank=True, null=False)
+    terminosPagoOtro = models.CharField(max_length=200, verbose_name="Ingrese le nombre", blank=True, null=True)
+    saleTax = models.CharField(max_length=15, choices=TAXES, verbose_name="Taxes", default='', blank=True, null=True)
+    mensajeInstitucional = models.CharField(max_length=500, verbose_name="Mensaje Institucional", blank=True, null=True)
+    
+    cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT, blank=False, null=False)
+    proveedor = models.ForeignKey(Proveedor, on_delete=models.PROTECT, blank=False, null=False)
+    #centroGestionId
+ 
 
 # Create your models here.
 class Registro(models.Model):
@@ -29,6 +58,9 @@ class RegistroDetalle(models.Model):
     fechaHoraInicio=models.DateTimeField(auto_now=False)
     fechaHoraFin=models.DateTimeField(auto_now=False)
     registro = models.ForeignKey(Registro, on_delete=models.PROTECT, blank=False, null=False)
+    factura = models.ForeignKey(Factura, on_delete=models.PROTECT, blank=True, null=True)
+    usuario = models.ForeignKey(User, on_delete=models.PROTECT, blank=False, null=False)
+
 
     def calcular_total_hs_detalle(self):
         timediff = (self.fechaHoraFin - self.fechaHoraInicio)
@@ -52,34 +84,7 @@ def convertir_tiempo(segundos):
     if segundos < 10:
         segundos = '0'+segundos.__str__()
 
-    tiempo = horas.__str__()+':'+minutos.__str__()+':'+segundos.__str__()
+    tiempo = horas.__str__()+':'+minutos.__str__() #+':'+segundos.__str__()
 
-    return tiempo
-
-class Factura(models.Model):
-    TERMINOS_PAGO = (
-       ('Due upon reciept', ('Due upon reciept')),
-       ('Net 30 days', ('Net 30 days')),
-       ('Other', ('Other')),
-    )
-
-    # TAXES = (
-    #     'Si (0%)',
-    #     'Si (10.5%)',
-    #     'No',
-    # )
-
-    id = models.AutoField(primary_key=True)
-    fechaCreacion = models.DateTimeField(auto_now=False)
-    fechaInicio = models.DateTimeField(auto_now=False)
-    fechaFin = models.DateTimeField(auto_now=False)
-    eliminada = models.BooleanField()
-    descripcion = models.CharField(max_length=500, blank=True, null=True)
-    terminosPago = models.CharField(max_length=32, choices=TERMINOS_PAGO, default='', blank=True, null=False)
-    saleTax = models.CharField(max_length=15, blank=True, null=True)
-    mensajeInstitucional = models.CharField(max_length=500, blank=True, null=True)
-    
-    cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT, blank=False, null=False)
-    #centroGestionId
-    
+    return tiempo   
     
