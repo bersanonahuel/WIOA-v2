@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Alumno, Maestro, Escuela, Municipio, Cliente, Proveedor, Cargo
+from .models import Alumno, Maestro, Escuela, Municipio, Cliente, Proveedor, Cargo, CentroGestion
 
 class AlumnoAdmin(admin.ModelAdmin):
     search_fields=['apellidoPaterno', 'apellidoMaterno', 'nombre']
@@ -19,15 +19,19 @@ class MunicipioAdmin(admin.ModelAdmin):
 
 class ClienteAdmin(admin.ModelAdmin):
     search_fields=['nombre']
-    list_display=('id', 'nombre')
+    list_display=('id', 'nombre', 'direccionFisica', 'direccionPostal', 'att', 'departamento', 'centroGestion')
 
 class ProveedorAdmin(admin.ModelAdmin):
     search_fields=['nombre']
-    list_display=('id', 'nombre', 'telefono', 'fax', 'direccionFisica', 'direccionPostal')
+    list_display=('id', 'nombre', 'telefono', 'fax', 'direccionFisica', 'direccionPostal', 'numeroFiscal')
 
 class CargoAdmin(admin.ModelAdmin):
     search_fields=['nombre']
     list_display=('id', 'nombre')
+
+class CentroGestionAdmin(admin.ModelAdmin):
+    search_fields=['nombre']
+    list_display = ('id', 'nombre')
 
 
 admin.site.register(Alumno, AlumnoAdmin)
@@ -37,3 +41,4 @@ admin.site.register(Municipio, MunicipioAdmin)
 admin.site.register(Cliente, ClienteAdmin)
 admin.site.register(Proveedor, ProveedorAdmin)
 admin.site.register(Cargo, CargoAdmin)
+admin.site.register(CentroGestion, CentroGestionAdmin)

@@ -42,10 +42,24 @@ class RegistroDetalleForm(forms.ModelForm):
             self.fields[field].widget.attrs = {
                 'class': 'form-control mb-3'
             }
+        self.fields['comentario'].widget.attrs = {
+            'class': 'form-control w-25 mx-auto'
+        }
+
+
 
     class Meta:
         model = RegistroDetalle
         fields = '__all__'
+
+        widgets={
+            'comentario': forms.Textarea(
+                attrs = {
+                    'placeholder':'',
+                    'rows':'4'
+                }
+            ),
+        }
     
 class FacturaForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -54,6 +68,8 @@ class FacturaForm(forms.ModelForm):
             self.fields[field].widget.attrs = {
                 'class': 'form-control mb-3'
             }
+        self.fields['saleTaxOtro'].widget.attrs['step'] = '0.01'
+        self.fields['saleTaxOtro'].widget.attrs['min'] = '0.00'
         self.fields['cliente'].widget.attrs = {
             'class': 'form-control select2 clienteFactura'
         }
@@ -62,6 +78,9 @@ class FacturaForm(forms.ModelForm):
         }
         self.fields['terminosPago'].widget.attrs = {
             'class': 'form-control selectTerminoPagoFactura'
+        }
+        self.fields['saleTax'].widget.attrs = {
+            'class': 'form-control selectSaleTaxFactura'
         }
 
     class Meta:
@@ -76,6 +95,18 @@ class FacturaForm(forms.ModelForm):
                 }
             ),
             'mensajeInstitucional': forms.Textarea(
+                attrs = {
+                    'placeholder':'',
+                    'rows':'4'
+                }
+            ),
+            'descripcionTareas': forms.Textarea(
+                attrs = {
+                    'placeholder':'',
+                    'rows':'4'
+                }
+            ),
+            'logrosObtenidos': forms.Textarea(
                 attrs = {
                     'placeholder':'',
                     'rows':'4'

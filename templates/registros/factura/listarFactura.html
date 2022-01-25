@@ -43,7 +43,6 @@
                   <td>{{ facrura.saleTax }}</td>
                   
                   <td>
-                    <a class="btn btn-warning btn-sm" href="{% url 'registros:imprimirFactura' facrura.id %}" target="_blank"><i class="fas fa-fas fa-print"></i></a>
                     <a class="btn btn-error btn-sm" href="{% url 'registros:printPdf' facrura.id %}" target="_blank"><i class="fas fa-fas fa-print"></i></a>
                     {% comment %} <a class="btn btn-primary btn-sm" href="{% url 'registros:editarFactura' factura.id %}"><i class="fas fa-fas fa-pencil-alt"></i></a> {% endcomment %}
                                 

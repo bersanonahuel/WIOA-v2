@@ -2,6 +2,17 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+class CentroGestion(models.Model):
+    id = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=50, blank=False,null=False)
+    class Meta:
+        verbose_name='Centro de Gestión'
+        verbose_name_plural='Centros de Gestión'
+        ordering=['nombre']
+    
+    def __str__(self) :
+        return self.nombre
+
 class Municipio(models.Model):
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=50, blank=False,null=False)
@@ -95,6 +106,9 @@ class Cliente(models.Model):
     nombre = models.CharField(max_length=200, blank=False,null=False)
     direccionFisica = models.CharField(max_length=100, verbose_name='Direccion Física', blank=True, null=True)
     direccionPostal = models.CharField(max_length=100, verbose_name='Direccion Postal', blank=True, null=True)
+    att = models.CharField(max_length=100, blank=True, null=True)
+    departamento = models.CharField(max_length=100, blank=True, null=True)
+    centroGestion = models.ForeignKey(CentroGestion, on_delete=models.PROTECT, blank=True, null=True)
     
     class Meta:
         verbose_name = ("Cliente")
@@ -110,6 +124,7 @@ class Proveedor(models.Model):
     fax = models.CharField(max_length=200, blank=False,null=False)
     direccionFisica = models.CharField(max_length=100, verbose_name='Dirección Física', blank=True, null=True)
     direccionPostal = models.CharField(max_length=100, verbose_name='Dirección Postal', blank=True, null=True)
+    numeroFiscal = models.CharField(max_length=100, verbose_name='Número Fiscal', blank=True, null=True)
     
     class Meta:
         verbose_name = ("Proveedor")

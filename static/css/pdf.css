@@ -1,0 +1,190 @@
+@page {
+    margin: 50px;
+}
+@page portrait { size: A4; }
+@page landscape { size: A4 landscape; }
+
+@page :first {
+    height: 100%;
+}
+@page hoja-4 {
+    margin-bottom: 20px !important;
+}
+
+html {
+    font-family: sans-serif;
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+h1 {
+    font-size: 30px;
+    margin: 15px 0;
+}
+h2 {
+    font-size: 25px;
+}
+h3 {
+    font-size: 16px;
+}
+h4 {
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+h2, h3, h4 {
+    font-weight: 600;
+}
+p{
+    margin: 0px;
+    line-height: 20px;
+    font-size: 12px;
+}
+
+/* Tabla */
+table{
+    border-collapse: collapse;
+}
+table tbody tr {
+    margin: 0px;
+}
+table tbody td, table thead th {
+    border: 1px solid black;
+    margin: 0px;
+    padding: 5px;
+    font-size: 12px;
+}
+tr {
+    display: table-row;
+}
+
+/* Clases genericas */
+.text-center{
+    text-align: center;
+}
+.text-right{
+    text-align: right;
+}
+.text-left{
+    text-align: left !important;
+}
+.text-bold{
+    font-weight: bold !important;
+}
+.float-left{
+    float: left;
+}
+.float-right{
+    float: right;
+}
+.d-flex{
+    display: flex;
+}
+.border{
+    border: 1px solid black !important;
+}
+.border-0{
+    border: 0px !important;
+}
+.bg-gris-oscuro {
+    background-color: #bebebe;
+}
+.bg-gris-claro {
+    background-color: #ddd9c5;
+}
+.bg-celeste {
+    background-color: #acb9ca;
+}
+.bg-claro {
+    background-color: #f2f2f2;
+}
+.color-celeste{
+    color: #27ade4;
+}
+.color-rojo{
+    color: red;
+}
+
+.pr-100{
+    padding-right: 100px;
+}
+.ml-10{
+    margin-left:10px;
+}
+.ml-30{
+    margin-left:30px;
+}
+.w-40{
+    width: 40px;
+}
+.w-50{
+    width: 50px;
+}
+.w-100{
+    width: 100px;
+}
+.w-200{
+    width: 200px;
+}
+.w-450{
+    width: 450px;
+}
+.w-650{
+    width: 650px;
+}
+
+.logo-header {
+    margin-top: 20px;
+    width:200px;
+}
+
+/* Hoja 2 */
+.tablaInvoiceDetalles{
+    width: 100% !important;
+    max-width: 100%;
+}
+
+/* Hoja 4 */
+#header-hoja-4 p {
+    font-size: 15px !important;
+    font-weight: bold !important;
+}
+#subheader-hoja-4 tr td{
+    border: 0px;
+    font-size: 10px;
+    line-height: 8px;
+
+}
+.descrip-hoja-4 p {
+    margin-bottom: 10px;
+}
+#footer-hoja-4{
+    margin-top: 160px !important;
+}
+#footer-hoja-4 td{
+    font-size:8px;
+    border: 0px;
+}
+
+/* HOJA 5 */
+.tabla-hoja-5{
+    margin: 10px;
+}
+.tabla-hoja-5 p{
+    font-size: 11px;
+    line-height: 18px;
+}
+
+/* Hoja 8 */
+#header-hoja-8 tr td{
+    border: 0px;
+}
+#header-hoja-8{
+    border-bottom: 3px solid gray !important;
+}
+
+/* HOJA 9*/
+#contenido-hoja-9 p.cuadro{
+    height: 100px;
+    padding: 10px;
+}
+

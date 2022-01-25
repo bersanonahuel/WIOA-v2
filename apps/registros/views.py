@@ -13,8 +13,10 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.http import HttpResponse
 from datetime import datetime, timedelta
+from decimal import Decimal
+from django.db.models import Count
 
-from apps.proyecto.models import ServiciosProyecto, Proyecto
+from apps.proyecto.models import ServiciosProyecto, Proyecto, Servicio
 #Para PDF
 from io import BytesIO # nos ayuda a convertir un html en pdf
 import os
@@ -26,6 +28,8 @@ from .filters import RegistroFilter, FacturaFilter
 
 from weasyprint import HTML
 from weasyprint import CSS
+
+from django.db.models import F, Q
 
 CREAR_REGISTRO_FILE  = 'registros/crearRegistro.html'
 LISTAR_REGISTRO_FILE = 'registros/listarRegistro.html'
@@ -107,7 +111,7 @@ class CrearRegistroDetalle(CreateView):
     def post(self, request, *args, **kwargs):
         if request.method == 'POST':
             request.POST._mutable = True
-
+            print('comentario:::: ', request.POST['comentario'])
             #Pruebas convertir time AM/PM
             format = '%Y-%m-%d %H:%M'
             date_string_inicio = request.POST['fechaHoraInicio']  #'2009-11-29 03:17:00.0000'
@@ -122,6 +126,7 @@ class CrearRegistroDetalle(CreateView):
             regDet.fechaHoraFin = fin.strftime(format)
             regDet.registro = Registro.objects.get(id=self.kwargs['registropk'])
             regDet.usuario = request.user
+            regDet.comentario = request.POST['comentario']
             
             regDet.save()
             
@@ -165,11 +170,33 @@ class CrearFactura(CreateView):
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        if request.is_ajax():
+            data = {}
+            try:
+                action = request.POST['action']
+                
+                if action == 'getServiciosDelProyecto':
+
+                    p = Proyecto.objects.get(id=request.POST['proyectoId'])
+                    serviciosProyecto = ServiciosProyecto.objects.filter(proyecto=p.id)
+                    
+                    servicioIds = serviciosProyecto.values_list('servicio_id', flat=True) #.values('id', 'nombre')
+                    servicios = Servicio.objects.filter(pk__in=servicioIds).values('id', 'nombre')
+                    print(servicios)
+                    
+                    if servicios:
+                        data = { 'servicios': list(servicios) }
+                    else:
+                        data['error'] = 'No se encontró ningún Servicio asignado a este Proyecto.'
+                else:
+                    data['error'] = 'Ha ocurrido un error'
+
+            except Exception as e:
+                data['error'] = str(e)
+            return JsonResponse(data, safe=False)
+
         if request.method == 'POST':
             request.POST._mutable = True
-
-            print('**** post factura')
-            print(request.POST)
 
             #Pruebas convertir time AM/PM
             format = '%Y-%m-%d'
@@ -179,23 +206,60 @@ class CrearFactura(CreateView):
             date_string_fin = request.POST['fechaFin']
             fin = datetime.strptime(date_string_fin, format)
             
-            form = FacturaForm(request.POST)
-            factura = form.save(commit=False)
-            factura.fechaInicio = inicio.strftime(format)
-            factura.fechaFin = fin.strftime(format)
-            factura.fechaCreacion = fin.strftime(format)
-            factura.cliente = Cliente.objects.get(id=request.POST['cliente'])
-            factura.proveedor = Proveedor.objects.get(id=request.POST['proveedor'])
-                        
-            factura.save()
+            #SaleTaxOtro, default 0
+            if not request.POST['saleTaxOtro']:
+                request.POST['saleTaxOtro'] = 0.0
             
-            return super().form_valid(factura)
+            request.POST['proyectosServicios'] = 1
+            
+            form = FacturaForm(request.POST)
+            
+            if form.is_valid():
+                factura = form.save(commit=False)
+                factura.fechaInicio = inicio.strftime(format)
+                factura.fechaFin = fin.strftime(format)
+                factura.fechaCreacion = fin.strftime(format)
+                factura.cliente = Cliente.objects.get(id=request.POST['cliente'])
+                factura.proveedor = Proveedor.objects.get(id=request.POST['proveedor'])
+
+                factura.save()
+                
+                #Guardar tabla intermedia Factura-ProyectoServicios
+                proyectoSelId = request.POST['proyectoSelId']
+                print('PROY: ',proyectoSelId)
+                for serv in request.POST.getlist('serviciosCheck'):
+                    print('SERV CHECK: ',serv)
+                    sp = ServiciosProyecto.objects.filter(proyecto=proyectoSelId, servicio=serv).first()
+                    print('SERV PROY: ',sp.id)
+
+                    factura.proyectosServicios.add(sp)
+                
+                factura.save()
+
+                #Buscar todos los registros de hs que se incluyan en el periodo ingresado.
+                detalles = RegistroDetalle.objects.filter( fechaHoraInicio__gte=inicio, fechaHoraFin__lte=fin, factura=None)
+
+                listaProyServFactura = factura.proyectosServicios.values_list('id',flat=True)
+                for det in detalles:
+                    if det.registro.proyecto_servicio.id in listaProyServFactura:
+                        det.factura = factura
+                        det.save()
+                
+                return super().form_valid(factura)
+            else:
+                print('NO SE GUARDO, ERROR: ', form.errors)
+                return super().form_valid(form)
+
 
     def form_valid(self, form):
         return super().form_valid(form)
 
     def get_success_url(self):
         return reverse_lazy('registros:crearFactura')
+    
+    def get_context_data(self, **kwargs):
+        kwargs['proyectos'] = Proyecto.objects.all()
+        return super(CrearFactura,self).get_context_data(**kwargs)
 
 class EditarFactura(UpdateView):
     model = Factura
@@ -216,63 +280,7 @@ class ListarFactura(ListView):
         factura_filter = FacturaFilter(request.GET, queryset=Factura.objects.all())
         
         return render(request, LISTAR_FACTURA_FILE, {'filter': factura_filter})
-
-class ListarFacturaPdf(TemplateView):
-    model = Factura
-    template_name = 'registros/documentos/factura.html'
-    def get_context_data(self, **kwargs):
-        facturaInstance = Factura.objects.get(id=self.kwargs['pk'])
-        kwargs['facturaInstance'] = facturaInstance
-        kwargs['registrosDetalle'] = RegistroDetalle.objects.filter(factura=facturaInstance.id)
-
-        return super(ListarFacturaPdf,self).get_context_data(**kwargs)
-
-
-class ImprimirFactura(View):
-    def link_callback(self,uri,rel):
-        sUrl = settings.STATIC_URL
-        sRoot = settings.STATIC_ROOT
-        mUrl = settings.MEDIA_URL
-        mRoot = settings.MEDIA_ROOT
-    
-        if uri.startswith(mUrl):
-            path = os.path.join(mRoot, uri.replace(mUrl,""))
-        elif uri.startswith(sUrl):
-            path = os.path.join(sRoot, uri.replace(sUrl,""))
-        else:
-            return uri
         
-        if not os.path.isfile(path):
-            raise Exception(
-                'media URI must start with %s or %s' % (sUrl,mUrl)
-            )
-        return path
-
-    def get(self, request, *args, **kwargs):
-        path = request.path
-        
-        template = get_template('registros/documentos/factura.html')
-
-        facturaInstance = Factura.objects.get(id=self.kwargs['pk'])
-        
-        registrosDetalle = RegistroDetalle.objects.filter(factura=facturaInstance.id)
-
-        context = {
-            'factura': facturaInstance,
-            'registrosDetalle': registrosDetalle,
-            'logoCgi':'{}{}'.format(settings.STATIC_URL, 'img/logo-cgi.png'),
-            'logoUno':'{}{}'.format(settings.STATIC_URL, 'img/logo-uno.png'),
-            'logoAmsi':'{}{}'.format(settings.STATIC_URL, 'img/logo-amsi.png'),
-            'logoGobPr':'{}{}'.format(settings.STATIC_URL, 'img/logo-gob-pr.png')
-        }
-        html = template.render(context)
-        response = HttpResponse(content_type='application/pdf')
-        #response['Content-Disposition'] = 'attachment; filename="report.pdf"'
-        pisaStatus = pisa.CreatePDF(
-            html, dest=response, link_callback = self.link_callback
-        )
-        return response
-
 
 class PrintPdf(View):
     def get(self, request, *args, **kwargs):
@@ -281,14 +289,117 @@ class PrintPdf(View):
         facturaInstance = Factura.objects.get(id=self.kwargs['pk'])
         registrosDetalle = RegistroDetalle.objects.filter(factura=facturaInstance.id)
 
+
+        # ······ Total y subtotal Factura
+        subtotal = Decimal(0.0)
+        total = Decimal(0.0)
+        tax = Decimal(0.0)
+
+        for proyServ in facturaInstance.proyectosServicios.all():
+            subtotal = subtotal + (proyServ.precio_por_hora * proyServ.cantidad_participantes)
+            
+        if facturaInstance.saleTax == 'Si (10.5%)':
+            tax = Decimal(10.5)
+        elif facturaInstance.saleTax == 'Other':
+            tax = facturaInstance.saleTaxOtro
+
+        precioTax = round(subtotal * (tax/100), 2)
+        total = subtotal + precioTax
+        
+        totalParticipantes = facturaInstance.proyectosServicios.all().aggregate(total=models.Sum('cantidad_participantes'))
+
+
+        # ······ Detalle de Hs por MES
+        #registrosDetalle.values('registro').order_by('registro').annotate(count=Count('author'))
+
+        registrosPorMes = dict()
+        nro = 1
+        tutoriaHsTotal = 0
+        mentoriaHsTotal = 0
+        conserjeriaHsTotal = 0
+        jsHsTotal = 0
+        
+        for i in range(1, 13): 
+            #regDetMes = RegistroDetalle.objects.filter(factura=facturaInstance.id, fechaHoraInicio__month = i).values('fechaHoraInicio__month', servicioId=F('registro__proyecto_servicio__servicio')).annotate(cant=Count('registro', distinct=True)).order_by('fechaHoraInicio__month', '-registro__proyecto_servicio__servicio')
+            
+            #cantParticipantes = ([regDet.registro_id for regDet in regDetMes])
+            regDetMes = RegistroDetalle.objects.filter(factura=facturaInstance.id, fechaHoraInicio__month = i).values('fechaHoraInicio__month').aggregate(
+                tutoria=Count('registro', distinct=True, filter=Q(registro__proyecto_servicio__servicio=1)),
+                mentoria=Count('registro', distinct=True, filter=Q(registro__proyecto_servicio__servicio=2)),
+                conserjeria=Count('registro', distinct=True, filter=Q(registro__proyecto_servicio__servicio=3)),
+                js=Count('registro', distinct=True, filter=Q(registro__proyecto_servicio__servicio=4)),
+            )
+            
+            if regDetMes:
+                if regDetMes['tutoria'] > 0 or regDetMes['mentoria'] > 0 or regDetMes['conserjeria'] > 0 or regDetMes['js'] > 0:
+                    for servicio in range(1,5):
+                        seg = 0
+                        reg = RegistroDetalle.objects.filter(factura=facturaInstance.id, fechaHoraInicio__month = i, registro__proyecto_servicio__servicio=servicio)
+                        #print('MES: ', i, ' ++++ serv', servicio)
+                        for r in reg:
+                            seg = seg + r.calcular_total_hs_segundos_detalle()
+
+                        #print('seg en hs: ',convertir_tiempo(seg))
+                        hs = convertir_tiempo(seg)
+                        if servicio == 1:
+                            regDetMes['tutoriaHs']  = hs
+                            tutoriaHsTotal = tutoriaHsTotal + seg
+                        if servicio == 2:
+                            regDetMes['mentoriaHs']  = hs
+                            mentoriaHsTotal = mentoriaHsTotal + seg
+                        if servicio == 3:
+                            regDetMes['conserjeriaHs']  = hs
+                            conserjeriaHsTotal = conserjeriaHsTotal + seg
+                        if servicio == 4:
+                            regDetMes['jsHs']  = hs
+                            jsHsTotal = jsHsTotal + seg
+                    
+                    regDetMes['mes'] = i
+
+                    registrosPorMes[nro] = regDetMes
+                    nro = nro+1
+        
+        # TOTALES
+        totTutoria = 0
+        totMentoria = 0
+        totConserjeria = 0
+        totJs = 0
+
+        for t in registrosPorMes.values():
+            totTutoria+=t['tutoria']
+            totMentoria+=t['mentoria']
+            totConserjeria+=t['conserjeria']
+            totJs+=t['js']
+        
+        registrosPorMes['TOTAL'] = {
+            'tutoria': totTutoria,
+            'mentoria': totMentoria,
+            'conserjeria': totConserjeria,
+            'js': totJs,
+            'tutoriaHs': convertir_tiempo(tutoriaHsTotal),
+            'mentoriaHs': convertir_tiempo(mentoriaHsTotal),
+            'conserjeriaHs': convertir_tiempo(conserjeriaHsTotal),
+            'jsHs': convertir_tiempo(jsHsTotal)
+        }
+
+        #print('registrosPorMes:::: ',registrosPorMes)
+        
         context = {
             'factura': facturaInstance,
-            'registrosDetalle': registrosDetalle
+            'registrosDetalle': registrosDetalle,
+            'subtotalFactura': round(subtotal, 2),
+            'totalFactura': round(total, 2),
+            'precioTax': precioTax,
+            'totalParticipantes': totalParticipantes,
+            'serviciosList': Servicio.objects.all(),
+            'serviciosFacturados': facturaInstance.proyectosServicios.values_list('servicio',flat=True),
+            'registrosPorMes': registrosPorMes
         }
 
         html_template = template.render(context)
-        css_url = os.path.join(settings.BASE_DIR, 'static/lib/adminlte-3.1.0/css/adminlte.css')
-        pdf = HTML(string=html_template, base_url=request.build_absolute_uri()).write_pdf(stylesheets=[CSS(css_url)])
+        #css_url = os.path.join(settings.BASE_DIR, 'static/lib/adminlte-3.1.0/css/adminlte.css')
+        #pdf = HTML(string=html_template, base_url=request.build_absolute_uri()).write_pdf(stylesheets=[CSS(css_url)])
+        pdf = HTML(string=html_template, base_url=request.build_absolute_uri()).write_pdf()
 
         #return super(PrintPdf,self).get_context_data(**kwargs)
         return HttpResponse(pdf, content_type='application/pdf')

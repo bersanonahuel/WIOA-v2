@@ -18,6 +18,7 @@ class Factura(models.Model):
         ('Si (0%)', ('Si (0%)')),
         ('Si (10.5%)', ('Si (10.5%)')),
         ('No', ('No')),
+       ('Other', ('Other')),
     )
 
     id = models.AutoField(primary_key=True)
@@ -27,13 +28,18 @@ class Factura(models.Model):
     eliminada = models.BooleanField(default=False)
     descripcion = models.CharField(max_length=500, blank=True, null=True)
     terminosPago = models.CharField(max_length=32, choices=TERMINOS_PAGO, verbose_name="Terminos de Pago", default='', blank=True, null=False)
-    terminosPagoOtro = models.CharField(max_length=200, verbose_name="Ingrese le nombre", blank=True, null=True)
+    terminosPagoOtro = models.CharField(max_length=200, verbose_name="Términos Otros", blank=True, null=True)
     saleTax = models.CharField(max_length=15, choices=TAXES, verbose_name="Taxes", default='', blank=True, null=True)
+    saleTaxOtro = models.DecimalField(verbose_name='Tax Otro (%)', max_digits=5, decimal_places=2, default=0.00, null=True)
     mensajeInstitucional = models.CharField(max_length=500, verbose_name="Mensaje Institucional", blank=True, null=True)
-    
+    descripcionTareas = models.CharField(max_length=500, verbose_name="Descripción de Tareas", blank=True, null=True)
+    logrosObtenidos = models.CharField(max_length=500, verbose_name="Logros Obtenidos", blank=True, null=True)
+
     cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT, blank=False, null=False)
     proveedor = models.ForeignKey(Proveedor, on_delete=models.PROTECT, blank=False, null=False)
-    #centroGestionId
+
+    proyectosServicios = models.ManyToManyField(ServiciosProyecto, related_name='factura')
+    
  
 
 # Create your models here.
@@ -60,6 +66,7 @@ class RegistroDetalle(models.Model):
     registro = models.ForeignKey(Registro, on_delete=models.PROTECT, blank=False, null=False)
     factura = models.ForeignKey(Factura, on_delete=models.PROTECT, blank=True, null=True)
     usuario = models.ForeignKey(User, on_delete=models.PROTECT, blank=False, null=False)
+    comentario = models.CharField(max_length=400, blank=True, null=True)
 
 
     def calcular_total_hs_detalle(self):
@@ -69,6 +76,12 @@ class RegistroDetalle(models.Model):
         tiempo = convertir_tiempo(segundos)
 
         return tiempo
+    
+    def calcular_total_hs_segundos_detalle(self):
+        timediff = (self.fechaHoraFin - self.fechaHoraInicio)
+        segundos = timediff.seconds
+
+        return segundos
 
 #Convierte segundos al formato hh:mm:ss
 def convertir_tiempo(segundos):

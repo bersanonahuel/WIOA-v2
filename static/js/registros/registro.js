@@ -4,13 +4,11 @@ function set_fechas(inicio, fin){
   if (inicio != null){
     $('#fInicio').val(inicio);
   }
-  console.log('SET FECHAS fin', fin);
+  //console.log('SET FECHAS fin', fin);
   $('#fFin').val(fin);
 }
 
 $(function() {
-  
-  
   
   //##### DATE TIME PICKER REGISTRO HORAS #####
   $('.reservationtime').daterangepicker({
