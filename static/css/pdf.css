@@ -125,8 +125,11 @@ tr {
 .w-200{
     width: 200px;
 }
-.w-450{
-    width: 450px;
+.w-250{
+    width: 250px;
+}
+.w-300{
+    width: 300px;
 }
 .w-650{
     width: 650px;

@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="es">
   <head>
-    <title>Fsctura nro. {{ factura.id }}</title>
+    <title>Factura nro. {{ factura.id }}</title>
     {% comment %} <link href="{% static 'lib/adminlte-3.1.0/css/adminlte.css' %}" rel="stylesheet"> {% endcomment %}
     <link href="{% static 'css/pdf.css' %}" rel="stylesheet">
   </head>
@@ -22,7 +22,11 @@
             <h1>INFORME DE FACTURACIÓN FINAL</h1>
             <h1>COMPONENTE DE <span class="color-rojo">
               {% for servicio in factura.proyectosServicios.all %}
-                {{ servicio.servicio | upper }}
+                {% if forloop.first %} 
+                  {{ servicio.servicio | upper }}
+                {% else %}
+                   - {{ servicio.servicio | upper }}
+                {% endif %}
               {% endfor %}
             </span></h1>
             <h1>CENTRO: <span> {{ factura.cliente.centroGestion }}</span></h1>
@@ -244,7 +248,11 @@
         <img src="{% static 'img/logo-cgi.png' %}" class="logo-header" />
         <h3>HOJA DE FACTURACIÓN #2 <span class="color-rojo">
           {% for sp in factura.proyectosServicios.all %}
-            {{ sp.servicio | upper }}
+            {% if forloop.first %} 
+              {{ sp.servicio | upper }}
+            {% else %}
+              - {{ sp.servicio | upper }}
+            {% endif %}
           {% endfor %}
         </span></h3>
       </div>
@@ -286,22 +294,18 @@
                       {% if sp.servicio.id == 4 %} {{ value.jsHs }} {% endif %}
                     {% endif %}
                   {% endfor %}
-                </span></h4></td>  {% comment %}  ############################## VER CALCULO #########################{% endcomment %}
+                </span></h4></td>
                 <td class="color-celeste text-center"><h4> {{ sp.cantidad_participantes }} X ${{ sp.precio_por_hora }} = ${{ sp.calcular_precio_total }} </h4></td>
             </tr>
           {% endfor %}
 
         
           {% for servicio in serviciosList %}
-          {% if servicio.id not in serviciosFacturados %}
+            {% if servicio.id not in serviciosFacturados %}
               <tr>
                 <td>
-                  <p>{{ servicio.nombre | upper }}</p>
-                  <br>
-                  <br>
-                  <br>
+                  <p>{{ servicio.nombre | upper }}</p> <br><br><br>
                 </td>
-
                 <td></td>
                 <td></td>
                 <td></td>
@@ -309,6 +313,16 @@
               </tr>
             {% endif %}
           {% endfor %}
+
+          <tr>
+            <td class="text-right">
+              <br> <p><b>TOTAL</b></p> <br>
+            </td>
+            <td class="color-celeste text-center" ><b>{{ totalParticipantes.total }}</b></td>
+            <td class="color-celeste text-center" ><b>{{ totalHorasServicios }}</b></td>
+            <td class="color-celeste text-center" ><b>$ {{ subtotalFactura }}</b></td>
+          </tr>
+
         </tbody>
       </table>
     </article>
@@ -426,43 +440,6 @@
 
             </tr>            
           {% endfor %} <!-- /for Key -->
-            
-          
-            
-              {% comment %} 
-              {% if c.servicioId == 1 %} <!-- Tutoria ID=1 -->
-                <td> {{ c.cant }} </td>
-              {% else %}
-                <td class="bg-celeste"></td>
-              {% endif %} 
-              <td class="bg-celeste"></td>
-              {% if c.servicioId == 5 %} <!-- Seguimiento ID=5 -->
-                <td> {{ c.cant }} </td>
-              {% else %}
-                <td class="bg-celeste"></td>
-              {% endif %} 
-              <td class="bg-celeste"></td>
-
-              {% if c.servicioId == 2 %} <!-- Mentoria ID=2 -->
-                <td> {{ c.cant }} </td>
-              {% else %}
-                <td class="bg-celeste"></td>
-              {% endif %} 
-              <td class="bg-celeste"></td>
-
-              {% if c.servicioId == 3 %} <!-- Conserjeria ID=3 -->
-                <td> {{ c.cant }} </td>
-              {% else %}
-                <td class="bg-celeste"></td>
-              {% endif %} 
-              <td class="bg-celeste"></td>
-
-              {% if c.servicioId == 4 %} <!-- JS ID=4 -->
-                <td> {{ c.cant }} </td>
-              {% else %}
-                <td class="bg-celeste"></td>
-              {% endif %} 
-              <td class="bg-celeste"></td> {% endcomment %}
         </tbody>
       </table>
       <br>
@@ -482,77 +459,91 @@
       <h1 class="text-center" style="margin: 450px 0">COMPONENTE DE 
         <span class="color-rojo">
           {% for servicio in factura.proyectosServicios.all %}
-            {{ servicio.servicio | upper }}
+            {% if forloop.first %} 
+              {{ servicio.servicio | upper }}
+            {% else %}
+              - {{ servicio.servicio | upper }}
+            {% endif %}
           {% endfor %}
         </span>
       </h1>
     </article>
     
     <!-- HOJA 8 -->
-    <article style="page: landscape" id="hoja-8">
-      <header>
-        <table id="header-hoja-8" >
-          <tr>
-            <td>
-              <img src="{% static 'img/logo-cgi.png' %}" style="width:160px;"/>
-            </td>
-            <td class="w-650 text-right" style="border-right:3px solid gray !important;">
-              <h3 style="margin-right:15px;">Hoja de Trabajo - evidencia de servicio para Proyecto Uno a Uno</h3>
-            </td>
-            <td>
-              <img src="{% static 'img/logo-uno.png' %}" class="w-50" style="margin:0 15px;" />
-            </td>
-            <td>
-              <img src="{% static 'img/logo-amsi.png' %}" class="w-50" style="margin-right:20px;"/>
-            </td>
-          </tr>
-        </table>
-      </header>
-
-      <div style="margin: 20px 0; display: flex;">
-        <h4 class="border" style="width: 60%; padding: 10px; margin-right:10px;">NOMBRE CONSEJERA PROFESIONAL: <span class="color-rojo">XXXXXXXX</span></h4>
-        <h4 class="border" style="width: 40%; padding: 10px;">FECHA PERÍODO: {{ factura.fechaInicio|date:'d F Y' }} {{ factura.fechaFin|date:'d F Y' }}</h4>
-            
-      </div>
-    
-      <table id="detalles-hoja-8">
-        <thead>
-          <tr class="text-center pt-2">
-            <th class="w-300 bg-gris-claro">NOMBRE ESTUDIANTE</th>
-            <th class="bg-gris-claro" style="width:300px;">DÍA Y HORA (AM/PM)</th>
-            <th class="bg-gris-claro">CANTIDAD DE HORAS</th>
-            <th class="w-200 bg-gris-claro">COMENTARIO (Indique si es Seguimiento)</th>
-          </tr>
-        </thead>
-        <tbody>
-            {% for det in registrosDetalle %}
-              <tr class="pt-2">
-                <td class="text-left">{{ det.registro.alumno }}</td>
-                <td class="text-left">{{ det.fechaHoraInicio | date:"l, F d, Y   h:i a"}}</td>
-                <td class="text-right">{{ det.calcular_total_hs_detalle }}</td>
-                <td class="text-center"></td>
+    {% for usuario in usuariosList %}
+      
+        <div style="page-break-after: always"></div>
+        <article style="page: landscape" id="hoja-8">
+          <header>
+            <table id="header-hoja-8" >
+              <tr>
+                <td>
+                  <img src="{% static 'img/logo-cgi.png' %}" style="width:160px;"/>
+                </td>
+                <td class="w-650 text-right" style="border-right:3px solid gray !important;">
+                  <h3 style="margin-right:15px;">Hoja de Trabajo - evidencia de servicio para Proyecto Uno a Uno</h3>
+                </td>
+                <td>
+                  <img src="{% static 'img/logo-uno.png' %}" class="w-50" style="margin:0 15px;" />
+                </td>
+                <td>
+                  <img src="{% static 'img/logo-amsi.png' %}" class="w-50" style="margin-right:20px;"/>
+                </td>
               </tr>
-            {% endfor %}
+            </table>
+          </header>
 
-        </tbody>
-      </table>
+          <div style="margin: 20px 0; display: flex;">
+            <h4 class="border" style="width: 60%; padding: 10px; margin-right:10px;">NOMBRE CONSEJERO PROFESIONAL: <span class="color-rojo">{{ usuario.usuario__first_name }}  {{ usuario.usuario__last_name }}</span></h4>
+            <h4 class="border" style="width: 40%; padding: 10px;">FECHA PERÍODO: {{ factura.fechaInicio|date:'d F Y' }} {{ factura.fechaFin|date:'d F Y' }}</h4>
+          </div>
+        
+          <table id="detalles-hoja-8">
+            <thead>
+              <tr class="text-center pt-2">
+                {% comment %} <th></th> {% endcomment %}
+                <th class="w-200 bg-gris-claro">NOMBRE ESTUDIANTE</th>
+                <th class="bg-gris-claro" colspan="2">DÍA Y HORA (AM/PM)</th>
+                <th class="bg-gris-claro w-100">CANTIDAD DE HORAS</th>
+                <th class="w-200 bg-gris-claro">COMENTARIO (Indique si es Seguimiento)</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+            {% for det in registrosDetalle %}
+              {% if det.usuario_id == usuario.usuario %}
+                <tr class="pt-2">
+                  {% comment %} <td>{{ det.usuario_id }}</td> {% endcomment %}
+                  <td class="text-left">{{ det.registro.alumno }}</td>
+                  <td class="text-left w-250">{{ det.fechaHoraInicio | date:"l, F d, Y"}} </td>
+                  <td class="text-left">{{ det.fechaHoraInicio | date:"h:i a"}} a {{ det.fechaHoraFin | date:"h:i a" }}</td>
+                  <td class="text-right">{{ det.calcular_total_hs_detalle }}</td>
+                  <td class="text-center">{{ det.comentario | default:" " }}</td>
+                </tr>
+              {% endif %}
+            {% endfor %} <!-- /For Detalle Registros -->
 
-      <br><br><br>
-      <p>Firma del tutor/consejero/mentor: ____________________________________________</p>
-      <br>
-      <p>Firma de Coordinadora de Proyecto: ____________________________________________</p>
-    </article>
+            </tbody>
+          </table>
+
+          <br><br><br>
+          <p>Firma del tutor/consejero/mentor: ____________________________________________</p>
+          <br>
+          <p>Firma de Coordinadora de Proyecto: ____________________________________________</p>
+        </article>
+
+    {% endfor %} <!-- /For Lista Usuarios -->
 
     <!-- HOJA 9 -->
     <div style="page-break-after: always"></div>
     <article style="page: landscape">
       <div id="contenido-hoja-9">
         <p>Descripción de tareas realizadas durante la semana:</p>
-        <p class="cuadro border">{{ factura.descripcionTareas }}</p>
+        <p class="cuadro border">{{ factura.descripcionTareas | default:' ' }}</p>
         
         <br><br>
         <p>Logros obtenidos en la semana/Historia de Éxito:</p>
-        <p class="cuadro border"><span>{{ factura.logrosObtenidos }}</span></p>
+        <p class="cuadro border"><span>{{ factura.logrosObtenidos | default:' ' }}</span></p>
       </div>
 
       <br><br><br>

@@ -237,7 +237,7 @@ class CrearFactura(CreateView):
                 factura.save()
 
                 #Buscar todos los registros de hs que se incluyan en el periodo ingresado.
-                detalles = RegistroDetalle.objects.filter( fechaHoraInicio__gte=inicio, fechaHoraFin__lte=fin, factura=None)
+                detalles = RegistroDetalle.objects.filter( fechaHoraInicio__gte=inicio, fechaHoraFin__lte=fin, factura=None )
 
                 listaProyServFactura = factura.proyectosServicios.values_list('id',flat=True)
                 for det in detalles:
@@ -287,9 +287,11 @@ class PrintPdf(View):
         template = get_template("registros/documentos/imprimirFactura.html")
         
         facturaInstance = Factura.objects.get(id=self.kwargs['pk'])
-        registrosDetalle = RegistroDetalle.objects.filter(factura=facturaInstance.id)
-
-
+        
+        registrosDetalle = dict()
+        registrosDetalle = RegistroDetalle.objects.filter(factura=facturaInstance.id).order_by('usuario', 'registro', 'fechaHoraInicio')
+        usuariosList = RegistroDetalle.objects.filter(factura=facturaInstance.id).values('usuario', 'usuario__first_name', 'usuario__last_name').distinct()
+        
         # ······ Total y subtotal Factura
         subtotal = Decimal(0.0)
         total = Decimal(0.0)
@@ -310,18 +312,16 @@ class PrintPdf(View):
 
 
         # ······ Detalle de Hs por MES
-        #registrosDetalle.values('registro').order_by('registro').annotate(count=Count('author'))
-
         registrosPorMes = dict()
         nro = 1
         tutoriaHsTotal = 0
         mentoriaHsTotal = 0
         conserjeriaHsTotal = 0
         jsHsTotal = 0
+        totalHorasServicios = 0
         
         for i in range(1, 13): 
             #regDetMes = RegistroDetalle.objects.filter(factura=facturaInstance.id, fechaHoraInicio__month = i).values('fechaHoraInicio__month', servicioId=F('registro__proyecto_servicio__servicio')).annotate(cant=Count('registro', distinct=True)).order_by('fechaHoraInicio__month', '-registro__proyecto_servicio__servicio')
-            
             #cantParticipantes = ([regDet.registro_id for regDet in regDetMes])
             regDetMes = RegistroDetalle.objects.filter(factura=facturaInstance.id, fechaHoraInicio__month = i).values('fechaHoraInicio__month').aggregate(
                 tutoria=Count('registro', distinct=True, filter=Q(registro__proyecto_servicio__servicio=1)),
@@ -355,9 +355,10 @@ class PrintPdf(View):
                             jsHsTotal = jsHsTotal + seg
                     
                     regDetMes['mes'] = i
-
                     registrosPorMes[nro] = regDetMes
                     nro = nro+1
+
+                    totalHorasServicios = tutoriaHsTotal + mentoriaHsTotal + conserjeriaHsTotal + jsHsTotal
         
         # TOTALES
         totTutoria = 0
@@ -387,10 +388,14 @@ class PrintPdf(View):
         context = {
             'factura': facturaInstance,
             'registrosDetalle': registrosDetalle,
+            'usuariosList': usuariosList,
+
             'subtotalFactura': round(subtotal, 2),
             'totalFactura': round(total, 2),
             'precioTax': precioTax,
             'totalParticipantes': totalParticipantes,
+            'totalHorasServicios': convertir_tiempo(totalHorasServicios),
+            
             'serviciosList': Servicio.objects.all(),
             'serviciosFacturados': facturaInstance.proyectosServicios.values_list('servicio',flat=True),
             'registrosPorMes': registrosPorMes
@@ -401,5 +406,4 @@ class PrintPdf(View):
         #pdf = HTML(string=html_template, base_url=request.build_absolute_uri()).write_pdf(stylesheets=[CSS(css_url)])
         pdf = HTML(string=html_template, base_url=request.build_absolute_uri()).write_pdf()
 
-        #return super(PrintPdf,self).get_context_data(**kwargs)
         return HttpResponse(pdf, content_type='application/pdf')
