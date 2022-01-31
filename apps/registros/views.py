@@ -206,10 +206,7 @@ class CrearFactura(CreateView):
             date_string_fin = request.POST['fechaFin']
             fin = datetime.strptime(date_string_fin, format)
             
-            #SaleTaxOtro, default 0
-            if not request.POST['saleTaxOtro']:
-                request.POST['saleTaxOtro'] = 0.0
-            
+
             request.POST['proyectosServicios'] = 1
             
             form = FacturaForm(request.POST)
@@ -226,12 +223,10 @@ class CrearFactura(CreateView):
                 
                 #Guardar tabla intermedia Factura-ProyectoServicios
                 proyectoSelId = request.POST['proyectoSelId']
-                print('PROY: ',proyectoSelId)
+                #print('PROY: ',proyectoSelId)
                 for serv in request.POST.getlist('serviciosCheck'):
-                    print('SERV CHECK: ',serv)
                     sp = ServiciosProyecto.objects.filter(proyecto=proyectoSelId, servicio=serv).first()
-                    print('SERV PROY: ',sp.id)
-
+                    
                     factura.proyectosServicios.add(sp)
                 
                 factura.save()
@@ -295,15 +290,13 @@ class PrintPdf(View):
         # ······ Total y subtotal Factura
         subtotal = Decimal(0.0)
         total = Decimal(0.0)
-        tax = Decimal(0.0)
 
         for proyServ in facturaInstance.proyectosServicios.all():
             subtotal = subtotal + (proyServ.precio_por_hora * proyServ.cantidad_participantes)
             
-        if facturaInstance.saleTax == 'Si (10.5%)':
-            tax = Decimal(10.5)
-        elif facturaInstance.saleTax == 'Other':
-            tax = facturaInstance.saleTaxOtro
+        
+        tax = Decimal(0.0)
+        tax = facturaInstance.impuesto.porcentaje
 
         precioTax = round(subtotal * (tax/100), 2)
         total = subtotal + precioTax

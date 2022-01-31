@@ -15,7 +15,7 @@ class RegistroFilter(django_filters.FilterSet):
     )
     alumno = filters.ModelChoiceFilter(
         queryset = Alumno.objects.all(),
-        label = 'Alumno',
+        label = 'Participante',
         widget = Select(attrs={'class':'form-control select2'})
     )
     proyecto_servicio__servicio = filters.ModelChoiceFilter(

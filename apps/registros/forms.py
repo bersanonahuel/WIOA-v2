@@ -24,7 +24,7 @@ class RegistroForm(forms.ModelForm):
         ]
         labels = {
             'comentario':'Comentario',
-            'alumno':'Alumno',
+            'alumno':'Participante',
         }
         widgets={
             'comentario': forms.Textarea(
@@ -68,8 +68,6 @@ class FacturaForm(forms.ModelForm):
             self.fields[field].widget.attrs = {
                 'class': 'form-control mb-3'
             }
-        self.fields['saleTaxOtro'].widget.attrs['step'] = '0.01'
-        self.fields['saleTaxOtro'].widget.attrs['min'] = '0.00'
         self.fields['cliente'].widget.attrs = {
             'class': 'form-control select2 clienteFactura'
         }
@@ -79,8 +77,8 @@ class FacturaForm(forms.ModelForm):
         self.fields['terminosPago'].widget.attrs = {
             'class': 'form-control selectTerminoPagoFactura'
         }
-        self.fields['saleTax'].widget.attrs = {
-            'class': 'form-control selectSaleTaxFactura'
+        self.fields['impuesto'].widget.attrs = {
+            'class': 'form-control select2 impuestoFactura'
         }
 
     class Meta:

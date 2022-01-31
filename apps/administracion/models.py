@@ -61,8 +61,8 @@ class Alumno(models.Model):
     escuela = models.ForeignKey(Escuela, on_delete=models.PROTECT, blank=False, null=False)
     
     class Meta:
-        verbose_name='Alumno'
-        verbose_name_plural='Alumnos'
+        verbose_name='Participante'
+        verbose_name_plural='Participantes'
         ordering=['nombre', 'apellidoPaterno', 'apellidoMaterno']
     
     def __str__(self) :

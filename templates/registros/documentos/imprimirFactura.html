@@ -115,14 +115,16 @@
                   <td class="text-right border-0 text-bold pr-100">SUBTOTAL</td>
                   <td class="text-right bg-claro"><span class="color-rojo">$ {{ subtotalFactura }}</span></td>
               </tr>
-              {% if  factura.saleTax != 'No'%}
+
+              {% if factura.impuesto.nombre != 'No'%}
               <tr>
                   <td class="text-right border-0 text-bold pr-100">
-                    TAXES {% if  factura.saleTax == 'Other'%} {{ factura.saleTaxOtro }}% {% else %} {{ factura.saleTax }} {% endif %}
+                    IMPUESTO {{ factura.impuesto }}
                   </td>
                   <td class="text-right">$ {{ precioTax }}</td>
               </tr>
               {% endif %}
+              
               <tr>
                   <td class="text-right border-0 text-bold pr-100">TOTAL</td>
                   <td class="text-right"><span class="color-rojo">$ {{ totalFactura }}</span></td>

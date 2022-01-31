@@ -16,11 +16,11 @@
               <tr>
                   <th>INVOICE</th>
                   <th>FECHA CREACIÓN</th>
-                  <th>PREÍODO</th>
+                  <th>PERÍODO</th>
                   <th>CLIENTE</th>
                   <th>PROVEEDOR</th>
-                  <th>TERMINOS DE PAGO</th>
-                  <th>TAXES</th>
+                  <th>TÉRMINOS DE PAGO</th>
+                  <th>IMPUESTOS</th>
                   <th></th>
               </tr>
           </thead>
@@ -29,8 +29,8 @@
               {% for facrura in filter.qs %}
               <tr class="text-center">
                   <td>{{ facrura.id }}</td>
-                  <td>{{ facrura.fechaCreacion | date:"d-m-Y h:i a" }}</td>
-                  <td>{{ facrura.fechaInicio | date:"d-m-Y" }} al {{ facrura.fechaFin | date:"d-m-Y" }}</td>
+                  <td>{{ facrura.fechaCreacion | date:"Y-m-d h:i a" }}</td>
+                  <td>{{ facrura.fechaInicio | date:"Y-m-d" }} al {{ facrura.fechaFin | date:"Y-m-d" }}</td>
                   <td>{{ facrura.cliente }}</td>
                   <td>{{ facrura.proveedor }}</td>
                   <td>
@@ -40,7 +40,7 @@
                       {{ facrura.terminosPago }}
                     {% endif %}
                   </td>
-                  <td>{{ facrura.saleTax }}</td>
+                  <td>{{ facrura.impuesto }}</td>
                   
                   <td>
                     <a class="btn btn-error btn-sm" href="{% url 'registros:printPdf' facrura.id %}" target="_blank"><i class="fas fa-fas fa-print"></i></a>

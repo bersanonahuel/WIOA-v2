@@ -7,17 +7,25 @@ from apps.administracion.models import Alumno, Maestro, Cliente, Proveedor
 from apps.proyecto.models import ServiciosProyecto
 
 
+class Impuesto(models.Model):
+    id = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=50, blank=False,null=False)
+    porcentaje = models.DecimalField(max_digits=10, decimal_places=2, blank=False, null=False, default=0, verbose_name="Porcentaje (%)")
+
+
+    class Meta:
+        verbose_name='Impuesto'
+        verbose_name_plural='Impuestos'
+        ordering=['nombre']
+
+    def __str__(self) :
+        return self.nombre
+
+
 class Factura(models.Model):
     TERMINOS_PAGO = (
        ('Due upon reciept', ('Due upon reciept')),
        ('Net 30 days', ('Net 30 days')),
-       ('Other', ('Other')),
-    )
-
-    TAXES = (
-        ('Si (0%)', ('Si (0%)')),
-        ('Si (10.5%)', ('Si (10.5%)')),
-        ('No', ('No')),
        ('Other', ('Other')),
     )
 
@@ -27,16 +35,15 @@ class Factura(models.Model):
     fechaFin = models.DateTimeField(auto_now=False)
     eliminada = models.BooleanField(default=False)
     descripcion = models.CharField(max_length=500, blank=True, null=True)
-    terminosPago = models.CharField(max_length=32, choices=TERMINOS_PAGO, verbose_name="Terminos de Pago", default='', blank=True, null=False)
+    terminosPago = models.CharField(max_length=32, choices=TERMINOS_PAGO, verbose_name="Términos de Pago", default='', blank=True, null=False)
     terminosPagoOtro = models.CharField(max_length=200, verbose_name="Términos Otros", blank=True, null=True)
-    saleTax = models.CharField(max_length=15, choices=TAXES, verbose_name="Taxes", default='', blank=True, null=True)
-    saleTaxOtro = models.DecimalField(verbose_name='Tax Otro (%)', max_digits=5, decimal_places=2, default=0.00, null=True)
     mensajeInstitucional = models.CharField(max_length=500, verbose_name="Mensaje Institucional", blank=True, null=True)
     descripcionTareas = models.CharField(max_length=500, verbose_name="Descripción de Tareas", blank=True, null=True)
     logrosObtenidos = models.CharField(max_length=500, verbose_name="Logros Obtenidos", blank=True, null=True)
 
     cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT, blank=False, null=False)
     proveedor = models.ForeignKey(Proveedor, on_delete=models.PROTECT, blank=False, null=False)
+    impuesto = models.ForeignKey(Impuesto, on_delete=models.PROTECT, blank=False, null=False)
 
     proyectosServicios = models.ManyToManyField(ServiciosProyecto, related_name='factura')
     
@@ -46,7 +53,7 @@ class Factura(models.Model):
 class Registro(models.Model):
     id = models.AutoField(primary_key=True)
     proyecto_servicio = models.ForeignKey(ServiciosProyecto, verbose_name="Proyecto y Servicio", on_delete=models.PROTECT, blank=False, null=False)
-    alumno = models.ForeignKey(Alumno, on_delete=models.PROTECT, blank=False, null=False)
+    alumno = models.ForeignKey(Alumno, on_delete=models.PROTECT, blank=False, null=False, verbose_name="Participante")
     comentario = models.CharField(max_length=400, blank=True, null=True)
 
     def calcular_total_horas_por_alumno(self):

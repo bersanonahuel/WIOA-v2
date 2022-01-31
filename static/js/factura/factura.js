@@ -17,22 +17,6 @@ function cambioTerminosPago(valorTP){
 
 cambioTerminosPago('');
 
-// Sale Tax Change
-$('#id_saleTax.selectSaleTaxFactura').on('change', function(){
-    cambioTax( $(this).val() );
-});
-
-function cambioTax(valorTax){
-    if(valorTax == 'Other'){
-        $("#id_saleTaxOtro").prop("readonly", false);
-    }
-    else{
-        $("#id_saleTaxOtro").prop("readonly", true);
-        $("#id_saleTaxOtro").val("");
-    }
-}
-cambioTax('');
-
 
 //Seleccion Proyecto -> Mostrar Servicios de ese Proyecto
 $('#selProyectoFactura').on('change', function(){

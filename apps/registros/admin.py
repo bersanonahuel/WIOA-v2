@@ -1,3 +1,10 @@
 from django.contrib import admin
+from .models import Impuesto
 
-# Register your models here.
+
+class ImpuestoAdmin(admin.ModelAdmin):
+    search_fields=['nombre']
+    list_display=('id', 'nombre')
+
+
+admin.site.register(Impuesto, ImpuestoAdmin)

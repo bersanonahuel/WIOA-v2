@@ -9,7 +9,7 @@
     <span class="info-box-icon bg-info my-2"><i class="fas fa-users"></i></span>
     <div class="info-box-content">
         <span class="info-box-number">{{ registro.proyecto_servicio }}</span>
-        <span class="info-box-text">ALUMNO: {{ registro.alumno }} </span>
+        <span class="info-box-text">PARTICIPANTE: {{ registro.alumno }} </span>
     </div>
 </div>
 {% endblock contentTitulo %}
@@ -100,8 +100,8 @@
 
               {% for det in registrosDet %}
               <tr class="text-center">
-                  <td>{{ det.fechaHoraInicio | date:"d-m-Y h:i a" }}</td>
-                  <td>{{ det.fechaHoraFin | date:"d-m-Y h:i a" }}</td>
+                  <td>{{ det.fechaHoraInicio | date:"Y-m-d h:i a" }}</td>
+                  <td>{{ det.fechaHoraFin | date:"Y-m-d h:i a" }}</td>
                   <td>{{ det.calcular_total_hs_detalle }}</td>
 
                   <td>{{ det.comentario | default:'' }}</td>
