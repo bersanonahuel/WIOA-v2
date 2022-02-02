@@ -14,7 +14,7 @@ from django.http import JsonResponse
 from django.http import HttpResponse
 from datetime import datetime, timedelta
 from decimal import Decimal
-from django.db.models import Count
+from django.db.models import Count, Sum
 
 from apps.proyecto.models import ServiciosProyecto, Proyecto, Servicio
 from apps.administracion import models
@@ -334,7 +334,7 @@ class PrintPdf(View):
         precioTax = round(subtotal * (tax/100), 2)
         total = subtotal + precioTax
         
-        totalParticipantes = facturaInstance.proyectosServicios.all().aggregate(total=models.Sum('cantidad_participantes'))
+        totalParticipantes = facturaInstance.proyectosServicios.all().aggregate(total=Sum('cantidad_participantes'))
 
 
         # ······ Detalle de Hs por MES
