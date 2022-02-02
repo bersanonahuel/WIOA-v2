@@ -58,15 +58,19 @@ $(function() {
   //##### Listar los Alumnos del Proyecto seleccionado. #####
   $('#id_proyecto_servicio.proyectoRegistro').on('change', function(){
     var servicioProyectoId = $(this).val();
-    getAlumnosDelProyecto(servicioProyectoId);
+    getAlumnosDelProyecto(servicioProyectoId, 'POST');
   });
-
+  $('#id_proyecto_servicio.proyectoServicioFilter').on('change', function(){
+    var servicioProyectoId = $(this).val();
+    getAlumnosDelProyecto(servicioProyectoId, 'GET');
+  });
+  
   verificarComboAlumnos();
   
-  function getAlumnosDelProyecto(servicioProyectoId) {
+  function getAlumnosDelProyecto(servicioProyectoId, type) {
     $.ajax({
         url: window.location.pathname,
-        type: 'POST',
+        type: type,
         data: {
             'action': 'getAlumnosDelProyecto',
             'servicioProyectoId': servicioProyectoId
@@ -75,19 +79,17 @@ $(function() {
     }).done(function (data) {
         
         var cboAlumnos = document.getElementById('id_alumno');
-
+        
         if (!data.hasOwnProperty('error')) {
-            console.log("ALUMNOS DEL PROY: "+data.alumnos);
-            
             vaciarCombo(cboAlumnos);
             cargarCombo(cboAlumnos, data.alumnos);
         }
         else{
             vaciarCombo(cboAlumnos);
-            alert(data.error);
+            alert('Data error: ', data.error);
         }
     }).fail(function (jqXHR, textStatus, errorThrown) {
-        alert(textStatus + ': ' + errorThrown);
+        alert('ERROR: ', textStatus + ': ' + errorThrown);
     }).always(function (data) {
         
     });
@@ -101,6 +103,15 @@ $(function() {
       var selectAlumnosResult = selectAlumnos.classList.contains('alumnoRegistro');
       if(selectAlumnosResult){
         vaciarCombo(document.getElementById('id_alumno'));
+      }
+      else{
+         
+        var selectAlumnosFilter = selectAlumnos.classList.contains('alumnoRegistroFilter');
+        var idPS = $('#id_proyecto_servicio.proyectoServicioFilter').val();
+        if(selectAlumnosFilter){ //Para el Filtro en la lista de Registros. Para que liste solo los alumnos del Proyecto seleccionado.
+          if(idPS) getAlumnosDelProyecto(idPS, 'GET');
+          else vaciarCombo(document.getElementById('id_alumno'));
+        }
       }
     }
   }

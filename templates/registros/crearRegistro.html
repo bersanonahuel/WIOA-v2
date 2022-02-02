@@ -19,7 +19,12 @@
             <div class="col-6">
               <div class="form-group {% if form.proyecto_servicio.errors %}has-error{% endif %}">
                 <label class="control-label font-weight-bold" for="{{ form.proyecto_servicio.auto_id }}"> {{ form.proyecto_servicio.label }}: </label>
-                {{ form.proyecto_servicio }}
+                <select name="proyecto_servicio" class="form-control select2 proyectoRegistro" required="" id="id_proyecto_servicio"  tabindex="-1" aria-hidden="true">
+                  <option value=""></option>
+                  {% for sp in serviciosProyecto %}
+                    <option value="{{ sp.id }}">{{ sp }}</option>
+                  {% endfor %}
+                </select>
               </div>
             </div>
             <div class="col-6">

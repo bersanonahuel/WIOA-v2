@@ -27,9 +27,20 @@ class Proyecto(models.Model):
     class Meta:
         verbose_name = ("Proyecto")
         verbose_name_plural = ("Proyectos")
+        ordering = ['nombre']
     
     def __str__(self) :
         return self.nombre
+
+    def get_proyectos_del_usuario(usuarioInstance):
+        if usuarioInstance.is_superuser:
+            proyectos = Proyecto.objects.all()
+        else:
+            #Son los que brindan servicios, solo hay que mostrar los proyectos que tenga asignados
+            maestro = Maestro.objects.filter(usuario=usuarioInstance.id)
+            proyectos = Proyecto.objects.filter(maestros__id__in=maestro)
+
+        return proyectos
 
 class ServiciosProyecto(models.Model):
     id = models.AutoField(primary_key=True)
@@ -44,6 +55,7 @@ class ServiciosProyecto(models.Model):
     class Meta:
         verbose_name = ("Servicios del Proyecto")
         verbose_name_plural = ("Servicios del Proyecto")
+        ordering = ['proyecto', 'servicio']
     
     def __str__(self) :
         return self.proyecto.nombre + ' || ' + self.servicio.nombre
@@ -52,4 +64,15 @@ class ServiciosProyecto(models.Model):
     def calcular_precio_total(self):
         total = self.cantidad_participantes * self.precio_por_hora
         return round(total, 2)
+    
+    def get_servicios_proyectos_del_usuario(usuarioInstance):
+        if usuarioInstance.is_superuser:
+            serviciosProyecto = ServiciosProyecto.objects.all()
+        else:
+            #Son los que brindan servicios, solo hay que mostrar los Servicios-Proyectos que tenga asignados
+            maestro = Maestro.objects.filter(usuario=usuarioInstance.id)
+            proyectos = Proyecto.objects.filter(maestros__id__in=maestro)
+            serviciosProyecto = ServiciosProyecto.objects.filter(proyecto__id__in=proyectos)
+
+        return serviciosProyecto
     

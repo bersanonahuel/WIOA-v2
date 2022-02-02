@@ -44,6 +44,7 @@ class Factura(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT, blank=False, null=False)
     proveedor = models.ForeignKey(Proveedor, on_delete=models.PROTECT, blank=False, null=False)
     impuesto = models.ForeignKey(Impuesto, on_delete=models.PROTECT, blank=False, null=False)
+    usuario = models.ForeignKey(User, on_delete=models.PROTECT, blank=False, null=False)
 
     proyectosServicios = models.ManyToManyField(ServiciosProyecto, related_name='factura')
     
@@ -55,6 +56,8 @@ class Registro(models.Model):
     proyecto_servicio = models.ForeignKey(ServiciosProyecto, verbose_name="Proyecto y Servicio", on_delete=models.PROTECT, blank=False, null=False)
     alumno = models.ForeignKey(Alumno, on_delete=models.PROTECT, blank=False, null=False, verbose_name="Participante")
     comentario = models.CharField(max_length=400, blank=True, null=True)
+
+    usuario = models.ForeignKey(User, on_delete=models.PROTECT, blank=False, null=False)
 
     def calcular_total_horas_por_alumno(self):
         segundos = 0

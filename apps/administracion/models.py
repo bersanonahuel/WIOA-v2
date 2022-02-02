@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-
 class CentroGestion(models.Model):
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=50, blank=False,null=False)
@@ -100,6 +99,7 @@ class Maestro(models.Model):
     
     def __str__(self) :
         return self.apellido + ', ' +self.nombre
+    
 
 class Cliente(models.Model):
     id = models.AutoField(primary_key=True)
@@ -132,3 +132,5 @@ class Proveedor(models.Model):
 
     def __str__(self):
         return self.nombre
+
+

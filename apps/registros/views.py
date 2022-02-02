@@ -2,13 +2,13 @@ from django.shortcuts import render, redirect
 from django.views.generic import ListView, CreateView, DeleteView, UpdateView, TemplateView
 from .models import *
 from django.urls.base import reverse_lazy
+from django.urls import reverse_lazy
 from .forms import RegistroForm, RegistroDetalleForm, FacturaForm
 from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
 from django.forms import formset_factory
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.edit import FormView
 from django.views.generic.base import View
-from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.http import HttpResponse
@@ -17,17 +17,19 @@ from decimal import Decimal
 from django.db.models import Count
 
 from apps.proyecto.models import ServiciosProyecto, Proyecto, Servicio
+from apps.administracion import models
+#from .mixins import GetAlumnosPorProyectoMixin
 #Para PDF
 from io import BytesIO # nos ayuda a convertir un html en pdf
 import os
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 from django.contrib.staticfiles import finders
+from weasyprint import HTML
+
+from weasyprint import CSS
 #Filtro
 from .filters import RegistroFilter, FacturaFilter
-
-from weasyprint import HTML
-from weasyprint import CSS
 
 from django.db.models import F, Q
 
@@ -55,11 +57,8 @@ class CrearRegistro(CreateView):
                 if action == 'getAlumnosDelProyecto':
 
                     serviciosProyecto = ServiciosProyecto.objects.get(id=request.POST['servicioProyectoId'])
-
-                    print('**** PROYECTO')
                     p = Proyecto.objects.get(id=serviciosProyecto.proyecto.id)
                     alumnos = p.alumnos.values('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno')
-                    print(alumnos)
                     
                     if alumnos:
                         data = { 'alumnos': list(alumnos) }
@@ -75,6 +74,7 @@ class CrearRegistro(CreateView):
         if request.method == 'POST':
             form = RegistroForm(request.POST)
             registro = form.save(commit=False)
+            registro.usuario = request.user
             registro.save()
             
             self.kwargs['registropk'] = registro.id
@@ -82,7 +82,11 @@ class CrearRegistro(CreateView):
             return super().form_valid(form)
 
     def get_context_data(self, *args, **kwargs):
+        serviciosProyecto = ServiciosProyecto.get_servicios_proyectos_del_usuario(self.request.user)
+
         kwargs['titulo'] = 'Crear registro'
+        kwargs['serviciosProyecto'] = serviciosProyecto
+
         return  super(CrearRegistro,self).get_context_data(**kwargs)
     
     def get_success_url(self):
@@ -92,9 +96,39 @@ class CrearRegistro(CreateView):
 class ListarRegistro(ListView):
     model = Registro
     template_name = LISTAR_REGISTRO_FILE
+
+    @method_decorator(csrf_exempt)
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
     
     def get(self, request, *args, **kwargs):
-        registro_filter = RegistroFilter(request.GET, queryset=Registro.objects.all())
+        if request.user.is_staff:
+            registro_filter = RegistroFilter(request.GET, queryset=Registro.objects.all(), request=self.request)
+        else:
+            registro_filter = RegistroFilter(request.GET, queryset=Registro.objects.filter(usuario=self.request.user), request=self.request)
+        
+        if request.is_ajax():
+            data = {}
+            try:
+                action = request.GET['action']
+          
+                if action == 'getAlumnosDelProyecto':
+
+                    serviciosProyecto = ServiciosProyecto.objects.get(id=request.GET['servicioProyectoId'])
+                    p = Proyecto.objects.get(id=serviciosProyecto.proyecto.id)
+                    alumnos = p.alumnos.values('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno')
+              
+                    if alumnos:
+                        data = { 'alumnos': list(alumnos) }
+                    else:
+                        data['error'] = 'No se encontró ningún alumno asignado a este Proyecto y Servicio'
+                else:
+                    data['error'] = 'Ha ocurrido un error'
+
+            except Exception as e:
+                data['error'] = str(e)
+            return JsonResponse(data, safe=False)
         
         return render(request, LISTAR_REGISTRO_FILE, {'filter': registro_filter})
 
@@ -111,7 +145,7 @@ class CrearRegistroDetalle(CreateView):
     def post(self, request, *args, **kwargs):
         if request.method == 'POST':
             request.POST._mutable = True
-            print('comentario:::: ', request.POST['comentario'])
+            
             #Pruebas convertir time AM/PM
             format = '%Y-%m-%d %H:%M'
             date_string_inicio = request.POST['fechaHoraInicio']  #'2009-11-29 03:17:00.0000'
@@ -218,7 +252,7 @@ class CrearFactura(CreateView):
                 factura.fechaCreacion = fin.strftime(format)
                 factura.cliente = Cliente.objects.get(id=request.POST['cliente'])
                 factura.proveedor = Proveedor.objects.get(id=request.POST['proveedor'])
-
+                factura.usuario = request.user
                 factura.save()
                 
                 #Guardar tabla intermedia Factura-ProyectoServicios
@@ -275,7 +309,6 @@ class ListarFactura(ListView):
         factura_filter = FacturaFilter(request.GET, queryset=Factura.objects.all())
         
         return render(request, LISTAR_FACTURA_FILE, {'filter': factura_filter})
-        
 
 class PrintPdf(View):
     def get(self, request, *args, **kwargs):
