@@ -32,16 +32,18 @@ from weasyprint import CSS
 from .filters import RegistroFilter, FacturaFilter
 
 from django.db.models import F, Q
+from django.contrib import messages
 
-CREAR_REGISTRO_FILE  = 'registros/crearRegistro.html'
-LISTAR_REGISTRO_FILE = 'registros/listarRegistro.html'
+CREAR_REGISTRO_FILE  = 'registros/registro/crearRegistro.html'
+LISTAR_REGISTRO_FILE = 'registros/registro/listarRegistro.html'
+CREAR_REGISTRO_DETALLE_FILE = 'registros/registro/crearRegistroDetalle.html'
 LISTAR_FACTURA_FILE  = 'registros/factura/listarFactura.html'
 CREAR_FACTURA_FILE   = 'registros/factura/crearFactura.html'
 
 class CrearRegistro(CreateView):
-    models=Registro
-    form_class=RegistroForm
-    template_name= 'registros/crearRegistro.html'
+    models = Registro
+    form_class = RegistroForm
+    template_name = CREAR_REGISTRO_FILE
     
     @method_decorator(csrf_exempt)
     @method_decorator(login_required)
@@ -92,7 +94,6 @@ class CrearRegistro(CreateView):
     def get_success_url(self):
         return reverse_lazy('registros:crearRegistroDetalle',args=[self.kwargs['registropk']])
 
-
 class ListarRegistro(ListView):
     model = Registro
     template_name = LISTAR_REGISTRO_FILE
@@ -132,10 +133,27 @@ class ListarRegistro(ListView):
         
         return render(request, LISTAR_REGISTRO_FILE, {'filter': registro_filter})
 
+
+def calcular_horas_facturadas(proyecto, servicio):
+    sp = ServiciosProyecto.objects.filter(proyecto=proyecto, servicio=servicio).first()
+        
+    facturaReg = Factura.objects.filter(proyectosServicios=sp)
+    
+    #Busco todos los reg det de las facturas ya creadas
+    seg = 0
+    for fact in facturaReg:
+        regDet = RegistroDetalle.objects.filter(factura=fact, registro__proyecto_servicio__servicio=servicio)
+
+        for r in regDet:
+            seg = seg + r.calcular_total_hs_segundos_detalle()
+    
+    return seg
+
+
 class CrearRegistroDetalle(CreateView):
     models = RegistroDetalle
     form_class = RegistroDetalleForm
-    template_name = 'registros/crearRegistroDetalle.html'
+    template_name = CREAR_REGISTRO_DETALLE_FILE
 
     @method_decorator(csrf_exempt)
     @method_decorator(login_required)
@@ -154,15 +172,41 @@ class CrearRegistroDetalle(CreateView):
             date_string_fin = request.POST['fechaHoraFin']
             fin = datetime.strptime(date_string_fin, format)
 
+            registroInstance = Registro.objects.get(id=self.kwargs['registropk'])
             form = RegistroDetalleForm()
             regDet = form.save(commit=False)
             regDet.fechaHoraInicio = inicio.strftime(format)
             regDet.fechaHoraFin = fin.strftime(format)
-            regDet.registro = Registro.objects.get(id=self.kwargs['registropk'])
+            regDet.registro = registroInstance
             regDet.usuario = request.user
             regDet.comentario = request.POST['comentario']
+
+            proyecto = registroInstance.proyecto_servicio.proyecto
+            servicio = registroInstance.proyecto_servicio.servicio
+            sp = ServiciosProyecto.objects.filter(proyecto=proyecto, servicio=servicio).first()
+            totalHorasSP = (sp.total_horas * 3600)
             
-            regDet.save()
+            hsFacturadasServicio = calcular_horas_facturadas(proyecto, servicio)
+            
+            #Validar que no se exceda del total de Hs del proyecto.
+
+            timediff = (fin - inicio)
+            hsRegistroActual = timediff.seconds
+            
+            if (hsFacturadasServicio + hsRegistroActual) > totalHorasSP:
+                error = 'Las horas que quiere registrar se exceden del Total de horas permitidas para este Proyecto y Servicio.'
+                messages.error(self.request, error)
+                context = {
+                    'titulo': 'Crear registro de horas',
+                    'registro': Registro.objects.get(id=self.kwargs['registropk']),
+                    'registrosDet': RegistroDetalle.objects.filter(registro=self.kwargs['registropk']),
+                    'form': RegistroDetalleForm()
+                }
+                return render(request, CREAR_REGISTRO_DETALLE_FILE, context)
+            else:
+                regDet.save()
+                success = 'El registro se guardó correctamente.'
+                messages.success(self.request, success)
             
             return super().form_valid(regDet)
     
@@ -204,6 +248,9 @@ class CrearFactura(CreateView):
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        error = None
+        mensaje = None
+        
         if request.is_ajax():
             data = {}
             try:
@@ -216,7 +263,6 @@ class CrearFactura(CreateView):
                     
                     servicioIds = serviciosProyecto.values_list('servicio_id', flat=True) #.values('id', 'nombre')
                     servicios = Servicio.objects.filter(pk__in=servicioIds).values('id', 'nombre')
-                    print(servicios)
                     
                     if servicios:
                         data = { 'servicios': list(servicios) }
@@ -240,41 +286,77 @@ class CrearFactura(CreateView):
             date_string_fin = request.POST['fechaFin']
             fin = datetime.strptime(date_string_fin, format)
             
-
             request.POST['proyectosServicios'] = 1
+            request.POST['usuario'] = request.user
             
             form = FacturaForm(request.POST)
             
             if form.is_valid():
-                factura = form.save(commit=False)
-                factura.fechaInicio = inicio.strftime(format)
-                factura.fechaFin = fin.strftime(format)
-                factura.fechaCreacion = fin.strftime(format)
-                factura.cliente = Cliente.objects.get(id=request.POST['cliente'])
-                factura.proveedor = Proveedor.objects.get(id=request.POST['proveedor'])
-                factura.usuario = request.user
-                factura.save()
-                
-                #Guardar tabla intermedia Factura-ProyectoServicios
                 proyectoSelId = request.POST['proyectoSelId']
-                #print('PROY: ',proyectoSelId)
+                
+                # Validar que no se exeda la cantidad de HS a Facturar establecidas del ProyectoServicio
+
+                #Busco hs ya facturadas                
                 for serv in request.POST.getlist('serviciosCheck'):
+                    hsAFacturarServicio = 0
+                    hsFacturadasServicio = 0
+
                     sp = ServiciosProyecto.objects.filter(proyecto=proyectoSelId, servicio=serv).first()
+                    totalHorasSP = (sp.total_horas * 3600)
+
+                    hsFacturadasServicio = calcular_horas_facturadas(proyectoSelId, serv)
+
+                    print('totalHorasFACTURADAS:: sp=', sp, ' ** hs=', hsFacturadasServicio)
+
+                    #Sumar horas que se quieren facturar AHORA
+                    seg = 0
+                    detallesAFacturar = RegistroDetalle.objects.filter( fechaHoraInicio__gte=inicio, fechaHoraFin__lte=fin, factura=None, registro__proyecto_servicio=sp )
+                    for detF in detallesAFacturar:
+                        seg = seg + detF.calcular_total_hs_segundos_detalle()
                     
-                    factura.proyectosServicios.add(sp)
-                
-                factura.save()
+                    hsAFacturarServicio = seg
+                    print('totalHoras A FACTURAR:: ', hsAFacturarServicio)
 
-                #Buscar todos los registros de hs que se incluyan en el periodo ingresado.
-                detalles = RegistroDetalle.objects.filter( fechaHoraInicio__gte=inicio, fechaHoraFin__lte=fin, factura=None )
+                    if (hsFacturadasServicio + hsAFacturarServicio) > totalHorasSP:
+                        error = 'Las horas que quiere facturar se exceden del Total de horas permitidas para el Proyecto "'+ sp.proyecto.nombre +'" y el Servicio "'+ sp.servicio.nombre+'".'
+                        messages.error(self.request, error)
+                    
+                    if not detallesAFacturar:
+                        mensaje = 'No se encontraron registros para facturar en el período seleccionado.'
+                        messages.warning(self.request, mensaje)
 
-                listaProyServFactura = factura.proyectosServicios.values_list('id',flat=True)
-                for det in detalles:
-                    if det.registro.proyecto_servicio.id in listaProyServFactura:
-                        det.factura = factura
-                        det.save()
-                
-                return super().form_valid(factura)
+                if error or mensaje:
+                    return render(request, CREAR_FACTURA_FILE, {'form':form, 'proyectos': Proyecto.objects.all()})
+                else:
+                    factura = form.save(commit=False)
+                    factura.fechaInicio = inicio.strftime(format)
+                    factura.fechaFin = fin.strftime(format)
+                    factura.fechaCreacion = fin.strftime(format)
+                    factura.cliente = Cliente.objects.get(id=request.POST['cliente'])
+                    factura.proveedor = Proveedor.objects.get(id=request.POST['proveedor'])
+                    factura.usuario = request.user
+                    factura.save()
+                    print('Se guardo catura ---------------- ')
+                    #Guardar tabla intermedia Factura-ProyectoServicios
+                    for serv in request.POST.getlist('serviciosCheck'):
+                        sp = ServiciosProyecto.objects.filter(proyecto=proyectoSelId, servicio=serv).first()
+                        factura.proyectosServicios.add(sp)
+                    
+                    factura.save()
+                    
+                    messages.success(self.request, 'La factura se creó correctamente.')
+
+                    #Buscar todos los registros de hs que se incluyan en el periodo ingresado.
+                    detalles = RegistroDetalle.objects.filter( fechaHoraInicio__gte=inicio, fechaHoraFin__lte=fin, factura=None )
+                    listaProyServFactura = factura.proyectosServicios.values_list('id',flat=True)
+                    print('listaProyServFactura:: ', listaProyServFactura)
+                    if detalles:
+                        for det in detalles:
+                            if det.registro.proyecto_servicio.id in listaProyServFactura:
+                                det.factura = factura
+                                det.save()
+                    
+                    return render(request, LISTAR_FACTURA_FILE, {'filter':FacturaFilter(request.GET, queryset=Factura.objects.all())} )
             else:
                 print('NO SE GUARDO, ERROR: ', form.errors)
                 return super().form_valid(form)
@@ -284,7 +366,7 @@ class CrearFactura(CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('registros:crearFactura')
+        return reverse_lazy('registros:listarFactura')
     
     def get_context_data(self, **kwargs):
         kwargs['proyectos'] = Proyecto.objects.all()

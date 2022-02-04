@@ -19,25 +19,34 @@
   <div class="card card-primary">
     <div class="card-header">CREAR REGISTRO</div>
 
-    <form id="formRegistro" method="POST">
-      <div class="row">
-        <div class="form-group col-12 text-center registro-manual">
-          <label class="control-label font-weight-bold mt-3" for="{{ form.comentario.auto_id }}"> {{ form.comentario.label }}: </label>
-          {{ form.comentario }}
-        </div>
-      </div>
+    <form id="formRegistro" method="POST" class="mt-2">
+      {% csrf_token %}
+      {% if error %}
+        <h2>{{ error }}</h2>
+      {% else %}
 
-      <div class="card-body card-block col-12">
+        {% if messages %}
+          {% for message in messages %}
+          <div class="mensaje alert alert-{{ message.tags }} alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert">&times;</button><strong></strong> 
+            {{ message }}
+          </div>
+          {% endfor %}
+        {% endif %}
+        
         <div class="row">
-          <div class="text-center col-12">
-            <small class="badge badge-warning px-2 py-3 mt-mb-3 mb-3" style="font-size: 0.8rem;"><label class="mb-0">Elija una de las dos opciones para crear <br class="d-md-none d-flex"> el registro de horas.</label></small>
+          <div class="form-group col-12 text-center registro-manual">
+            <label class="control-label font-weight-bold mt-3" for="{{ form.comentario.auto_id }}"> {{ form.comentario.label }}: </label>
+            {{ form.comentario }}
           </div>
         </div>
 
-        {% csrf_token %}
-        {% if error %}
-          <h2>{{ error }}</h2>
-        {% else %} 
+        <div class="card-body card-block col-12">
+          <div class="row">
+            <div class="text-center col-12">
+              <small class="badge badge-warning px-2 py-3 mt-mb-3 mb-3" style="font-size: 0.8rem;"><label class="mb-0">Elija una de las dos opciones para crear <br class="d-md-none d-flex"> el registro de horas.</label></small>
+            </div>
+          </div>
         
           {% comment %} FECHA INICIO FIN {% endcomment %}
           <input type="hidden" name="fechaHoraInicio" id="fInicio" />

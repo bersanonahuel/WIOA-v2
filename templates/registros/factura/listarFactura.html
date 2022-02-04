@@ -2,7 +2,7 @@
 {% load static %}
 <!--Para que herede todo de index.html -->
 
-{% block titulo %} Detalle Registro Hs {% endblock titulo %}
+{% block titulo %} Facturas Creadas {% endblock titulo %}
 
 {% block contentTitulo %} {% endblock contentTitulo %}
 
@@ -10,6 +10,15 @@
 
   <!-- Listado -->
   <div class="table-stats order-table ov-h table-responsive">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="mensaje alert alert-{{ message.tags }} alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert">&times;</button><strong></strong> 
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+    
     {% if filter.qs %}
       <table id="tablaFacturacion" class="table table-bordered table-hover dataTable table-head-fixed text-nowrap bg-white">
           <thead class="text-center bg-header-tabla">
@@ -17,6 +26,8 @@
                   <th>INVOICE</th>
                   <th>FECHA CREACIÓN</th>
                   <th>PERÍODO</th>
+                  <th>PROYECTO</th>
+                  <th>SERVICIOS</th>
                   <th>CLIENTE</th>
                   <th>PROVEEDOR</th>
                   <th>TÉRMINOS DE PAGO</th>
@@ -26,27 +37,37 @@
           </thead>
           <tbody>
 
-              {% for facrura in filter.qs %}
+              {% for factura in filter.qs %}
               <tr class="text-center">
-                  <td>{{ facrura.id }}</td>
-                  <td>{{ facrura.fechaCreacion | date:"Y-m-d h:i a" }}</td>
-                  <td>{{ facrura.fechaInicio | date:"Y-m-d" }} al {{ facrura.fechaFin | date:"Y-m-d" }}</td>
-                  <td>{{ facrura.cliente }}</td>
-                  <td>{{ facrura.proveedor }}</td>
+                  <td>{{ factura.id }}</td>
+                  <td>{{ factura.fechaCreacion | date:"Y-m-d h:i a" }}</td>
+                  <td>{{ factura.fechaInicio | date:"Y-m-d" }} al {{ factura.fechaFin | date:"Y-m-d" }}</td>
+                  <td>{{ factura.proyectosServicios.all.first.proyecto }}</td>
                   <td>
-                    {% if facrura.terminosPago == "Other" %}
-                      {{ facrura.terminosPagoOtro }}
+                    {% for servicio in factura.proyectosServicios.all %}
+                      {% if forloop.first %} 
+                        {{ servicio.servicio | upper }}
+                      {% else %}
+                        <br> {{ servicio.servicio | upper }}
+                      {% endif %}
+                    {% endfor %}
+                  </td>
+                  <td>{{ factura.cliente }}</td>
+                  <td>{{ factura.proveedor }}</td>
+                  <td>
+                    {% if factura.terminosPago == "Other" %}
+                      {{ factura.terminosPagoOtro }}
                     {% else %}
-                      {{ facrura.terminosPago }}
+                      {{ factura.terminosPago }}
                     {% endif %}
                   </td>
-                  <td>{{ facrura.impuesto }}</td>
+                  <td>{{ factura.impuesto }}</td>
                   
                   <td>
-                    <a class="btn btn-error btn-sm" href="{% url 'registros:printPdf' facrura.id %}" target="_blank"><i class="fas fa-fas fa-print"></i></a>
+                    <a class="btn btn-error btn-sm" href="{% url 'registros:printPdf' factura.id %}" target="_blank"><i class="fas fa-fas fa-print"></i></a>
                     {% comment %} <a class="btn btn-primary btn-sm" href="{% url 'registros:editarFactura' factura.id %}"><i class="fas fa-fas fa-pencil-alt"></i></a> {% endcomment %}
                                 
-                    {% comment %} <a class="btn btn-danger btn-sm" rel="eliminar" href="#" onClick="eliminarRegistro({{ facrura.id }}, '../eliminarFactura/')" ><icon class="fa fa-trash"></icon></a>  {% endcomment %}
+                    {% comment %} <a class="btn btn-danger btn-sm" rel="eliminar" href="#" onClick="eliminarRegistro({{ factura.id }}, '../eliminarFactura/')" ><icon class="fa fa-trash"></icon></a>  {% endcomment %}
                   </td>
               </tr>
               {% endfor %}
