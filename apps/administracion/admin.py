@@ -1,7 +1,9 @@
 from django.contrib import admin
+from import_export.admin import ImportExportModelAdmin
 from .models import Alumno, Maestro, Escuela, Municipio, Cliente, Proveedor, Cargo, CentroGestion
 
-class AlumnoAdmin(admin.ModelAdmin):
+@admin.register(Alumno)
+class AlumnoAdmin(ImportExportModelAdmin):
     search_fields=['apellidoPaterno', 'apellidoMaterno', 'nombre']
     list_display = ('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno', 'nivelEscolar', 'direccion', 'email', 'telefono', 'escuela', 'tipoEncargado', 'nombreEncargado', 'emailEncargado', 'telefonoEncargado')
 
@@ -34,7 +36,7 @@ class CentroGestionAdmin(admin.ModelAdmin):
     list_display = ('id', 'nombre')
 
 
-admin.site.register(Alumno, AlumnoAdmin)
+#admin.site.register(Alumno, AlumnoAdmin)
 admin.site.register(Maestro, MaestroAdmin)
 admin.site.register(Escuela, EscuelaAdmin)
 admin.site.register(Municipio, MunicipioAdmin)

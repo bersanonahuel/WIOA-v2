@@ -1,0 +1,3 @@
+
+python -m pip install weasyprint 
+pip install django-import-export

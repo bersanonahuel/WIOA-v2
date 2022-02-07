@@ -12,11 +12,15 @@
     <!-- HOJA 1 -->
     <article id="hoja-1" class="border">
       <div class="text-center">
-          <img src="{% static 'img/logo-cgi.png' %}" class="logo-header"/>
+        {% if factura.proyectosServicios.all.first.proyecto.logoCliente %}
+          <img src="{{ factura.proyectosServicios.all.first.proyecto.logoCliente.url }}" class="logo-header" />
+        {% endif %}
       </div>
       <div style="margin: 250px 0 420px 0;">
         <div class="text-center" style="margin-bottom: 60px;">
-            <img src="{% static 'img/logo-cgi.png' %}" style="width:350px;"/>
+          {% if factura.proyectosServicios.all.first.proyecto.logoCliente %}
+            <img src="{{ factura.proyectosServicios.all.first.proyecto.logoCliente.url }}" style="width:350px;" />
+          {% endif %}
         </div>
         <div class="text-center" >
             <h1>INFORME DE FACTURACIÓN FINAL</h1>
@@ -45,7 +49,9 @@
           <p><span>{{ factura.proveedor.numeroFiscal }}</span></p>
         </section>
         <section style="padding-top: 25px;">
-          <img src="{% static 'img/logo-cgi.png' %}" style="width:300px; float:right;"/>
+          {% if factura.proyectosServicios.all.first.proyecto.logoCliente %}
+            <img src="{{ factura.proyectosServicios.all.first.proyecto.logoCliente.url }}" style="width:300px; float:right;" />
+          {% endif %}
         </section>
       </div>
 
@@ -247,7 +253,9 @@
     <p style="break-before: always;"></p>
     <article id="hoja-5" class="border">
       <div class="text-center">
-        <img src="{% static 'img/logo-cgi.png' %}" class="logo-header" />
+        {% if factura.proyectosServicios.all.first.proyecto.logoCliente %}
+          <img src="{{ factura.proyectosServicios.all.first.proyecto.logoCliente.url }}" class="logo-header" />
+        {% endif %}
         <h3>HOJA DE FACTURACIÓN #2 <span class="color-rojo">
           {% for sp in factura.proyectosServicios.all %}
             {% if forloop.first %} 
@@ -334,7 +342,9 @@
     <p style="break-before: always;"></p>
     <article id="hoja-6" class="border">
       <div class="text-center">
-        <img src="{% static 'img/logo-cgi.png' %}" class="logo-header" />
+        {% if factura.proyectosServicios.all.first.proyecto.logoCliente %}
+          <img src="{{ factura.proyectosServicios.all.first.proyecto.logoCliente.url }}" class="logo-header" />
+        {% endif %}
         <h3>HOJA DE TABULACIÓN</h3>
       </div>
       <div>  
@@ -456,7 +466,9 @@
     {% comment %} <p style="break-before: always;"></p> {% endcomment %}
     <article class="border">
       <div class="text-center">
-        <img src="{% static 'img/logo-cgi.png' %}" class="logo-header" />
+        {% if factura.proyectosServicios.all.first.proyecto.logoCliente %}
+          <img src="{{ factura.proyectosServicios.all.first.proyecto.logoCliente.url }}" class="logo-header" />
+        {% endif %}
       </div>
       <h1 class="text-center" style="margin: 450px 0">COMPONENTE DE 
         <span class="color-rojo">
@@ -480,7 +492,9 @@
             <table id="header-hoja-8" >
               <tr>
                 <td>
-                  <img src="{% static 'img/logo-cgi.png' %}" style="width:160px;"/>
+                  {% if factura.proyectosServicios.all.first.proyecto.logoCliente %}
+                    <img src="{{ factura.proyectosServicios.all.first.proyecto.logoCliente.url }}" style="width:160px;" />
+                  {% endif %}
                 </td>
                 <td class="w-650 text-right" style="border-right:3px solid gray !important;">
                   <h3 style="margin-right:15px;">Hoja de Trabajo - evidencia de servicio para Proyecto Uno a Uno</h3>

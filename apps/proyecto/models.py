@@ -20,6 +20,7 @@ class Proyecto(models.Model):
     nombre = models.CharField(max_length=50, blank=False,null=False, verbose_name='Nombre del Proyecto')
     fechaCreacion = models.DateTimeField(auto_now=True, verbose_name='Fecha de Creación')
     nroPartidaPresupuestaria = models.CharField(max_length=200, blank=True,null=True, verbose_name='Número de Partida Presupuestaria')
+    logoCliente = models.ImageField(upload_to="logos", null=True)
     
     alumnos = models.ManyToManyField(Alumno, related_name='proyecto')
     maestros = models.ManyToManyField(Maestro, related_name='proyecto')

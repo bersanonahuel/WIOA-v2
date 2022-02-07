@@ -18,7 +18,8 @@ from django.urls import path , include
 from django.contrib.auth.decorators import login_required
 from apps.administracion.views import Inicio
 from apps.session.views import Login, logoutUsuario
-# from app.registros.views import Inicio
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,3 +29,6 @@ urlpatterns = [
     path('administracion/',include(('apps.administracion.urls', 'administracion'))),
     path('registros/',include(('apps.registros.urls', 'registros'))),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
