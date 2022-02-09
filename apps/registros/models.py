@@ -53,6 +53,7 @@ class Factura(models.Model):
 # Create your models here.
 class Registro(models.Model):
     id = models.AutoField(primary_key=True)
+    fechaCreacion = models.DateTimeField(auto_now=True)
     proyecto_servicio = models.ForeignKey(ServiciosProyecto, verbose_name="Proyecto y Servicio", on_delete=models.PROTECT, blank=False, null=False)
     alumno = models.ForeignKey(Alumno, on_delete=models.PROTECT, blank=False, null=False, verbose_name="Participante")
     comentario = models.CharField(max_length=400, blank=True, null=True)
@@ -71,6 +72,7 @@ class Registro(models.Model):
     
 class RegistroDetalle(models.Model):
     id = models.AutoField(primary_key=True)
+    fechaCreacion = models.DateTimeField(auto_now=True)
     fechaHoraInicio=models.DateTimeField(auto_now=False)
     fechaHoraFin=models.DateTimeField(auto_now=False)
     registro = models.ForeignKey(Registro, on_delete=models.PROTECT, blank=False, null=False)
