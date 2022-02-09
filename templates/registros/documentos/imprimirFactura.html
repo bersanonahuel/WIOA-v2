@@ -500,10 +500,14 @@
                   <h3 style="margin-right:15px;">Hoja de Trabajo - evidencia de servicio para Proyecto Uno a Uno</h3>
                 </td>
                 <td>
-                  <img src="{% static 'img/logo-uno.png' %}" class="w-50" style="margin:0 15px;" />
+                  {% if factura.proyectosServicios.all.first.proyecto.logoAdmin1 %}
+                    <img src="{{ factura.proyectosServicios.all.first.proyecto.logoAdmin1.url }}" class="w-50" style="margin:0 15px;" />
+                  {% endif %}
                 </td>
                 <td>
-                  <img src="{% static 'img/logo-amsi.png' %}" class="w-50" style="margin-right:20px;"/>
+                  {% if factura.proyectosServicios.all.first.proyecto.logoAdmin2 %}
+                    <img src="{{ factura.proyectosServicios.all.first.proyecto.logoAdmin2.url }}" class="w-50" style="margin:0 15px;" />
+                  {% endif %}
                 </td>
               </tr>
             </table>

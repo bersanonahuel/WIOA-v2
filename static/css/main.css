@@ -16,6 +16,12 @@
     font-size: 1.3rem !important;
 }
 
+/* Login */
+.login-page.fondo{
+    background-image: url('../img/fondo-login.jpg') !important;
+    background-size: cover !important;
+    height: 75vh !important;
+}
 /* Tablas */
 #tablaFacturacion tbody{
     font-size: 13px;;
