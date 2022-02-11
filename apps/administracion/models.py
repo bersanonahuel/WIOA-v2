@@ -88,7 +88,8 @@ class Maestro(models.Model):
     nombre = models.CharField(max_length=50, blank=False,null=False)
     apellido = models.CharField(max_length=50, blank=False, null=False)
 
-    usuario = models.ForeignKey(User, on_delete=models.PROTECT, blank=False, null=False)
+    #usuario = models.ForeignKey(User, on_delete=models.PROTECT, blank=False, null=False)
+    usuario = models.OneToOneField(User, on_delete=models.PROTECT, blank=False, null=False)
     cargo = models.ForeignKey(Cargo, on_delete=models.PROTECT, blank=False, null=False)
     alumnos = models.ManyToManyField(Alumno, related_name='maestro')
 
