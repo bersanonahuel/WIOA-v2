@@ -1,11 +1,41 @@
-from django.contrib import admin
+#Import - Export Excel
+from import_export import resources
+from import_export.formats import base_formats
 from import_export.admin import ImportExportModelAdmin
+
+from django.contrib import admin
 from .models import Alumno, Maestro, Escuela, Municipio, Cliente, Proveedor, Cargo, CentroGestion
+
+
+
+class AlumnoResource(resources.ModelResource):
+    class Meta:
+        model = Alumno
+
 
 @admin.register(Alumno)
 class AlumnoAdmin(ImportExportModelAdmin):
+    resource_class = AlumnoResource
     search_fields=['apellidoPaterno', 'apellidoMaterno', 'nombre']
     list_display = ('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno', 'nivelEscolar', 'direccion', 'email', 'telefono', 'escuela', 'tipoEncargado', 'nombreEncargado', 'emailEncargado', 'telefonoEncargado')
+    list_filter = ('escuela',)
+
+    def get_export_formats(self):
+        formats = (
+          base_formats.XLS,
+          base_formats.XLSX,
+          )
+
+        return [f for f in formats if f().can_export()]
+    
+    def get_import_formats(self):
+        formats = (
+          base_formats.XLS,
+          base_formats.XLSX,
+          )
+
+        return [f for f in formats if f().can_export()]
+
 
 class MaestroAdmin(admin.ModelAdmin):
     search_fields=['apellido']
@@ -36,7 +66,6 @@ class CentroGestionAdmin(admin.ModelAdmin):
     list_display = ('id', 'nombre')
 
 
-#admin.site.register(Alumno, AlumnoAdmin)
 admin.site.register(Maestro, MaestroAdmin)
 admin.site.register(Escuela, EscuelaAdmin)
 admin.site.register(Municipio, MunicipioAdmin)

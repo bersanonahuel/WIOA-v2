@@ -33,6 +33,10 @@ html, body, header{
     font-family: 'Gilroy-Light';
 }
 
+.brand-link .brand-image{
+    max-width: 90%;
+}
+
 
 /* Login */
 .login-page.fondo{

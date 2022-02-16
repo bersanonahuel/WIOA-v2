@@ -14,6 +14,7 @@ class ServiciosProyectoAdmin(admin.ModelAdmin):
     search_fields=['nombre']
     list_display = ('id', 'proyecto', 'servicio', 'precio_por_hora', 'cantidad_participantes', 'total_horas', 'presupuesto_total')
     fields = ('proyecto', 'servicio', 'precio_por_hora', 'cantidad_participantes', 'total_horas', 'presupuesto_total')
+    list_filter = ('servicio',)
 
 
 admin.site.register(Servicio, ServicioAdmin)

@@ -24,8 +24,8 @@ class Proyecto(models.Model):
     logoAdmin1 = models.ImageField(upload_to="logos", null=True, verbose_name="Logo Uno a Uno Admin")
     logoAdmin2 = models.ImageField(upload_to="logos", null=True, verbose_name="Logo Wioa Admin")
     
-    alumnos = models.ManyToManyField(Alumno, related_name='proyecto')
-    maestros = models.ManyToManyField(Maestro, related_name='proyecto')
+    alumnos = models.ManyToManyField(Alumno, related_name='proyecto', verbose_name="Participantes")
+    maestros = models.ManyToManyField(Maestro, related_name='proyecto', verbose_name="Personas")
 
     class Meta:
         verbose_name = ("Proyecto")

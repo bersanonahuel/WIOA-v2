@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['192.168.0.126', '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
+    'admin_interface',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'apps.session',
     'apps.proyecto',
     'import_export',
+    'colorfield',
 ]
 
 MIDDLEWARE = [
