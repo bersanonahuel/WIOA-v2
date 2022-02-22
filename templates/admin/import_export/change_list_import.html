@@ -6,7 +6,7 @@
     <div style="float: left;">
         <form action="descargar/" method="POST">
             {% csrf_token %}
-            <li><a class="" href="http://127.0.0.1:8000/static/excel/insert_participantes.xlsx">Descargar Excel</a></li>
+            <li><a class="" href="{{STATIC_ROOT}}/static/excel/insert_participantes.xlsx">Descargar Excel</a></li>
         </form>
     </div>
     {{ block.super }}
