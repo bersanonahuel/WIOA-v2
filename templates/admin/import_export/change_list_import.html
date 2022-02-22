@@ -1,0 +1,13 @@
+{% extends "admin/import_export/change_list_import.html" %}
+{% load i18n %}
+
+{% block object-tools-items %}
+    
+    <div style="float: left;">
+        <form action="descargar/" method="POST">
+            {% csrf_token %}
+            <li><a class="" href="http://127.0.0.1:8000/static/excel/insert_participantes.xlsx">Descargar Excel</a></li>
+        </form>
+    </div>
+    {{ block.super }}
+{% endblock %}

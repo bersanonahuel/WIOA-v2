@@ -1,40 +1,35 @@
 #Import - Export Excel
-from import_export import resources
 from import_export.formats import base_formats
-from import_export.admin import ImportExportModelAdmin
+from import_export.admin import ImportExportModelAdmin, ExportActionMixin
 
 from django.contrib import admin
 from .models import Alumno, Maestro, Escuela, Municipio, Cliente, Proveedor, Cargo, CentroGestion
+from .resources import AlumnoResource
 
-
-
-class AlumnoResource(resources.ModelResource):
-    class Meta:
-        model = Alumno
 
 
 @admin.register(Alumno)
-class AlumnoAdmin(ImportExportModelAdmin):
+class AlumnoAdmin(ImportExportModelAdmin, ExportActionMixin):
+    #ExportActionMixin: es para que aparezca la opcion de exportar en el combo de acciones.
+
     resource_class = AlumnoResource
     search_fields=['apellidoPaterno', 'apellidoMaterno', 'nombre']
     list_display = ('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno', 'nivelEscolar', 'direccion', 'email', 'telefono', 'escuela', 'tipoEncargado', 'nombreEncargado', 'emailEncargado', 'telefonoEncargado')
     list_filter = ('escuela',)
-
+    
+    change_list_template  = "admin/import_export/change_list_import.html"
+    
+   
+    #Para excluir formatos que no se utilizan.
     def get_export_formats(self):
-        formats = (
-          base_formats.XLS,
-          base_formats.XLSX,
-          )
-
+        formats = ( base_formats.XLS, base_formats.XLSX, )
         return [f for f in formats if f().can_export()]
     
     def get_import_formats(self):
-        formats = (
-          base_formats.XLS,
-          base_formats.XLSX,
-          )
-
+        formats = ( base_formats.XLS, base_formats.XLSX, )
         return [f for f in formats if f().can_export()]
+    
+
 
 
 class MaestroAdmin(admin.ModelAdmin):
