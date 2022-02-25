@@ -402,21 +402,9 @@ class PrintPdf(View):
         registrosDetalle = RegistroDetalle.objects.filter(factura=facturaInstance.id).order_by('usuario', 'registro', 'fechaHoraInicio')
         usuariosList = RegistroDetalle.objects.filter(factura=facturaInstance.id).values('usuario', 'usuario__first_name', 'usuario__last_name').distinct()
         
-        # ······ Total y subtotal Factura
-        subtotal = Decimal(0.0)
-        total = Decimal(0.0)
-
-        for proyServ in facturaInstance.proyectosServicios.all():
-            subtotal = subtotal + (proyServ.precio_por_hora * proyServ.cantidad_participantes)
-            
         
-        tax = Decimal(0.0)
-        tax = facturaInstance.impuesto.porcentaje
-
-        precioTax = round(subtotal * (tax/100), 2)
-        total = subtotal + precioTax
-        
-        totalParticipantes = facturaInstance.proyectosServicios.all().aggregate(total=Sum('cantidad_participantes'))
+        #Total participantes Matriculados
+        totalParticipantesMatriculados = facturaInstance.proyectosServicios.all().aggregate(total=Sum('cantidad_participantes'))
 
 
         # ······ Detalle de Hs por MES
@@ -426,24 +414,28 @@ class PrintPdf(View):
         mentoriaHsTotal = 0
         conserjeriaHsTotal = 0
         jsHsTotal = 0
+        seguimientoHsTotal = 0
         totalHorasServicios = 0
         
         for i in range(1, 13): 
             #regDetMes = RegistroDetalle.objects.filter(factura=facturaInstance.id, fechaHoraInicio__month = i).values('fechaHoraInicio__month', servicioId=F('registro__proyecto_servicio__servicio')).annotate(cant=Count('registro', distinct=True)).order_by('fechaHoraInicio__month', '-registro__proyecto_servicio__servicio')
             #cantParticipantes = ([regDet.registro_id for regDet in regDetMes])
+
+            #Calculo cantidad de Participantes x Servicio x Mes
             regDetMes = RegistroDetalle.objects.filter(factura=facturaInstance.id, fechaHoraInicio__month = i).values('fechaHoraInicio__month').aggregate(
                 tutoria=Count('registro', distinct=True, filter=Q(registro__proyecto_servicio__servicio=1)),
                 mentoria=Count('registro', distinct=True, filter=Q(registro__proyecto_servicio__servicio=2)),
                 conserjeria=Count('registro', distinct=True, filter=Q(registro__proyecto_servicio__servicio=3)),
                 js=Count('registro', distinct=True, filter=Q(registro__proyecto_servicio__servicio=4)),
+                seguimiento=Count('registro', distinct=True, filter=Q(registro__proyecto_servicio__servicio=5)),
             )
             
             if regDetMes:
-                if regDetMes['tutoria'] > 0 or regDetMes['mentoria'] > 0 or regDetMes['conserjeria'] > 0 or regDetMes['js'] > 0:
-                    for servicio in range(1,5):
+                if regDetMes['tutoria'] > 0 or regDetMes['mentoria'] > 0 or regDetMes['conserjeria'] > 0 or regDetMes['js'] > 0 or regDetMes['seguimiento'] > 0:
+                    for servicio in range(1,6):
+                        #print('MES: ', i, ' ++++ serv', servicio)
                         seg = 0
                         reg = RegistroDetalle.objects.filter(factura=facturaInstance.id, fechaHoraInicio__month = i, registro__proyecto_servicio__servicio=servicio)
-                        #print('MES: ', i, ' ++++ serv', servicio)
                         for r in reg:
                             seg = seg + r.calcular_total_hs_segundos_detalle()
 
@@ -461,38 +453,91 @@ class PrintPdf(View):
                         if servicio == 4:
                             regDetMes['jsHs']  = hs
                             jsHsTotal = jsHsTotal + seg
+                        if servicio == 5:
+                            regDetMes['seguimientoHs']  = hs
+                            seguimientoHsTotal = seguimientoHsTotal + seg
                     
                     regDetMes['mes'] = i
                     registrosPorMes[nro] = regDetMes
                     nro = nro+1
 
-                    totalHorasServicios = tutoriaHsTotal + mentoriaHsTotal + conserjeriaHsTotal + jsHsTotal
+                    totalHorasServicios = tutoriaHsTotal + mentoriaHsTotal + conserjeriaHsTotal + jsHsTotal + seguimientoHsTotal
         
+
         # TOTALES
         totTutoria = 0
         totMentoria = 0
         totConserjeria = 0
         totJs = 0
+        totSeguimiento = 0
 
         for t in registrosPorMes.values():
             totTutoria+=t['tutoria']
             totMentoria+=t['mentoria']
             totConserjeria+=t['conserjeria']
             totJs+=t['js']
+            totSeguimiento+=t['seguimiento']
         
         registrosPorMes['TOTAL'] = {
             'tutoria': totTutoria,
             'mentoria': totMentoria,
             'conserjeria': totConserjeria,
             'js': totJs,
+            'seguimiento': totSeguimiento,
             'tutoriaHs': convertir_tiempo(tutoriaHsTotal),
             'mentoriaHs': convertir_tiempo(mentoriaHsTotal),
             'conserjeriaHs': convertir_tiempo(conserjeriaHsTotal),
-            'jsHs': convertir_tiempo(jsHsTotal)
+            'jsHs': convertir_tiempo(jsHsTotal),
+            'seguimientoHs': convertir_tiempo(seguimientoHsTotal)
         }
 
-        #print('registrosPorMes:::: ',registrosPorMes)
+        #Cantidad de Participantes x Servicio
+        regDetServicio = RegistroDetalle.objects.filter(factura=facturaInstance.id).aggregate(
+            tutoriaCantPart=Count('registro', distinct=True, filter=Q(registro__proyecto_servicio__servicio=1)),
+            mentoriaCantPart=Count('registro', distinct=True, filter=Q(registro__proyecto_servicio__servicio=2)),
+            conserjeriaCantPart=Count('registro', distinct=True, filter=Q(registro__proyecto_servicio__servicio=3)),
+            jsCantPart=Count('registro', distinct=True, filter=Q(registro__proyecto_servicio__servicio=4)),
+            seguimientoCantPart=Count('registro', distinct=True, filter=Q(registro__proyecto_servicio__servicio=5)),
+        )
+
+        # print('regDetServicio: ',regDetServicio)
+        # print('registrosPorMes:::: ',registrosPorMes)
+        totalParticipantesServidos = regDetServicio['tutoriaCantPart'] + regDetServicio['mentoriaCantPart']  + regDetServicio['conserjeriaCantPart'] + regDetServicio['jsCantPart'] + regDetServicio['seguimientoCantPart']
+
         
+        # ······ Total y subtotal Factura
+        subtotal = Decimal(0.0)
+        total = Decimal(0.0)
+        regDetServicio['tutoriaPrecio'] =  Decimal(0.0)
+        regDetServicio['mentoriaPrecio'] =  Decimal(0.0)
+        regDetServicio['conserjeriaPrecio'] =  Decimal(0.0)
+        regDetServicio['jsPrecio'] =  Decimal(0.0)
+        regDetServicio['seguimientoPrecio'] =  Decimal(0.0)
+
+        for proyServ in facturaInstance.proyectosServicios.all():
+            #subtotal = subtotal + (proyServ.precio_por_hora * proyServ.cantidad_participantes)
+            print('proyServ::: ', proyServ.servicio.id)
+            if proyServ.servicio.id == 1:
+                regDetServicio['tutoriaPrecio'] = round(proyServ.precio_por_hora * regDetServicio['tutoriaCantPart'], 2)
+            elif proyServ.servicio.id == 2:
+                regDetServicio['mentoriaPrecio'] = round(proyServ.precio_por_hora * regDetServicio['mentoriaCantPart'], 2)
+            elif proyServ.servicio.id == 3:
+                regDetServicio['conserjeriaPrecio'] = round(proyServ.precio_por_hora * regDetServicio['conserjeriaCantPart'], 2)
+            elif proyServ.servicio.id == 4:
+                regDetServicio['jsPrecio'] = round(proyServ.precio_por_hora * regDetServicio['jsCantPart'], 2)
+            elif proyServ.servicio.id == 5:
+                regDetServicio['seguimientoPrecio'] = round(proyServ.precio_por_hora * regDetServicio['seguimientoCantPart'], 2)
+                
+
+        subtotal = regDetServicio['tutoriaPrecio'] + regDetServicio['mentoriaPrecio'] + regDetServicio['conserjeriaPrecio'] + regDetServicio['jsPrecio'] + regDetServicio['seguimientoPrecio']
+
+        tax = Decimal(0.0)
+        tax = facturaInstance.impuesto.porcentaje
+        
+        precioTax = round(subtotal * (tax/100), 2)
+        total = subtotal + precioTax
+
+
         context = {
             'factura': facturaInstance,
             'registrosDetalle': registrosDetalle,
@@ -501,12 +546,15 @@ class PrintPdf(View):
             'subtotalFactura': round(subtotal, 2),
             'totalFactura': round(total, 2),
             'precioTax': precioTax,
-            'totalParticipantes': totalParticipantes,
+            'totalParticipantesMatriculados': totalParticipantesMatriculados,
             'totalHorasServicios': convertir_tiempo(totalHorasServicios),
             
             'serviciosList': Servicio.objects.all(),
             'serviciosFacturados': facturaInstance.proyectosServicios.values_list('servicio',flat=True),
-            'registrosPorMes': registrosPorMes
+            'registrosPorMes': registrosPorMes,
+
+            'regDetServicio': regDetServicio,
+            'totalParticipantesServidos': totalParticipantesServidos
         }
 
         html_template = template.render(context)

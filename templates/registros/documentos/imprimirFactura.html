@@ -92,7 +92,7 @@
         </thead>
         <tbody>
             <tr>
-                <td class="border-0">{{ factura.proyectosServicios.all.first.proyecto }}<span class="color-rojo"> ({{ totalParticipantes.total }} participantes)</span></td>
+                <td class="border-0">{{ factura.proyectosServicios.all.first.proyecto }}<span class="color-rojo"> ({{ totalParticipantesServidos }} participantes)</span></td>
                 <td class="text-center text-bold">{{ factura.terminosPago }}</td>
             </tr>
         </tbody>
@@ -112,7 +112,11 @@
                     {% comment %} <span class="color-rojo">{{ factura.descripcion }}</span> {% endcomment %}
                   </td>
                   <td class="text-right"><span class="color-rojo">
-                    $ {{ proyServ.calcular_precio_total }}
+                    {% if proyServ.servicio.id == 1 %} ${{ regDetServicio.tutoriaPrecio }} {% endif %}
+                    {% if proyServ.servicio.id == 2 %} ${{ regDetServicio.mentoriaPrecio }} {% endif %}
+                    {% if proyServ.servicio.id == 3 %} ${{ regDetServicio.conserjeriaPrecio }} {% endif %}
+                    {% if proyServ.servicio.id == 4 %} ${{ regDetServicio.jsPrecio }} {% endif %}
+                    {% if proyServ.servicio.id == 5 %} ${{ regDetServicio.seguimientoPrecio }} {% endif %}
                   </span></td>
               </tr>
               {% endfor %}
@@ -269,7 +273,7 @@
       <div>  
         <h4 class="ml-30">Periodo: <span class="color-celeste">{{ factura.fechaInicio|date:'d F Y' }} hasta {{ factura.fechaFin|date:'d F Y' }}</span></h4>
         <h4 class="ml-30">CENTRO DE GESTIÓN: <span class="color-celeste"><u><span>{{ factura.cliente.centroGestion }}</span></u></span></h4>
-        <h4 class="ml-30">TOTAL DE PARTICIPANTES MATRICULADOS: <span class="color-celeste"> {{ totalParticipantes.total }} </span></h4>
+        <h4 class="ml-30">TOTAL DE PARTICIPANTES MATRICULADOS: <span class="color-celeste"> {{ totalParticipantesMatriculados.total }} </span></h4>
         <h4 class="ml-30">CUADRE DE HORAS DE SERVICIO</h4>
       <div>
       <br>
@@ -291,21 +295,46 @@
                 <p>{{ sp.total_horas }} horas a razón de $ {{ sp.precio_por_hora }} por participante</p>
                 <p><u>Partida</u>:</p>
                 <p>{{ sp.proyecto.nroPartidaPresupuestaria }}</p>
-                <p>${{ sp.presupuesto_total }}</p>
+                <p>${{ sp.presupuesto_total }}</p>  
+              </td>
+
+              <td class="color-celeste text-center">
+                <h4>
+                  {% if sp.servicio.id == 1 %} {{ regDetServicio.tutoriaCantPart }} {% endif %}
+                  {% if sp.servicio.id == 2 %} {{ regDetServicio.mentoriaCantPart }} {% endif %}
+                  {% if sp.servicio.id == 3 %} {{ regDetServicio.conserjeriaCantPart }} {% endif %}
+                  {% if sp.servicio.id == 4 %} {{ regDetServicio.jsCantPart }} {% endif %}
+                  {% if sp.servicio.id == 5 %} {{ regDetServicio.seguimientoCantPart }} {% endif %}
+                  {% comment %} {{ sp.cantidad_participantes }}  {% endcomment %}
+                </h4>
+              </td>
                 
-                </td>
-                <td class="color-celeste text-center"><h4> {{ sp.cantidad_participantes }} </h4></td>
-                <td class="color-celeste text-center"><h4><span class="color-rojo">
-                  {% for key, value in registrosPorMes.items  %}
-                    {% if forloop.last %}
-                      {% if sp.servicio.id == 1 %} {{ value.tutoriaHs }} {% endif %}
-                      {% if sp.servicio.id == 2 %} {{ value.mentoriaHs }} {% endif %}
-                      {% if sp.servicio.id == 3 %} {{ value.conserjeriaHs }} {% endif %}
-                      {% if sp.servicio.id == 4 %} {{ value.jsHs }} {% endif %}
-                    {% endif %}
-                  {% endfor %}
-                </span></h4></td>
-                <td class="color-celeste text-center"><h4> {{ sp.cantidad_participantes }} X ${{ sp.precio_por_hora }} = ${{ sp.calcular_precio_total }} </h4></td>
+              <td class="color-celeste text-center">
+                <h4>
+                {% for key, value in registrosPorMes.items  %}
+                  {% if forloop.last %}
+                    {% if sp.servicio.id == 1 %} {{ value.tutoriaHs }} {% endif %}
+                    {% if sp.servicio.id == 2 %} {{ value.mentoriaHs }} {% endif %}
+                    {% if sp.servicio.id == 3 %} {{ value.conserjeriaHs }} {% endif %}
+                    {% if sp.servicio.id == 4 %} {{ value.jsHs }} {% endif %}
+                    {% if sp.servicio.id == 5 %} {{ value.seguimientoHs }} {% endif %}
+                  {% endif %}
+                {% endfor %}
+                </h4>
+              </td>
+
+              <td class="color-celeste text-center">
+                <h4> 
+                  {% if sp.servicio.id == 1 %} {{ regDetServicio.tutoriaCantPart }} X ${{ sp.precio_por_hora }} = ${{ regDetServicio.tutoriaPrecio }} {% endif %}
+                  {% if sp.servicio.id == 2 %} {{ regDetServicio.mentoriaCantPart }} X ${{ sp.precio_por_hora }} = ${{ regDetServicio.mentoriaPrecio }} {% endif %}
+                  {% if sp.servicio.id == 3 %} {{ regDetServicio.conserjeriaCantPart }} X ${{ sp.precio_por_hora }} = ${{ regDetServicio.conserjeriaPrecio }} {% endif %}
+                  {% if sp.servicio.id == 4 %} {{ regDetServicio.jsCantPart }} X ${{ sp.precio_por_hora }} = ${{ regDetServicio.jsPrecio }} {% endif %}
+                  {% if sp.servicio.id == 5 %} {{ regDetServicio.seguimientoCantPart }} X ${{ sp.precio_por_hora }} = ${{ regDetServicio.seguimientoPrecio }} {% endif %}
+                  
+                  {% comment %} {{ sp.calcular_precio_total }}  {% endcomment %}
+                </h4>
+              
+              </td>
             </tr>
           {% endfor %}
 
@@ -328,7 +357,7 @@
             <td class="text-right">
               <br> <p><b>TOTAL</b></p> <br>
             </td>
-            <td class="color-celeste text-center" ><b>{{ totalParticipantes.total }}</b></td>
+            <td class="color-celeste text-center" ><b>{{ totalParticipantesServidos }}</b></td>
             <td class="color-celeste text-center" ><b>{{ totalHorasServicios }}</b></td>
             <td class="color-celeste text-center" ><b>$ {{ subtotalFactura }}</b></td>
           </tr>
@@ -350,7 +379,7 @@
       <div>  
         <h4 class="ml-30">Periodo: <span class="color-celeste">{{ factura.fechaInicio|date:'d F Y' }} hasta {{ factura.fechaFin|date:'d F Y' }}</span></h4>
         <h4 class="ml-30">CENTRO DE GESTIÓN: <span class="color-celeste"><u><span>{{ factura.cliente.centroGestion }}</span></u></span></h4>
-        <h4 class="ml-30">TOTAL DE PARTICIPANTES MATRICULADOS: <span class="color-celeste"><span class="color-rojo">{{ totalParticipantes.total }}</span></span></h4>
+        <h4 class="ml-30">TOTAL DE PARTICIPANTES MATRICULADOS: <span class="color-celeste"><span class="color-rojo">{{ totalParticipantesMatriculados.total }}</span></span></h4>
         <h4 class="ml-30">CUADRE DE HORAS DE SERVICIO A LOS PARTICIPANTES</h4>
       <div>
       <br>
@@ -361,7 +390,7 @@
             <th colspan="11" class="bg-celeste">CUADRE TOTAL DE HORAS DE SERVICIO</th>
           </tr>
           <tr>
-            <th class="bg-celeste" style="width: 120px;" >MES</th>
+            <th class="bg-celeste" style="width: 60px;" >MES</th>
             <th class="bg-celeste" colspan="2" >TUTORÍA</th>
             <th class="bg-celeste" colspan="2" >MENTORÍA</th>
             <th class="bg-celeste" colspan="2" >CONSEJERÍA</th>
@@ -447,8 +476,13 @@
               {% endif %}
               
               <!-- Seguimiento ID=5 -->
-              <td class="bg-celeste"></td>
-              <td class="bg-celeste"></td>
+              {% if value.seguimiento > 0 %} 
+                <td> {{ value.seguimiento }} </td> 
+                <td> {{ value.seguimientoHs }} </td>
+              {% else %}
+                <td class="bg-celeste"></td> 
+                <td class="bg-celeste"></td> 
+              {% endif %}
 
             </tr>            
           {% endfor %} <!-- /for Key -->

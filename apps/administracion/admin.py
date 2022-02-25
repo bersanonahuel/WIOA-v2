@@ -28,8 +28,6 @@ class AlumnoAdmin(ImportExportModelAdmin, ExportActionMixin):
     def get_import_formats(self):
         formats = ( base_formats.XLS, base_formats.XLSX, )
         return [f for f in formats if f().can_export()]
-    
-
 
 
 class MaestroAdmin(admin.ModelAdmin):
@@ -39,10 +37,12 @@ class MaestroAdmin(admin.ModelAdmin):
 class EscuelaAdmin(admin.ModelAdmin):
     search_fields=['nombre']
     list_display=('id', 'nombre', 'municipio')
+    querystring_auth = False
 
 class MunicipioAdmin(admin.ModelAdmin):
     search_fields=['nombre']
     list_display=('id', 'nombre')
+    querystring_auth = False
 
 class ClienteAdmin(admin.ModelAdmin):
     search_fields=['nombre']
@@ -59,6 +59,43 @@ class CargoAdmin(admin.ModelAdmin):
 class CentroGestionAdmin(admin.ModelAdmin):
     search_fields=['nombre']
     list_display = ('id', 'nombre')
+
+
+
+
+def app_resort(func):                                                                                            
+    def inner(*args, **kwargs):                                                                                            
+        app_list = func(*args, **kwargs)
+        # Useful to discover your app and module list:
+        #import pprint                                                                                          
+        #pprint.pprint(app_list)
+
+        app_sort_key = 'name'
+        app_ordering = {
+            "Administracion": 1,
+            "Proyecto": 2,
+            "Registros": 3
+        }
+
+        resorted_app_list = sorted(app_list, key=lambda x: app_ordering[x[app_sort_key]] if x[app_sort_key] in app_ordering else 1000)
+
+        model_sort_key = 'object_name'
+        model_ordering = {
+            "Escuela": 1,
+            "Alumno": 2,
+            "Maestro": 3,
+            "Cliente": 4,
+            "Proveedor": 5,
+            "Municipio": 6,
+            "Cargo": 7,
+            "CentroGestion": 8
+        }
+        for app in resorted_app_list:
+            app['models'].sort(key=lambda x: model_ordering[x[model_sort_key]] if x[model_sort_key] in model_ordering else 1000)
+        return resorted_app_list
+    return inner                                                                                            
+                   
+admin.site.get_app_list = app_resort(admin.site.get_app_list)
 
 
 admin.site.register(Maestro, MaestroAdmin)

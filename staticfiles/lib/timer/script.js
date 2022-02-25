@@ -1,0 +1,158 @@
+
+window.addEventListener('load', function () {
+    //Getting dashboard  ( Checking if we are in dashboard or not)
+    var dashboard = document.getElementById("formRegistro");
+    //Start button 
+    var start_button = document.getElementById("start_button");
+    //Stop button
+    var stop_button = document.getElementById("timer_submit");
+    //timer 
+    var hour = document.getElementById("hour");
+    var mint = document.getElementById("min");
+    var secd = document.getElementById("sec");
+    
+    $("#timer_submit").prop("disabled", true);
+
+    //console.log('start_button: ',start_button);
+
+    if (dashboard != null && localStorage.getItem('start_button') == null) {
+        //Declaring variable  
+        var hr = 0;
+        var min = 0;
+        var sec = 0;
+
+    } else if ((dashboard != null && localStorage.getItem('start_button') != null)) {
+        $("#start_button").prop("disabled", true);
+        $("#start_button").removeClass("btn-outline-success");
+        $("#start_button").addClass("btn-light");
+        start_button.innerHTML = "Iniciado";
+    }
+
+
+
+    if (start_button) {
+        start_button.addEventListener('click', function () {
+            
+            localStorage.setItem('start_button', 'clicked');
+            $("#start_button").prop("disabled", true);
+            $("#start_button").removeClass("btn-outline-success");
+            $("#start_button").addClass("btn-light");
+            start_button.innerHTML = "Iniciado";
+
+            $("#crearRegistro").prop("disabled", true);
+            $("#timer_submit").prop("disabled", false);
+            
+            var date_start = new moment().format('YYYY-MM-DD HH:mm');
+            set_fechas(date_start, null);
+            
+            timerCycle();
+        })
+    }
+    if (stop_button) {
+        stop_button.addEventListener('click', function () {
+            
+            //Guardo la fecha de fin
+            var date_stop = new moment().format('YYYY-MM-DD HH:mm');
+            set_fechas(null, date_stop);
+
+            // saveData(hr, min, sec);                          To get data after stop button active this fuction
+            localStorage.clear();
+            hour.innerHTML = '00';
+            mint.innerHTML = '00';
+            secd.innerHTML = '00';
+            // var total_time = document.getElementById("total_time");
+            // if (total_time) {
+            //     total_time.innerHTML = hr + ':' + min + ':' + sec;
+            // }
+            //Stopping the cycle
+            clearTimeout(cycle);
+            hr = 0;
+            min = 0;
+            sec = 0;
+            $("#start_button").prop("disabled", false);
+            $("#start_button").addClass("btn-success");
+            $("#start_button").removeClass("btn-light");
+            start_button.innerHTML = "Iniciar";
+        })
+    }
+
+    //Si sale de la pagina
+    if (dashboard == null) {
+        console.log('salio de la pagina..');
+        $("#timer_submit").click();
+    }
+    
+    //continue timer on other pages 
+    /*if (dashboard == null && localStorage.getItem('start_button') != null) {
+        sec = localStorage.getItem('sec');
+        min = localStorage.getItem('min');
+        hr = localStorage.getItem('hr');
+        timerCycle();
+        //continue timer on coming back Dashboard
+    } else */
+    if (dashboard != null && localStorage.getItem('start_button') != null) {
+        sec = localStorage.getItem('sec');
+        min = localStorage.getItem('min');
+        hr = localStorage.getItem('hr');
+        timerCycle();
+    }
+
+    function timerCycle() {
+        sec = parseInt(sec);
+        min = parseInt(min);
+        hr = parseInt(hr);
+
+        sec = sec + 1;
+
+        if (sec == 60) {
+            min = min + 1;
+            sec = 0;
+        }
+        if (min == 60) {
+            hr = hr + 1;
+            min = 0;
+            sec = 0;
+        }
+
+        if (sec < 10 || sec == 0) {
+            sec = '0' + sec;
+        }
+        if (min < 10 || min == 0) {
+            min = '0' + min;
+        }
+        if (hr < 10 || hr == 0) {
+            hr = '0' + hr;
+        }
+
+        localStorage.setItem('hr', hr);
+        localStorage.setItem('min', min);
+        localStorage.setItem('sec', sec);
+        
+        hour.innerHTML = hr;
+        mint.innerHTML = min;
+        secd.innerHTML = sec;
+
+        // if (dashboard == null && localStorage.getItem('start_button') != null) {
+        //     var side_timer = document.getElementById('time_title');
+        //     if (side_timer) {
+        //         handling other counter changeing URL        [Put Where you want to show your counter after URL change]
+        //         hour.innerHTML = hr;
+        //         min.innerHTML = min;
+        //         sec.innerHTML = sec;
+        //     }
+
+        // } else {
+
+        // }
+
+
+        cycle = setTimeout(timerCycle, 1000);
+    }
+
+});
+
+window.addEventListener('beforeunload', function (){
+    // Para el cronometro cuando se actualiza la pagina.
+    $("#timer_submit").click();
+} );
+

@@ -47,7 +47,7 @@
                     <div class="row mt-5 mb-2">
                         <div class="col-12 text-center">
                             <h1 class="m-0" style="color: #008da5; font-family: 'Gilroy-ExtraBold'; letter-spacing: 2px;">{% block contentTitulo %} BIENVENIDOS {% endblock contentTitulo %}</h1>
-                            <img src="{% static 'img/logo.png' %}" alt="Logo Wioa" class="brand-image mt-3">
+                            <img src="{% static 'img/logo.png' %}" alt="Logo WIOA" class="brand-image mt-3">
                         </div><!-- /.col -->
                     </div><!-- /.row -->
 
@@ -59,7 +59,7 @@
                                     <i class="nav-icon fa fa-plus pr-1"></i> Crear Registro 
                                 </a><br><br>
                                 <a href="{% url 'registros:listarRegistro' %}" class="btn btn-secondary btn-sub-menu">
-                                    <i class="nav-icon fa fa-list-ul pr-1"></i> Listado registros
+                                    <i class="nav-icon fa fa-list-ul pr-1"></i> Listar registros
                                 </a>
                             </div>
                             
@@ -69,7 +69,7 @@
                             <button class="btn btn-success btn-menu" id="btn-factura"> FACTURA </button><br><br>
                             <div id="sub-menu-factura">
                                 <a href="{% url 'registros:crearFactura' %}" class="btn btn-secondary btn-sub-menu">
-                                    <i class="nav-icon fa fa-plus pr-1"></i> Registrar factura
+                                    <i class="nav-icon fa fa-plus pr-1"></i> Crear factura
                                 </a><br><br>
                                 <a href="{% url 'registros:listarFactura' %}" class="btn btn-secondary btn-sub-menu">
                                     <i class="nav-icon fa fa-list-ul pr-1"></i> Listar facturas

@@ -1,0 +1,216 @@
+/* Fuente */
+@font-face {
+    font-family: 'Gilroy-Light';
+    font-style: normal;
+    src: url('/static/fonts/Gilroy-Light.otf') format('opentype');
+}
+@font-face {
+    font-family: 'Gilroy-ExtraBold';
+    font-style: normal;
+    font-weight: bold;
+    src: url('/static/fonts/Gilroy-ExtraBold.otf') format('opentype');
+}
+
+/* Generales */
+.bg-warning-light {
+    background-color: #ffc10780!important;
+}
+.bg-header-tabla {
+    background-color: #5188c4!important;
+    color: white !important;
+}
+.bg-gris-claro {
+    background-color: #c9c9c9;
+}
+
+.info-box-content .info-box-number{
+    font-size: 1.5rem !important;
+}
+.info-box-content .info-box-text{
+    font-size: 1.3rem !important;
+}
+html, body, header{
+    font-family: 'Gilroy-Light';
+}
+
+.brand-link .brand-image{
+    max-width: 90%;
+}
+
+
+/* Login */
+.login-page.fondo{
+    background-image: url('../img/fondo-login.jpg') !important;
+    background-size: cover !important;
+    height: 75vh !important;
+}
+
+/* Header */
+header{
+    font-size: 14px !important;
+}
+header .link-logo {
+    margin: 0 58% 0 0;
+}
+header .linea-gris {
+    background-color: #666666;
+    width: 5px;
+    height: 36px;
+    border-radius: 10px;
+}
+.nav-pills .nav-link:not(.active):hover {
+    color: #5188c4;
+}
+.texto-session {
+    display: contents;
+}
+header .icono-menu {
+    font-size: 20px !important;
+    margin-left: 0.5rem;
+}
+
+/* Content */
+.content-wrapper{
+    background-image: url('../img/fondo-content.png') !important;
+    background-size: cover !important;
+}
+
+
+/* Menu */
+#menu-registro {
+    justify-content: flex-end;
+    display: grid;
+    flex-direction: row;
+}
+
+.btn-menu{
+    width: 180px;
+    height: 50px;
+    border-radius: 10px;
+    font-size: 24px;
+    font-family: 'Gilroy-ExtraBold';
+    letter-spacing: 1.5px;
+}
+.btn-sub-menu{
+    font-size: 12px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    padding: 12px;
+    letter-spacing: 1px;
+}
+
+/* Tablas */
+#tablaFacturacion tbody{
+    font-size: 13px;;
+}
+
+.registro-manual{
+    border-right: 1px solid #dee2e6!important;
+    border-bottom: 0px !important;
+}
+
+/* Mensajes */
+.mensaje.alert-error {
+    color: #b94a48 !important;
+    background-color: #f2dede !important;
+    border-color: #ebccd1 !important;
+}
+.mensaje.alert-success {
+    color: #468847 !important;
+    background-color: #dff0d8 !important;
+    border-color: #d6e9c6 !important;
+}
+.mensaje.alert-warning {
+    color: #c09853 !important;
+    background-color: #fcf8e3 !important;
+    border-color: #faebcc !important;
+}
+.mensaje.alert-info {
+    color: #3a87ad !important;
+    background-color: #d9edf7 !important;
+    border-color: #bce8f1 !important;
+}
+
+@media (max-width: 1200px) {
+    body{
+        font-size: 0.8rem;
+    }
+    .info-box-content .info-box-number {
+        font-size: 1.1rem !important;
+    }
+
+    .info-box-content .info-box-text {
+        font-size: 1.0rem !important;
+    }
+}
+
+
+/* Tamaño mas pequeño hasta md */
+@media (max-width: 768px) {
+    
+    .registro-manual{
+        border-bottom: 1px solid #dee2e6!important;
+        border-right: 0px !important;
+        padding-bottom: 20px;
+    }
+}
+@media (max-width: 789px) {
+    header #opciones {
+        margin-top: 70px;
+    }
+    header .link-logo{
+        position: absolute;
+    }
+}
+
+@media (max-width: 1890px) {
+    header .link-logo {
+        margin-right: 35%;
+    }
+}
+
+@media (max-width: 1258px) {
+    header .link-logo {
+        margin-right: 12%;
+    }
+}
+@media (max-width: 945px) {
+    header .link-logo {
+        margin-right: 5%;
+    }
+}
+@media (max-width: 839px) {
+    header .link-logo {
+        margin-right: 0%;
+    }
+}
+
+@media (max-width: 526px) {
+    header .texto-session {
+        display: none;
+    }
+    header .icono-menu {
+        margin-left: 0px !important;
+    }
+}
+@media (max-width: 470px) {
+    .brand-image  {
+        width: 85% !important;
+    }
+    .btn-sub-menu {
+        font-size: 11px;
+    }
+}
+@media (max-width: 382px) {
+    .brand-image  {
+        width: 95% !important;
+    }
+    .btn-menu {
+        width: 140px;
+        font-size: 22px;
+    }
+    .btn-sub-menu{
+        padding: 8px 10px;
+        width: 130px;
+    }
+}
