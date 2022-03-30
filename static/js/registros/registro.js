@@ -17,13 +17,13 @@ $(function() {
     endDate: moment().add(1, 'hour'),
     autoUpdateInput: false,
     locale: {
-      format: 'YYYY-MM-DD hh:mm a',
+      format: 'MM-DD-YYYY hh:mm a',
       applyLabel:'<i class="fa fa-check"></i> Aplicar',
       cancelLabel:'<i class="fa fa-times"></i> Cancelar',
     }
   });
   $('.reservationtime').on('apply.daterangepicker', function(ev, picker) {
-      $(this).val(picker.startDate.format('YYYY-MM-DD hh:mm a') + ' - ' + picker.endDate.format('YYYY-MM-DD hh:mm a'));
+      $(this).val(picker.startDate.format('MM-DD-YYYY hh:mm a') + ' - ' + picker.endDate.format('MM-DD-YYYY hh:mm a'));
       date_range = picker;
       set_fechas(date_range.startDate.format('YYYY-MM-DD HH:mm'), date_range.endDate.format('YYYY-MM-DD HH:mm'));
       //Desp que selecciona la fecha habilito el boton para crear.
@@ -40,13 +40,13 @@ $(function() {
     endDate: moment().add(1, 'M'),
     autoUpdateInput: false,
     locale: {
-      format: 'YYYY-MM-DD',
+      format: 'MM-DD-YYYY',
       applyLabel:'<i class="fa fa-check"></i> Aplicar',
       cancelLabel:'<i class="fa fa-times"></i> Cancelar',
     }
   });
   $('#periodoFacturacion').on('apply.daterangepicker', function(ev, picker) {
-      $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+      $(this).val(picker.startDate.format('MM-DD-YYYY') + ' - ' + picker.endDate.format('MM-DD-YYYY'));
       date_range = picker;
       set_fechas(date_range.startDate.format('YYYY-MM-DD'), date_range.endDate.format('YYYY-MM-DD'));
   });
@@ -55,25 +55,33 @@ $(function() {
   });
   
 
-  //##### Listar los Alumnos del Proyecto seleccionado. #####
+  /* ##### Listar los Alumnos del Proyecto seleccionado. ##### */
+
   $('#id_proyecto_servicio.proyectoRegistro').on('change', function(){
     var servicioProyectoId = $(this).val();
-    getAlumnosDelProyecto(servicioProyectoId, 'POST');
-  });
-  $('#id_proyecto_servicio.proyectoServicioFilter').on('change', function(){
-    var servicioProyectoId = $(this).val();
-    getAlumnosDelProyecto(servicioProyectoId, 'GET');
+    getAlumnosDelProyecto(servicioProyectoId, null, 'POST');
   });
   
-  verificarComboAlumnos();
+  $('#id_proyecto_servicio__proyecto.proyectoRegistroFilter').on('change', function(){ //Cambia el Proyecto, en la vista ListarRegistro
+    var proyectoId = $(this).val();
+    getAlumnosDelProyecto(null, proyectoId, 'GET');
+  });
   
-  function getAlumnosDelProyecto(servicioProyectoId, type) {
+  // $('#id_proyecto_servicio.proyectoServicioFilter').on('change', function(){
+  //   var servicioProyectoId = $(this).val();
+  //   getAlumnosDelProyecto(servicioProyectoId, 'GET');
+  // }); 
+  
+  //verificarComboAlumnos();
+  
+  function getAlumnosDelProyecto(servicioProyectoId, proyectoId, type) {
     $.ajax({
         url: window.location.pathname,
         type: type,
         data: {
             'action': 'getAlumnosDelProyecto',
-            'servicioProyectoId': servicioProyectoId
+            'servicioProyectoId': servicioProyectoId,
+            'proyectoId': proyectoId
         },
         dataType: 'json',
     }).done(function (data) {
@@ -107,10 +115,14 @@ $(function() {
       else{
          
         var selectAlumnosFilter = selectAlumnos.classList.contains('alumnoRegistroFilter');
-        var idPS = $('#id_proyecto_servicio.proyectoServicioFilter').val();
-        if(selectAlumnosFilter){ //Para el Filtro en la lista de Registros. Para que liste solo los alumnos del Proyecto seleccionado.
-          if(idPS) getAlumnosDelProyecto(idPS, 'GET');
-          else vaciarCombo(document.getElementById('id_alumno'));
+        //var idPS = $('#id_proyecto_servicio.proyectoServicioFilter').val();
+        var idProy = $('#id_proyecto_servicio__proyecto.proyectoRegistroFilter').val();
+        if(selectAlumnosFilter){ //Para el Filtro en listarRegistros. Para que liste solo los alumnos del Proyecto seleccionado.
+          if(idProy) getAlumnosDelProyecto(null, idProy, 'GET');
+          else{
+            vaciarCombo(document.getElementById('id_alumno'));
+          }
+
         }
       }
     }
@@ -120,7 +132,7 @@ $(function() {
   // **************** FUNCIONES GENERALES **************** //
   function vaciarCombo(combo){
     if(combo){
-      console.log('long: ', combo.length);
+      // console.log('long: ', combo.length);
       for (var i = combo.length - 1; i > 0; --i) {
           combo.remove(i);
       }
@@ -138,6 +150,11 @@ $(function() {
       combo.add(new Option(nombre, datos[i].id, false, false));
     }
   }
-
-
+  
 });
+
+function listarRegistroPorProyecto(){
+  var formulario = document.getElementById('formRegistrosFiltros');
+  formulario.action = '../listarRegistroPorProyecto';
+  formulario.submit();
+}

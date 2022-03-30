@@ -125,7 +125,8 @@ USE_THOUSAND_SEPARATOR = True
 
 #TIME_ZONE = 'America/Argentina/Buenos_Aires'
 TIME_ZONE = 'America/Puerto_Rico'
-DATETIME_FORMAT = '%Y-%m-%d %I:%M %p'
+#DATETIME_FORMAT = '%Y-%m-%d %I:%M %p'
+DATETIME_FORMAT = '%m-%d-%Y %I:%M %p'
 
 USE_I18N = True
 

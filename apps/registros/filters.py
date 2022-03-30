@@ -14,11 +14,11 @@ def proyecto_filtered_queryset(request):
     return Proyecto.get_proyectos_del_usuario(request.user)
 
 class RegistroFilter(django_filters.FilterSet):
-    proyecto_servicio = filters.ModelChoiceFilter(
-        queryset = proyecto_servicio_filtered_queryset,
-        label = 'Proyecto | Servicio',
-        widget = Select(attrs={'class':'form-control select2 proyectoServicioFilter'})
-    )
+    # proyecto_servicio = filters.ModelChoiceFilter(
+    #     queryset = proyecto_servicio_filtered_queryset,
+    #     label = 'Proyecto | Servicio',
+    #     widget = Select(attrs={'class':'form-control select2 proyectoServicioFilter'})
+    # )
     alumno = filters.ModelChoiceFilter(
         queryset = Alumno.objects.all(),
         label = 'Participante',
@@ -32,7 +32,7 @@ class RegistroFilter(django_filters.FilterSet):
     proyecto_servicio__proyecto = filters.ModelChoiceFilter(
         queryset = proyecto_filtered_queryset,
         label = 'Proyecto',
-        widget = Select(attrs={'class':'form-control'})
+        widget = Select(attrs={'class':'form-control proyectoRegistroFilter'})
     )
     
     class Meta:

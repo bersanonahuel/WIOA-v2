@@ -1,0 +1,52 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block titulo %} Informe de registros por Proyecto {% endblock titulo %}
+
+{% block menu %}{% endblock menu %}
+
+{% block contentTitulo %}INFORME POR PROYECTO{% endblock contentTitulo %}
+
+{% block conteiner %}
+
+{% include  './filtros.html' %}
+
+<div class="card card-secondary">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-8 col-7 my-auto">
+                <strong class="card-title">Informe de registros por Proyecto</strong>
+            </div>
+            <div class="col-md-4 col-3 text-right">
+                <a class="btn btn-success" href="{% url 'registros:crearRegistro'%}">
+                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="table-stats order-table ov-h table-responsive">
+        <table id="tabla_registro" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="bootstrap-data-table_info">
+            <thead class="bg-header-tabla">
+                <tr>
+                    <th>PROYECTO || SERVICIO</th>
+                    <th>LIMITE PARTICIPANTES</th>
+                    <th>PARTICIPANTES SERVIDOS</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                {% comment %} {% for registro in filter.qs %} {% endcomment %}
+                {% for proyServ in reg_count %}
+                <tr>
+                    <td>{{ proyServ.proyecto_servicio__proyecto__nombre }} || {{ proyServ.proyecto_servicio__servicio__nombre }} </td>
+                    <td>{{ proyServ.proyecto_servicio__cantidad_participantes }}</td>
+                    
+                    <td>{{ proyServ.cant }}</td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+    </div>
+</div>
+{% endblock conteiner %}

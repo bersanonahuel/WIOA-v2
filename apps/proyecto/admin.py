@@ -8,12 +8,12 @@ class ServicioAdmin(admin.ModelAdmin):
 
 class ProyectoAdmin(admin.ModelAdmin):
     search_fields=['nombre']
-    list_display = ('id', 'nombre', 'fechaCreacion', 'nroPartidaPresupuestaria')
+    list_display = ('id', 'nombre', 'fechaCreacion')
 
 class ServiciosProyectoAdmin(admin.ModelAdmin):
     search_fields=['nombre']
-    list_display = ('id', 'proyecto', 'servicio', 'precio_por_hora', 'cantidad_participantes', 'total_horas', 'presupuesto_total')
-    fields = ('proyecto', 'servicio', 'precio_por_hora', 'cantidad_participantes', 'total_horas', 'presupuesto_total')
+    list_display = ('id', 'proyecto', 'servicio', 'precio_por_hora', 'cantidad_participantes', 'total_horas', 'presupuesto_total', 'nroPartidaPresupuestaria')
+    fields = ('proyecto', 'servicio', 'precio_por_hora', 'cantidad_participantes', 'total_horas', 'presupuesto_total', 'nroPartidaPresupuestaria')
     list_filter = ('servicio',)
 
 

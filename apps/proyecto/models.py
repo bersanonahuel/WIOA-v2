@@ -19,13 +19,12 @@ class Proyecto(models.Model):
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=50, blank=False,null=False, verbose_name='Nombre del Proyecto')
     fechaCreacion = models.DateTimeField(auto_now=True, verbose_name='Fecha de Creación')
-    nroPartidaPresupuestaria = models.CharField(max_length=200, blank=True,null=True, verbose_name='Número de Partida Presupuestaria')
     logoCliente = models.ImageField(upload_to="logos", null=True, blank=True, verbose_name="Logo del Cliente")
     logoAdmin1 = models.ImageField(upload_to="logos", null=True, blank=True, verbose_name="Logo Uno a Uno Admin")
     logoAdmin2 = models.ImageField(upload_to="logos", null=True, blank=True, verbose_name="Logo WIOA Admin")
     
     alumnos = models.ManyToManyField(Alumno, related_name='proyecto', verbose_name="Participantes")
-    maestros = models.ManyToManyField(Maestro, related_name='proyecto', verbose_name="Personas")
+    maestros = models.ManyToManyField(Maestro, related_name='proyecto', verbose_name="Consultores Educativos")
 
     class Meta:
         verbose_name = ("Proyecto")
@@ -48,9 +47,10 @@ class Proyecto(models.Model):
 class ServiciosProyecto(models.Model):
     id = models.AutoField(primary_key=True)
     precio_por_hora = models.DecimalField(max_digits=7, decimal_places=2, blank=False, null=False, default=0, verbose_name="Precio por participante")
-    cantidad_participantes = models.IntegerField(blank=False, null=False, default=0)
+    cantidad_participantes = models.IntegerField(blank=False, null=False, default=0, verbose_name='Límite de participantes')
     total_horas = models.IntegerField(blank=False, null=False, default=0)
     presupuesto_total = models.DecimalField(max_digits=10, decimal_places=2, blank=False, null=False, default=0)
+    nroPartidaPresupuestaria = models.CharField(max_length=200, blank=True,null=True, verbose_name='Número de Partida Presupuestaria')
 
     servicio = models.ForeignKey(Servicio, on_delete=models.PROTECT, blank=False, null=False)
     proyecto = models.ForeignKey(Proyecto, on_delete=models.PROTECT, blank=False, null=False)

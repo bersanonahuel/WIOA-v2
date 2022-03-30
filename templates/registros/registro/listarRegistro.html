@@ -4,61 +4,11 @@
 
 {% block menu %}{% endblock menu %}
 
-{% block extracss %}
-    <link rel="stylesheet" href="{% static 'css/ventas/listar-venta.css' %}">
-{% endblock extracss %}
-
 {% block contentTitulo %}REGISTRO HORAS{% endblock contentTitulo %}
 
 {% block conteiner %}
 
-<div class="accordion" id="filtros">
-    <div class="card card-outline card-info">
-        <div class="card-header">
-            <h3 class="card-title"> Filtros </h3>
-
-            <div class="card-tools">
-                <button type="button" class="btn btn-tool btn-sm" data-card-widget="collapse" title="Collapse">
-                    <i class="fas fa-minus"></i>
-                </button>
-            </div>
-        
-        </div>
-
-        <div id="filtros-details" class="collapse show" aria-labelledby="headingOne" data-parent="#filtros">
-            <div class="card-body">
-                <form method="GET">
-
-                    <div class="form-group d-flex ">
-                        <div class="form-group-filters mr-2 {% if filter.form.alumno.errors %}has-error{% endif %}">
-                            <label class="control-label font-weight-bold" for="{{ filter.form.alumno.auto_id }}"> {{ filter.form.alumno.label }}: </label>
-                            <div>{{filter.form.alumno}}</div>
-                        </div>
-                        <div class="form-group-filters mr-2 {% if filter.form.proyecto_servicio.errors %}has-error{% endif %}">
-                            <label class="control-label font-weight-bold" for="{{ filter.form.proyecto_servicio.auto_id }}"> {{ filter.form.proyecto_servicio.label }}: </label>
-                            <div>{{filter.form.proyecto_servicio}}</div>
-                        </div>
-                        <div class="form-group-filters mr-2 {% if filter.form.proyecto_servicio__servicio.errors %}has-error{% endif %}">
-                            <label class="control-label font-weight-bold" for="{{ filter.form.proyecto_servicio__servicio.auto_id }}"> {{ filter.form.proyecto_servicio__servicio.label }}: </label>
-                            <div>{{filter.form.proyecto_servicio__servicio}}</div>
-                        </div>
-                        <div class="form-group-filters mr-2 {% if filter.form.proyecto_servicio__proyecto.errors %}has-error{% endif %}">
-                            <label class="control-label font-weight-bold" for="{{ filter.form.proyecto_servicio__proyecto.auto_id }}"> {{ filter.form.proyecto_servicio__proyecto.label }}: </label>
-                            <div>{{filter.form.proyecto_servicio__proyecto}}</div>
-                        </div>
-
-                    </div>
-                    <button type="submit" class="btn btn-primary">Filtrar</button>
-                    <a class="btn btn-secondary" href="{% url 'registros:listarRegistro'%}">Limpiar</a>
-                    
-                </form>
-            </div>
-        </div>
-
-        <div class="card-footer">
-        </div>
-    </div>
-</div>
+{% include  './filtros.html' %}
 
 <div class="card card-secondary">
     <div class="card-header">
@@ -80,8 +30,10 @@
                     <th>ID</th>
                     <th>PROYECTO || SERVICIO</th>
                     <th>PARTICIPANTE</th>
-                    <th>COMENTARIO</th>
+                    <th>ESCUELA</th>
                     <th>CANTIDAD HORAS</th>
+                    <th>TOTAL HORAS DEL PROYECTO</th>
+                    <th>CANTIDAD HORAS FALTANTES</th>
                     <th></th>
                 </tr>
             </thead>
@@ -92,8 +44,15 @@
                     <td>{{ registro.id }}</td>
                     <td>{{ registro.proyecto_servicio }}</td>
                     <td>{{ registro.alumno }}</td>
-                    <td>{{ registro.comentario | default:""}}</td>
+                    <td>{{ registro.alumno.escuela.nombre }}</td>
                     <td>{{ registro.calcular_total_horas_por_alumno}}</td>
+                    <td>{{ registro.proyecto_servicio.total_horas }}</td>
+                    <td>
+                        {% if registro.calcular_total_horas_faltantes_por_alumno == '00:00' %}
+                        100%
+                        {% else %}
+                        {{ registro.calcular_total_horas_faltantes_por_alumno }}</td>
+                        {% endif %}
                     <td> 
                         <a class="btn btn-success btn-sm" href="{% url 'registros:crearRegistroDetalle' registro.id%}"><i class="fa fa-list"></i></a>
                     </td>

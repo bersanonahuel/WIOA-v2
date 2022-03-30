@@ -273,7 +273,7 @@
       <div>  
         <h4 class="ml-30">Periodo: <span class="color-celeste">{{ factura.fechaInicio|date:'d F Y' }} hasta {{ factura.fechaFin|date:'d F Y' }}</span></h4>
         <h4 class="ml-30">CENTRO DE GESTIÓN: <span class="color-celeste"><u><span>{{ factura.cliente.centroGestion }}</span></u></span></h4>
-        <h4 class="ml-30">TOTAL DE PARTICIPANTES MATRICULADOS: <span class="color-celeste"> {{ totalParticipantesMatriculados.total }} </span></h4>
+        <h4 class="ml-30">LÍMITE DE PARTICIPANTES: <span class="color-celeste"> {{ totalParticipantesMatriculados.total }} </span></h4>
         <h4 class="ml-30">CUADRE DE HORAS DE SERVICIO</h4>
       <div>
       <br>
@@ -294,7 +294,7 @@
                 <p>{{ sp.servicio | upper }}</p>
                 <p>{{ sp.total_horas }} horas a razón de $ {{ sp.precio_por_hora }} por participante</p>
                 <p><u>Partida</u>:</p>
-                <p>{{ sp.proyecto.nroPartidaPresupuestaria }}</p>
+                <p>{{ sp.nroPartidaPresupuestaria }}</p>
                 <p>${{ sp.presupuesto_total }}</p>  
               </td>
 
@@ -379,7 +379,7 @@
       <div>  
         <h4 class="ml-30">Periodo: <span class="color-celeste">{{ factura.fechaInicio|date:'d F Y' }} hasta {{ factura.fechaFin|date:'d F Y' }}</span></h4>
         <h4 class="ml-30">CENTRO DE GESTIÓN: <span class="color-celeste"><u><span>{{ factura.cliente.centroGestion }}</span></u></span></h4>
-        <h4 class="ml-30">TOTAL DE PARTICIPANTES MATRICULADOS: <span class="color-celeste"><span class="color-rojo">{{ totalParticipantesMatriculados.total }}</span></span></h4>
+        <h4 class="ml-30">LÍMITE DE PARTICIPANTES: <span class="color-celeste"><span class="color-rojo">{{ totalParticipantesMatriculados.total }}</span></span></h4>
         <h4 class="ml-30">CUADRE DE HORAS DE SERVICIO A LOS PARTICIPANTES</h4>
       <div>
       <br>

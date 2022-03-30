@@ -91,11 +91,11 @@ class Maestro(models.Model):
     #usuario = models.ForeignKey(User, on_delete=models.PROTECT, blank=False, null=False)
     usuario = models.OneToOneField(User, on_delete=models.PROTECT, blank=False, null=False)
     cargo = models.ForeignKey(Cargo, on_delete=models.PROTECT, blank=False, null=False)
-    alumnos = models.ManyToManyField(Alumno, related_name='maestro')
+    alumnos = models.ManyToManyField(Alumno, related_name='maestro', verbose_name='Participantes')
 
     class Meta:
-        verbose_name='Persona'
-        verbose_name_plural='Personas'
+        verbose_name='Consultor Educativo'
+        verbose_name_plural='Consultores Educativos'
         ordering=['apellido']
     
     def __str__(self) :

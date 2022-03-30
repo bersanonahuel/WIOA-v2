@@ -36,6 +36,7 @@ from django.contrib import messages
 
 CREAR_REGISTRO_FILE  = 'registros/registro/crearRegistro.html'
 LISTAR_REGISTRO_FILE = 'registros/registro/listarRegistro.html'
+LISTAR_REGISTRO_PROYECTO_FILE = 'registros/registro/listarRegistroPorProyecto.html'
 CREAR_REGISTRO_DETALLE_FILE = 'registros/registro/crearRegistroDetalle.html'
 LISTAR_FACTURA_FILE  = 'registros/factura/listarFactura.html'
 CREAR_FACTURA_FILE   = 'registros/factura/crearFactura.html'
@@ -57,15 +58,24 @@ class CrearRegistro(CreateView):
                 action = request.POST['action']
                 
                 if action == 'getAlumnosDelProyecto':
-
-                    serviciosProyecto = ServiciosProyecto.objects.get(id=request.POST['servicioProyectoId'])
-                    p = Proyecto.objects.get(id=serviciosProyecto.proyecto.id)
-                    alumnos = p.alumnos.values('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno')
+                    proyectoId = 0
                     
+                    if request.POST['servicioProyectoId']:
+                        serviciosProyecto = ServiciosProyecto.objects.get(id=request.POST['servicioProyectoId'])
+                        proyectoId = serviciosProyecto.proyecto.id
+                    elif request.POST['proyectoId']:
+                        proyectoId = request.POST['proyectoId']
+                    
+                    if proyectoId > 0:
+                        p = Proyecto.objects.get(id=proyectoId)
+                        alumnos = p.alumnos.values('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno')
+                    else:
+                        data['error'] = 'No se seleccionó ningún Proyecto'
+
                     if alumnos:
                         data = { 'alumnos': list(alumnos) }
                     else:
-                        data['error'] = 'No se encontró ningún alumno asignado a este Proyecto y Servicio'
+                        data['error'] = 'No se encontró ningún alumno asignado a este Proyecto.'
                 else:
                     data['error'] = 'Ha ocurrido un error'
 
@@ -116,14 +126,8 @@ class ListarRegistro(ListView):
           
                 if action == 'getAlumnosDelProyecto':
 
-                    serviciosProyecto = ServiciosProyecto.objects.get(id=request.GET['servicioProyectoId'])
-                    p = Proyecto.objects.get(id=serviciosProyecto.proyecto.id)
-                    alumnos = p.alumnos.values('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno')
-              
-                    if alumnos:
-                        data = { 'alumnos': list(alumnos) }
-                    else:
-                        data['error'] = 'No se encontró ningún alumno asignado a este Proyecto y Servicio'
+                    data = get_alumnos_del_proyecto(request.GET['servicioProyectoId'], request.GET['proyectoId'], data)
+
                 else:
                     data['error'] = 'Ha ocurrido un error'
 
@@ -133,6 +137,70 @@ class ListarRegistro(ListView):
         
         return render(request, LISTAR_REGISTRO_FILE, {'filter': registro_filter})
 
+from django.db.models import Count
+class ListarRegistroPorProyecto(ListView):
+    model = Registro
+    template_name = LISTAR_REGISTRO_PROYECTO_FILE
+
+    @method_decorator(csrf_exempt)
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get(self, request, *args, **kwargs):
+        if request.user.is_staff:
+            registro_filter = RegistroFilter(request.GET, queryset=Registro.objects.all(), request=self.request)
+        else:
+            registro_filter = RegistroFilter(request.GET, queryset=Registro.objects.filter(usuario=self.request.user), request=self.request)
+        
+        registros = Registro.objects.filter(id__in=registro_filter.qs)
+        
+        reg_count = registros.values('proyecto_servicio__proyecto__nombre', 'proyecto_servicio__servicio__nombre', 'proyecto_servicio__cantidad_participantes').order_by('proyecto_servicio').annotate(cant=Count('id'))
+        
+        # Cantidad de registros / participantes por proyecto y servicio que tomaron servicio
+        #
+
+        if request.is_ajax():
+            data = {}
+            try:
+                action = request.GET['action']
+          
+                if action == 'getAlumnosDelProyecto':
+                                        
+                    data = get_alumnos_del_proyecto(request.GET['servicioProyectoId'], request.GET['proyectoId'], data)
+
+                else:
+                    data['error'] = 'Ha ocurrido un error'
+
+            except Exception as e:
+                data['error'] = str(e)
+            return JsonResponse(data, safe=False)
+        
+        return render(request, LISTAR_REGISTRO_PROYECTO_FILE, {'filter': registro_filter, 'reg_count':reg_count})
+
+def get_alumnos_del_proyecto(servicioProyectoId, proyectoId, data):
+    proyecto = 0
+
+    if servicioProyectoId:
+        serviciosProyecto = ServiciosProyecto.objects.get(id=servicioProyectoId)
+        proyecto = serviciosProyecto.proyecto.id
+    elif proyectoId:
+        proyecto = proyectoId
+    
+    if int(proyecto) > 0:
+        p = Proyecto.objects.get(id=proyecto)
+        alumnos = p.alumnos.values('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno')
+    else:
+        #data['error'] = 'No se seleccionó ningún Proyecto'
+        alumnos = Alumnos.objects.all().values('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno')
+        #print('Alumnos = ', alumnos)
+
+    if alumnos:
+        data = { 'alumnos': list(alumnos) }
+    else:
+        data['error'] = 'No se encontró ningún alumno asignado a este Proyecto.'
+    
+    return data
 
 def calcular_horas_facturadas(proyecto, servicio):
     sp = ServiciosProyecto.objects.filter(proyecto=proyecto, servicio=servicio).first()
@@ -194,7 +262,7 @@ class CrearRegistroDetalle(CreateView):
             hsRegistroActual = timediff.seconds
             
             if (hsFacturadasServicio + hsRegistroActual) > totalHorasSP:
-                error = 'Las horas que quiere registrar se exceden del Total de horas permitidas para este Proyecto y Servicio.'
+                error = 'Las horas que quiere registrar para el participante se exceden del Total de Horas ('+str(sp.total_horas)+') permitidas para este Proyecto y Servicio.'
                 messages.error(self.request, error)
                 context = {
                     'titulo': 'Crear registro de horas',
@@ -306,7 +374,7 @@ class CrearFactura(CreateView):
 
                     hsFacturadasServicio = calcular_horas_facturadas(proyectoSelId, serv)
 
-                    print('totalHorasFACTURADAS:: sp=', sp, ' ** hs=', hsFacturadasServicio)
+                    #print('totalHorasFACTURADAS:: sp=', sp, ' ** hs=', hsFacturadasServicio)
 
                     #Sumar horas que se quieren facturar AHORA
                     seg = 0
@@ -315,7 +383,7 @@ class CrearFactura(CreateView):
                         seg = seg + detF.calcular_total_hs_segundos_detalle()
                     
                     hsAFacturarServicio = seg
-                    print('totalHoras A FACTURAR:: ', hsAFacturarServicio)
+                    #print('totalHoras A FACTURAR:: ', hsAFacturarServicio)
 
                     if (hsFacturadasServicio + hsAFacturarServicio) > totalHorasSP:
                         error = 'Las horas que quiere facturar se exceden del Total de horas permitidas para el Proyecto "'+ sp.proyecto.nombre +'" y el Servicio "'+ sp.servicio.nombre+'".'
@@ -336,7 +404,7 @@ class CrearFactura(CreateView):
                     factura.proveedor = Proveedor.objects.get(id=request.POST['proveedor'])
                     factura.usuario = request.user
                     factura.save()
-                    print('Se guardo catura ---------------- ')
+                    #print('Se guardo catura ---------------- ')
                     #Guardar tabla intermedia Factura-ProyectoServicios
                     for serv in request.POST.getlist('serviciosCheck'):
                         sp = ServiciosProyecto.objects.filter(proyecto=proyectoSelId, servicio=serv).first()
@@ -349,7 +417,7 @@ class CrearFactura(CreateView):
                     #Buscar todos los registros de hs que se incluyan en el periodo ingresado.
                     detalles = RegistroDetalle.objects.filter( fechaHoraInicio__gte=inicio, fechaHoraFin__lte=fin, factura=None )
                     listaProyServFactura = factura.proyectosServicios.values_list('id',flat=True)
-                    print('listaProyServFactura:: ', listaProyServFactura)
+                    #print('listaProyServFactura:: ', listaProyServFactura)
                     if detalles:
                         for det in detalles:
                             if det.registro.proyecto_servicio.id in listaProyServFactura:
@@ -516,7 +584,7 @@ class PrintPdf(View):
 
         for proyServ in facturaInstance.proyectosServicios.all():
             #subtotal = subtotal + (proyServ.precio_por_hora * proyServ.cantidad_participantes)
-            print('proyServ::: ', proyServ.servicio.id)
+            
             if proyServ.servicio.id == 1:
                 regDetServicio['tutoriaPrecio'] = round(proyServ.precio_por_hora * regDetServicio['tutoriaCantPart'], 2)
             elif proyServ.servicio.id == 2:

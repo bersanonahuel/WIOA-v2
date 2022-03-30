@@ -40,8 +40,8 @@
               {% for factura in filter.qs %}
               <tr class="text-center">
                   <td>{{ factura.id }}</td>
-                  <td>{{ factura.fechaCreacion | date:"Y-m-d h:i a" }}</td>
-                  <td>{{ factura.fechaInicio | date:"Y-m-d" }} al {{ factura.fechaFin | date:"Y-m-d" }}</td>
+                  <td>{{ factura.fechaCreacion | date:"m-d-Y h:i a" }}</td>
+                  <td>{{ factura.fechaInicio | date:"m-d-Y" }} al {{ factura.fechaFin | date:"m-d-Y" }}</td>
                   <td>{{ factura.proyectosServicios.all.first.proyecto }}</td>
                   <td>
                     {% for servicio in factura.proyectosServicios.all %}
