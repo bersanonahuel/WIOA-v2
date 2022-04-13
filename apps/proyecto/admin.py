@@ -8,7 +8,10 @@ class ServicioAdmin(admin.ModelAdmin):
 
 class ProyectoAdmin(admin.ModelAdmin):
     search_fields=['nombre']
-    list_display = ('id', 'nombre', 'fechaCreacion')
+    list_display = ('id', 'nombre', 'fechaCreacion', 'participantes')
+
+    def participantes(self, obj):
+        return ", ".join([a.nombre +' '+ a.apellidoPaterno for a in obj.alumnos.all()])
 
 class ServiciosProyectoAdmin(admin.ModelAdmin):
     search_fields=['nombre']

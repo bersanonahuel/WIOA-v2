@@ -74,6 +74,7 @@ $(function() {
   
   //verificarComboAlumnos();
   
+  //Busca los alumnos del proyecto o servicio, o ambos; segun parametros
   function getAlumnosDelProyecto(servicioProyectoId, proyectoId, type) {
     $.ajax({
         url: window.location.pathname,

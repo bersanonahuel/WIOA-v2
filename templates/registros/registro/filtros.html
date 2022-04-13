@@ -13,13 +13,9 @@
 
         <div id="filtros-details" class="collapse show" aria-labelledby="headingOne" data-parent="#filtros">
             <div class="card-body">
-                <form method="GET" id="formRegistrosFiltros" >
+                <form method="GET" id="formRegistrosFiltros" action="../listarRegistro">
 
                     <div class="form-group d-flex ">
-                        {% comment %} <div class="form-group-filters mr-2 {% if filter.form.proyecto_servicio.errors %}has-error{% endif %}">
-                            <label class="control-label font-weight-bold" for="{{ filter.form.proyecto_servicio.auto_id }}"> {{ filter.form.proyecto_servicio.label }}: </label>
-                            <div>{{filter.form.proyecto_servicio}}</div>
-                        </div> {% endcomment %}
                         <div class="form-group-filters mr-2 {% if filter.form.proyecto_servicio__proyecto.errors %}has-error{% endif %}">
                             <label class="control-label font-weight-bold" for="{{ filter.form.proyecto_servicio__proyecto.auto_id }}"> {{ filter.form.proyecto_servicio__proyecto.label }}: </label>
                             <div>{{filter.form.proyecto_servicio__proyecto}}</div>
@@ -38,7 +34,6 @@
                     
                     <button type="submit" class="btn btn-primary" ><i class="fas fa-user"></i> Informe Por Participante (Hs)</button>
                     <button type="button" class="btn btn-primary" onClick="listarRegistroPorProyecto();" ><i class="fas fa-list-alt"></i> Informe Por Proyecto</button>
-                    {% comment %} <a class="btn btn-primary" href="{% url 'registros:listarRegistroPorProyecto' %}"><i class="fas fa-list-alt"></i> Informe Por Proyecto</a> {% endcomment %}
                     
                     <a class="btn btn-secondary" href="{% url 'registros:listarRegistro'%}">Limpiar</a>
                     

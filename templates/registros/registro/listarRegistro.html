@@ -31,8 +31,8 @@
                     <th>PROYECTO || SERVICIO</th>
                     <th>PARTICIPANTE</th>
                     <th>ESCUELA</th>
-                    <th>CANTIDAD HORAS</th>
                     <th>TOTAL HORAS DEL PROYECTO</th>
+                    <th>CANTIDAD HORAS REGISTRADAS</th>
                     <th>CANTIDAD HORAS FALTANTES</th>
                     <th></th>
                 </tr>
@@ -45,11 +45,11 @@
                     <td>{{ registro.proyecto_servicio }}</td>
                     <td>{{ registro.alumno }}</td>
                     <td>{{ registro.alumno.escuela.nombre }}</td>
-                    <td>{{ registro.calcular_total_horas_por_alumno}}</td>
-                    <td>{{ registro.proyecto_servicio.total_horas }}</td>
-                    <td>
+                    <td class="text-center">{{ registro.proyecto_servicio.total_horas }}</td>
+                    <td class="text-center">{{ registro.calcular_total_horas_por_alumno}}</td>
+                    <td class="text-center">
                         {% if registro.calcular_total_horas_faltantes_por_alumno == '00:00' %}
-                        100%
+                        <b>100%</b>
                         {% else %}
                         {{ registro.calcular_total_horas_faltantes_por_alumno }}</td>
                         {% endif %}

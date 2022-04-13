@@ -22,6 +22,9 @@
 .bg-gris-claro {
     background-color: #c9c9c9;
 }
+.bg-verde-claro {
+    background-color: #28a74582!important;
+}
 
 .info-box-content .info-box-number{
     font-size: 1.5rem !important;
@@ -107,6 +110,14 @@ header .icono-menu {
 .registro-manual{
     border-right: 1px solid #dee2e6!important;
     border-bottom: 0px !important;
+}
+
+table tr th {
+    text-align: center;
+}
+
+#tabla_registro.listadoPorProyecto thead tr th {
+    padding: 3px;
 }
 
 /* Mensajes */

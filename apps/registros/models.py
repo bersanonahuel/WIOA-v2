@@ -71,10 +71,10 @@ class Registro(models.Model):
         return tiempo
 
     def calcular_total_horas_faltantes_por_alumno(self):
-        segundosRegistrado = 0
-        for det in RegistroDetalle.objects.filter(registro=self):
-            timediff = (det.fechaHoraFin - det.fechaHoraInicio)
-            segundosRegistrado+=timediff.seconds
+        segundosRegistrado = self.calcular_total_horas_registradas_por_alumno()
+        # for det in RegistroDetalle.objects.filter(registro=self):
+        #     timediff = (det.fechaHoraFin - det.fechaHoraInicio)
+        #     segundosRegistrado+=timediff.seconds
         
         totalHs = self.proyecto_servicio.total_horas
 
@@ -83,6 +83,14 @@ class Registro(models.Model):
         tiempo = convertir_tiempo(hsFaltantes)
 
         return tiempo
+
+    def calcular_total_horas_registradas_por_alumno(self):
+        segundosRegistrado = 0
+        for det in RegistroDetalle.objects.filter(registro=self):
+            timediff = (det.fechaHoraFin - det.fechaHoraInicio)
+            segundosRegistrado+=timediff.seconds
+        
+        return segundosRegistrado
     
 class RegistroDetalle(models.Model):
     id = models.AutoField(primary_key=True)

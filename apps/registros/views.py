@@ -26,8 +26,8 @@ from django.template.loader import get_template
 from xhtml2pdf import pisa
 from django.contrib.staticfiles import finders
 from weasyprint import HTML
-
 from weasyprint import CSS
+
 #Filtro
 from .filters import RegistroFilter, FacturaFilter
 
@@ -59,16 +59,23 @@ class CrearRegistro(CreateView):
                 
                 if action == 'getAlumnosDelProyecto':
                     proyectoId = 0
-                    
-                    if request.POST['servicioProyectoId']:
-                        serviciosProyecto = ServiciosProyecto.objects.get(id=request.POST['servicioProyectoId'])
+                    serviciosProyectoSelectId = request.POST['servicioProyectoId']
+                    serviciosProyecto = None
+                    if serviciosProyectoSelectId:
+                        serviciosProyecto = ServiciosProyecto.objects.get(id=serviciosProyectoSelectId)
                         proyectoId = serviciosProyecto.proyecto.id
                     elif request.POST['proyectoId']:
                         proyectoId = request.POST['proyectoId']
                     
                     if proyectoId > 0:
                         p = Proyecto.objects.get(id=proyectoId)
-                        alumnos = p.alumnos.values('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno')
+                        
+                        #Buscar alumnos del proyecto y servicio que todavia no tienen registro creado.
+                        if serviciosProyectoSelectId:
+                            alumnosConRegistroCreado = Registro.objects.filter(proyecto_servicio=serviciosProyectoSelectId).values_list('alumno_id', flat=True)
+
+                        alumnos = p.alumnos.exclude(pk__in=alumnosConRegistroCreado).values('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno')
+
                     else:
                         data['error'] = 'No se seleccionó ningún Proyecto'
 
@@ -153,12 +160,45 @@ class ListarRegistroPorProyecto(ListView):
         else:
             registro_filter = RegistroFilter(request.GET, queryset=Registro.objects.filter(usuario=self.request.user), request=self.request)
         
-        registros = Registro.objects.filter(id__in=registro_filter.qs)
+        registrosInstance = Registro.objects.filter(id__in=registro_filter.qs)
         
-        reg_count = registros.values('proyecto_servicio__proyecto__nombre', 'proyecto_servicio__servicio__nombre', 'proyecto_servicio__cantidad_participantes').order_by('proyecto_servicio').annotate(cant=Count('id'))
+        reg_count = registrosInstance.values('proyecto_servicio__id', 'proyecto_servicio__proyecto__nombre', 'proyecto_servicio__servicio__nombre', 'proyecto_servicio__cantidad_participantes').order_by('proyecto_servicio').annotate(cant_con_registro=Count('id'))
         
-        # Cantidad de registros / participantes por proyecto y servicio que tomaron servicio
-        #
+        # Cantidad de registros / participantes por proyecto y servicio. 
+        i= 0
+        for reg in reg_count:
+            #Busco todos los registros del Proyecto/Servicio
+            registros_todos = Registro.objects.filter(proyecto_servicio__id=reg['proyecto_servicio__id'])
+            servidos = 0
+            enProceso = 0
+            for regInst in registros_todos:
+                hsFaltantes = regInst.calcular_total_horas_faltantes_por_alumno()
+                hsRegistradas = regInst.calcular_total_horas_registradas_por_alumno()
+
+                if hsFaltantes == '00:00':
+                    servidos = servidos + 1
+                elif hsRegistradas > 0:
+                    enProceso = enProceso + 1
+                
+            cantTotalConHs = servidos + enProceso
+            reg_count[i]['cant_servidos'] = servidos 
+            reg_count[i]['cant_en_proceso'] = enProceso #Este muestra todos los que tienen registro creado, tengan o no hs cargadas.. reg['cant_con_registro'] - servidos
+            reg_count[i]['cant_total_con_hs'] = cantTotalConHs 
+            reg_count[i]['cant_faltan_identificar'] = reg['proyecto_servicio__cantidad_participantes'] - reg['cant_total_con_hs']
+
+
+            #De la cantidad que faltan reg hs, dividir en los que estan cargados en el sistema sin registro y los que faltarian cargar.
+            cargados = 0
+            sinCargar = 0
+
+            ps = ServiciosProyecto.objects.get(id=reg['proyecto_servicio__id'])
+            proyecto = Proyecto.objects.get(id=ps.proyecto.id)
+            cargados = proyecto.alumnos.all().count()
+            reg_count[i]['cant_cargados'] = cargados - cantTotalConHs
+            reg_count[i]['cant_sin_cargados'] = reg['cant_faltan_identificar'] - reg_count[i]['cant_cargados']
+
+
+            i = i + 1
 
         if request.is_ajax():
             data = {}
@@ -260,7 +300,9 @@ class CrearRegistroDetalle(CreateView):
 
             timediff = (fin - inicio)
             hsRegistroActual = timediff.seconds
-            
+            print('totalHorasSP: ', totalHorasSP)
+            print('hsFacturadasServicio: ', hsFacturadasServicio)
+            print('hsRegistroActual: ', hsRegistroActual)
             if (hsFacturadasServicio + hsRegistroActual) > totalHorasSP:
                 error = 'Las horas que quiere registrar para el participante se exceden del Total de Horas ('+str(sp.total_horas)+') permitidas para este Proyecto y Servicio.'
                 messages.error(self.request, error)

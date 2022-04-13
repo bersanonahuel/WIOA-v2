@@ -24,12 +24,24 @@
         </div>
     </div>
     <div class="table-stats order-table ov-h table-responsive">
-        <table id="tabla_registro" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="bootstrap-data-table_info">
+        <table id="tabla_registro" class="table table-striped table-bordered table-hover dataTable no-footer listadoPorProyecto" role="grid" aria-describedby="bootstrap-data-table_info">
             <thead class="bg-header-tabla">
                 <tr>
-                    <th>PROYECTO || SERVICIO</th>
-                    <th>LIMITE PARTICIPANTES</th>
-                    <th>PARTICIPANTES SERVIDOS</th>
+                    <th class="align-middle" rowspan="3">PROYECTO || SERVICIO</th>
+                    <th class="align-middle" rowspan="3">LIMITE PARTICIPANTES</th>
+                    <th colspan="6">PARTICIPANTES</th>
+                </tr>
+                <tr>
+                    <th colspan="3">CON HS REGISTRADAS</th>
+                    <th colspan="3">QUE FALTAN IDENTIFICAR</th>
+                </tr>
+                <tr>
+                    <th>TOTAL</th>
+                    <th>SERVIDOS</th>
+                    <th>EN PROCESO</th>
+                    <th>TOTAL</th>
+                    <th>CARGADOS</th>
+                    <th>SIN CARGAR</th>
                 </tr>
             </thead>
             <tbody>
@@ -38,9 +50,14 @@
                 {% for proyServ in reg_count %}
                 <tr>
                     <td>{{ proyServ.proyecto_servicio__proyecto__nombre }} || {{ proyServ.proyecto_servicio__servicio__nombre }} </td>
-                    <td>{{ proyServ.proyecto_servicio__cantidad_participantes }}</td>
+                    <td class="text-center">{{ proyServ.proyecto_servicio__cantidad_participantes }}</td>
                     
-                    <td>{{ proyServ.cant }}</td>
+                    <td class="bg-verde-claro text-center">{{ proyServ.cant_total_con_hs }}</td>
+                    <td class="text-center">{{ proyServ.cant_servidos }}</td>
+                    <td class="text-center">{{ proyServ.cant_en_proceso }}</td>
+                    <td class="bg-verde-claro text-center">{{ proyServ.cant_faltan_identificar }}</td>
+                    <td class="text-center">{{ proyServ.cant_cargados }}</td>
+                    <td class="text-center">{{ proyServ.cant_sin_cargados }}</td>
                 </tr>
                 {% endfor %}
 
