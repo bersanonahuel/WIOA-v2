@@ -72,36 +72,49 @@ $(function() {
   //   getAlumnosDelProyecto(servicioProyectoId, 'GET');
   // }); 
   
-  //verificarComboAlumnos();
+  verificarComboAlumnos();
   
   //Busca los alumnos del proyecto o servicio, o ambos; segun parametros
   function getAlumnosDelProyecto(servicioProyectoId, proyectoId, type) {
-    $.ajax({
-        url: window.location.pathname,
-        type: type,
-        data: {
-            'action': 'getAlumnosDelProyecto',
-            'servicioProyectoId': servicioProyectoId,
-            'proyectoId': proyectoId
-        },
-        dataType: 'json',
-    }).done(function (data) {
-        
-        var cboAlumnos = document.getElementById('id_alumno');
-        
-        if (!data.hasOwnProperty('error')) {
-            vaciarCombo(cboAlumnos);
-            cargarCombo(cboAlumnos, data.alumnos);
-        }
-        else{
-            vaciarCombo(cboAlumnos);
-            alert('Data error: ', data.error);
-        }
-    }).fail(function (jqXHR, textStatus, errorThrown) {
-        alert('ERROR: ', textStatus + ': ' + errorThrown);
-    }).always(function (data) {
-        
-    });
+
+    console.log('servicioProyectoId',servicioProyectoId);
+    console.log('proyectoId',proyectoId);
+    if(servicioProyectoId > 0 || proyectoId > 0){
+
+      $.ajax({
+          url: window.location.pathname,
+          type: type,
+          data: {
+              'action': 'getAlumnosDelProyecto',
+              'servicioProyectoId': servicioProyectoId,
+              'proyectoId': proyectoId
+          },
+          dataType: 'json',
+      })
+      .done(function (data) {
+          
+          var cboAlumnos = document.getElementById('id_alumno');
+          
+          if (!data.hasOwnProperty('error')) {
+              vaciarCombo(cboAlumnos);
+              cargarCombo(cboAlumnos, data.alumnos);
+          }
+          else{
+              vaciarCombo(cboAlumnos);
+              alert('Data error getAlumnosDelProyecto: ', data.error);
+          }
+      })
+      .fail(function (jqXHR, textStatus, errorThrown) {
+          alert('ERROR: ', textStatus + ': ' + errorThrown);
+      }).always(function (data) {
+          
+      });
+
+    }
+    else{
+      verificarComboAlumnos();
+    }
+
   } 
 
   //Verifica si el combo de Alumnos tiene que vaciarlo o dejarlo completo. Cuando se registran hs hay que vaciarlo, para el filtro del listado queda completo
@@ -110,20 +123,16 @@ $(function() {
 
     if(selectAlumnos){
       var selectAlumnosResult = selectAlumnos.classList.contains('alumnoRegistro');
+      
       if(selectAlumnosResult){
         vaciarCombo(document.getElementById('id_alumno'));
       }
-      else{
-         
+      else{         
         var selectAlumnosFilter = selectAlumnos.classList.contains('alumnoRegistroFilter');
         //var idPS = $('#id_proyecto_servicio.proyectoServicioFilter').val();
         var idProy = $('#id_proyecto_servicio__proyecto.proyectoRegistroFilter').val();
         if(selectAlumnosFilter){ //Para el Filtro en listarRegistros. Para que liste solo los alumnos del Proyecto seleccionado.
           if(idProy) getAlumnosDelProyecto(null, idProy, 'GET');
-          else{
-            vaciarCombo(document.getElementById('id_alumno'));
-          }
-
         }
       }
     }
