@@ -45,12 +45,19 @@ class Proyecto(models.Model):
         return proyectos
 
 class ServiciosProyecto(models.Model):
+    TIPO_FACTURACION = (
+       ('Por hora', ('Por hora')),
+       ('Por participante', ('Por participante')),
+    )
+
     id = models.AutoField(primary_key=True)
-    precio_por_hora = models.DecimalField(max_digits=7, decimal_places=2, blank=False, null=False, default=0, verbose_name="Precio por participante")
+    precio_por_hora_participante = models.DecimalField(max_digits=7, decimal_places=2, blank=False, null=False, default=0, verbose_name="Precio (por Hora | Participante)") #El precio puede ser por hora o por participante, segun opcion elegida en tipo_facturacion
     cantidad_participantes = models.IntegerField(blank=False, null=False, default=0, verbose_name='Límite de participantes')
     total_horas = models.IntegerField(blank=False, null=False, default=0)
+    
     presupuesto_total = models.DecimalField(max_digits=10, decimal_places=2, blank=False, null=False, default=0)
     nroPartidaPresupuestaria = models.CharField(max_length=200, blank=True,null=True, verbose_name='Número de Partida Presupuestaria')
+    tipo_facturacion = models.CharField(max_length=32, choices=TIPO_FACTURACION, verbose_name="Tipo de Facturación", default='', blank=False, null=False)
 
     servicio = models.ForeignKey(Servicio, on_delete=models.PROTECT, blank=False, null=False)
     proyecto = models.ForeignKey(Proyecto, on_delete=models.PROTECT, blank=False, null=False)

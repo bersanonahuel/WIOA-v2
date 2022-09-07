@@ -1,24 +1,23 @@
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, CreateView, DeleteView, UpdateView, TemplateView
-from .models import *
+from django.views.generic.edit import FormView
+from django.views.generic.base import View
 from django.urls.base import reverse_lazy
-from django.urls import reverse_lazy
-from .forms import RegistroForm, RegistroDetalleForm, FacturaForm
+#from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.forms import formset_factory
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic.edit import FormView
-from django.views.generic.base import View
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
-from django.http import HttpResponse
-from datetime import datetime, timedelta
-from decimal import Decimal
-from django.db.models import Count, Sum
-
+from django.contrib import messages
+from django.http import JsonResponse, HttpResponse
+from django.db.models import Count, Sum, F, Q
+from .models import *
+from .forms import RegistroForm, RegistroDetalleForm, FacturaForm
 from apps.proyecto.models import ServiciosProyecto, Proyecto, Servicio
 from apps.administracion import models
-#from .mixins import GetAlumnosPorProyectoMixin
+
+from datetime import datetime, timedelta
+from decimal import Decimal
 #Para PDF
 from io import BytesIO # nos ayuda a convertir un html en pdf
 import os
@@ -27,12 +26,11 @@ from xhtml2pdf import pisa
 from django.contrib.staticfiles import finders
 from weasyprint import HTML
 from weasyprint import CSS
-
 #Filtro
 from .filters import RegistroFilter, FacturaFilter
-
-from django.db.models import F, Q
-from django.contrib import messages
+#Excel
+from openpyxl import Workbook
+from openpyxl.styles import Color, Fill ,PatternFill
 
 CREAR_REGISTRO_FILE  = 'registros/registro/crearRegistro.html'
 LISTAR_REGISTRO_FILE = 'registros/registro/listarRegistro.html'
@@ -512,10 +510,8 @@ class PrintPdf(View):
         registrosDetalle = RegistroDetalle.objects.filter(factura=facturaInstance.id).order_by('usuario', 'registro', 'fechaHoraInicio')
         usuariosList = RegistroDetalle.objects.filter(factura=facturaInstance.id).values('usuario', 'usuario__first_name', 'usuario__last_name').distinct()
         
-        
         #Total participantes Matriculados
         totalParticipantesMatriculados = facturaInstance.proyectosServicios.all().aggregate(total=Sum('cantidad_participantes'))
-
 
         # ······ Detalle de Hs por MES
         registrosPorMes = dict()
@@ -539,11 +535,11 @@ class PrintPdf(View):
                 js=Count('registro', distinct=True, filter=Q(registro__proyecto_servicio__servicio=4)),
                 seguimiento=Count('registro', distinct=True, filter=Q(registro__proyecto_servicio__servicio=5)),
             )
-            
+                        
             if regDetMes:
                 if regDetMes['tutoria'] > 0 or regDetMes['mentoria'] > 0 or regDetMes['conserjeria'] > 0 or regDetMes['js'] > 0 or regDetMes['seguimiento'] > 0:
                     for servicio in range(1,6):
-                        #print('MES: ', i, ' ++++ serv', servicio)
+                        print('MES: ', i, ' ++++ serv', servicio)
                         seg = 0
                         reg = RegistroDetalle.objects.filter(factura=facturaInstance.id, fechaHoraInicio__month = i, registro__proyecto_servicio__servicio=servicio)
                         for r in reg:
@@ -625,18 +621,18 @@ class PrintPdf(View):
         regDetServicio['seguimientoPrecio'] =  Decimal(0.0)
 
         for proyServ in facturaInstance.proyectosServicios.all():
-            #subtotal = subtotal + (proyServ.precio_por_hora * proyServ.cantidad_participantes)
+            #subtotal = subtotal + (proyServ.precio_por_hora_participante * proyServ.cantidad_participantes)
             
             if proyServ.servicio.id == 1:
-                regDetServicio['tutoriaPrecio'] = round(proyServ.precio_por_hora * regDetServicio['tutoriaCantPart'], 2)
+                regDetServicio['tutoriaPrecio'] = round(proyServ.precio_por_hora_participante * regDetServicio['tutoriaCantPart'], 2)
             elif proyServ.servicio.id == 2:
-                regDetServicio['mentoriaPrecio'] = round(proyServ.precio_por_hora * regDetServicio['mentoriaCantPart'], 2)
+                regDetServicio['mentoriaPrecio'] = round(proyServ.precio_por_hora_participante * regDetServicio['mentoriaCantPart'], 2)
             elif proyServ.servicio.id == 3:
-                regDetServicio['conserjeriaPrecio'] = round(proyServ.precio_por_hora * regDetServicio['conserjeriaCantPart'], 2)
+                regDetServicio['conserjeriaPrecio'] = round(proyServ.precio_por_hora_participante * regDetServicio['conserjeriaCantPart'], 2)
             elif proyServ.servicio.id == 4:
-                regDetServicio['jsPrecio'] = round(proyServ.precio_por_hora * regDetServicio['jsCantPart'], 2)
+                regDetServicio['jsPrecio'] = round(proyServ.precio_por_hora_participante * regDetServicio['jsCantPart'], 2)
             elif proyServ.servicio.id == 5:
-                regDetServicio['seguimientoPrecio'] = round(proyServ.precio_por_hora * regDetServicio['seguimientoCantPart'], 2)
+                regDetServicio['seguimientoPrecio'] = round(proyServ.precio_por_hora_participante * regDetServicio['seguimientoCantPart'], 2)
                 
 
         subtotal = regDetServicio['tutoriaPrecio'] + regDetServicio['mentoriaPrecio'] + regDetServicio['conserjeriaPrecio'] + regDetServicio['jsPrecio'] + regDetServicio['seguimientoPrecio']
@@ -673,3 +669,48 @@ class PrintPdf(View):
         pdf = HTML(string=html_template, base_url=request.build_absolute_uri()).write_pdf()
 
         return HttpResponse(pdf, content_type='application/pdf')
+
+class DescargarExcelRegistros(TemplateView):
+    def get(self, request, *args, **kwargs):
+        print('get excel request == ', request.GET)
+        print('get excel kwargs == ', kwargs)
+        #Creamos el libro de trabajo
+        wb = Workbook()
+        #Definimos como nuestra hoja de trabajo, la hoja activa, por defecto la primera del libro
+        ws = wb.active
+        #En la celda B1 ponemos el titulo
+        ws['B1'] = 'LISTADO REGISTROS POR PARTICIPANTES (HS)'
+        #Juntamos las celdas desde la B1 hasta el final, formando una sola celda
+        ws.merge_cells('B1:C1')
+        #Creamos los encabezados desde la celda B3 hasta la E3
+        ws['B3'] = 'FECHA'
+        ws['C3'] = 'VENTA'
+        
+        #ws.column_dimensions['B'].width = 12
+        #ws.column_dimensions['C'].width = 25
+        
+        # for col in range(2,10):
+        #     ws.cell(row=3,column=2).fill = PatternFill (patternType = "solid", start_color = "A6A6A6")
+        #     ws.cell(row=3,column=3).fill = PatternFill (patternType = "solid", start_color = "A6A6A6")
+
+        row = 4
+        #Recorremos el conjunto de ventas y vamos escribiendo cada uno de los datos en las celdas
+        # for venta in sumaVentasPorDia:
+        #     ws.cell(row=row,column=2).value = venta['venta__fechaCreacion__date'] 
+        #     ws.cell(row=row,column=3).value = round(venta['sum'],2)
+
+        #     row = row + 1
+
+        # Establecemos el nombre del archivo
+        nombre_archivo = 'Default'
+        if request.GET['accionDesde'] == 'listarRegistro':
+            nombre_archivo ="Listado registros por participante.xlsx"
+        elif request.GET['accionDesde'] == 'listarRegistroPorProyecto':
+            nombre_archivo ="Listado registros por proyectos.xlsx"
+        # Definimos que el tipo de respuesta a devolver es un archivo de microsoft excel
+        response = HttpResponse(content_type="application/ms-excel") 
+        contenido = "attachment; filename={0}".format(nombre_archivo)
+        response["Content-Disposition"] = contenido
+        wb.save(response)
+
+        return response

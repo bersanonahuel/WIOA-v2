@@ -14,7 +14,7 @@
         <div id="filtros-details" class="collapse show" aria-labelledby="headingOne" data-parent="#filtros">
             <div class="card-body">
                 <form method="GET" id="formRegistrosFiltros" action="../listarRegistro">
-
+                    <input type="hidden" name="accionDesde" value="" />
                     <div class="form-group d-flex ">
                         <div class="form-group-filters mr-2 {% if filter.form.proyecto_servicio__proyecto.errors %}has-error{% endif %}">
                             <label class="control-label font-weight-bold" for="{{ filter.form.proyecto_servicio__proyecto.auto_id }}"> {{ filter.form.proyecto_servicio__proyecto.label }}: </label>
@@ -35,7 +35,11 @@
                     <button type="submit" class="btn btn-primary" ><i class="fas fa-user"></i> Informe Por Participante (Hs)</button>
                     <button type="button" class="btn btn-primary" onClick="listarRegistroPorProyecto();" ><i class="fas fa-list-alt"></i> Informe Por Proyecto</button>
                     
-                    <a class="btn btn-secondary" href="{% url 'registros:listarRegistro'%}">Limpiar</a>
+                    <a class="btn btn-secondary" href="{% url 'registros:listarRegistro'%}">Limpiar filtros</a>
+
+                    <br><br>
+                    {% comment %} <button type="button" value="ok" class="btn btn-warning btn-sm btn-reportes" data-toggle="tooltip" data-placement="bottom" name="descargarExcelRegistros" onclick="descargarExcelListadoRegistros();" title="Descargar excel del listado" > <i class="fas fa-fas fa-print"></i> Descargar Excel </button> {% endcomment %}
+
                     
                 </form>
             </div>

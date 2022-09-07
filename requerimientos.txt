@@ -2,3 +2,4 @@
 python -m pip install weasyprint 
 pip install django-import-export
 pip install django-admin-interface
+pip install openpyxl

@@ -14,10 +14,15 @@ class ProyectoAdmin(admin.ModelAdmin):
         return ", ".join([a.nombre +' '+ a.apellidoPaterno for a in obj.alumnos.all()])
 
 class ServiciosProyectoAdmin(admin.ModelAdmin):
+    class Media:
+        js = (
+            '//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js', # jquery
+            'js/admin.js',   # project static folder
+        )
     search_fields=['nombre']
-    list_display = ('id', 'proyecto', 'servicio', 'precio_por_hora', 'cantidad_participantes', 'total_horas', 'presupuesto_total', 'nroPartidaPresupuestaria')
-    fields = ('proyecto', 'servicio', 'precio_por_hora', 'cantidad_participantes', 'total_horas', 'presupuesto_total', 'nroPartidaPresupuestaria')
-    list_filter = ('servicio',)
+    list_display = ('id', 'proyecto', 'servicio', 'tipo_facturacion', 'precio_por_hora_participante', 'cantidad_participantes', 'total_horas', 'presupuesto_total', 'nroPartidaPresupuestaria')
+    fields = ('proyecto', 'servicio', 'tipo_facturacion', 'precio_por_hora_participante', 'cantidad_participantes', 'total_horas', 'presupuesto_total', 'nroPartidaPresupuestaria')
+    list_filter = ('servicio','tipo_facturacion','proyecto')
 
 
 admin.site.register(Servicio, ServicioAdmin)

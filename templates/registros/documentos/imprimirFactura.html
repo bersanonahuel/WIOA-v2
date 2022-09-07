@@ -292,7 +292,7 @@
             <tr>
               <td>
                 <p>{{ sp.servicio | upper }}</p>
-                <p>{{ sp.total_horas }} horas a razón de $ {{ sp.precio_por_hora }} por participante</p>
+                <p>{{ sp.total_horas }} horas a razón de $ {{ sp.precio_por_hora_participante }} por participante</p>
                 <p><u>Partida</u>:</p>
                 <p>{{ sp.nroPartidaPresupuestaria }}</p>
                 <p>${{ sp.presupuesto_total }}</p>  
@@ -325,11 +325,11 @@
 
               <td class="color-celeste text-center">
                 <h4> 
-                  {% if sp.servicio.id == 1 %} {{ regDetServicio.tutoriaCantPart }} X ${{ sp.precio_por_hora }} = ${{ regDetServicio.tutoriaPrecio }} {% endif %}
-                  {% if sp.servicio.id == 2 %} {{ regDetServicio.mentoriaCantPart }} X ${{ sp.precio_por_hora }} = ${{ regDetServicio.mentoriaPrecio }} {% endif %}
-                  {% if sp.servicio.id == 3 %} {{ regDetServicio.conserjeriaCantPart }} X ${{ sp.precio_por_hora }} = ${{ regDetServicio.conserjeriaPrecio }} {% endif %}
-                  {% if sp.servicio.id == 4 %} {{ regDetServicio.jsCantPart }} X ${{ sp.precio_por_hora }} = ${{ regDetServicio.jsPrecio }} {% endif %}
-                  {% if sp.servicio.id == 5 %} {{ regDetServicio.seguimientoCantPart }} X ${{ sp.precio_por_hora }} = ${{ regDetServicio.seguimientoPrecio }} {% endif %}
+                  {% if sp.servicio.id == 1 %} {{ regDetServicio.tutoriaCantPart }} X ${{ sp.precio_por_hora_participante }} = ${{ regDetServicio.tutoriaPrecio }} {% endif %}
+                  {% if sp.servicio.id == 2 %} {{ regDetServicio.mentoriaCantPart }} X ${{ sp.precio_por_hora_participante }} = ${{ regDetServicio.mentoriaPrecio }} {% endif %}
+                  {% if sp.servicio.id == 3 %} {{ regDetServicio.conserjeriaCantPart }} X ${{ sp.precio_por_hora_participante }} = ${{ regDetServicio.conserjeriaPrecio }} {% endif %}
+                  {% if sp.servicio.id == 4 %} {{ regDetServicio.jsCantPart }} X ${{ sp.precio_por_hora_participante }} = ${{ regDetServicio.jsPrecio }} {% endif %}
+                  {% if sp.servicio.id == 5 %} {{ regDetServicio.seguimientoCantPart }} X ${{ sp.precio_por_hora_participante }} = ${{ regDetServicio.seguimientoPrecio }} {% endif %}
                   
                   {% comment %} {{ sp.calcular_precio_total }}  {% endcomment %}
                 </h4>
