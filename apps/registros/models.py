@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from apps.administracion.models import Alumno, Maestro, Cliente, Proveedor
 from apps.proyecto.models import ServiciosProyecto
 
+from decimal import Decimal
 
 class Impuesto(models.Model):
     id = models.AutoField(primary_key=True)
@@ -134,3 +135,14 @@ def convertir_tiempo(segundos):
     tiempo = horas.__str__()+':'+minutos.__str__() #+':'+segundos.__str__()
 
     return tiempo
+
+#Convertir segundos a hs con decimales, para multiplicar por precio.
+def convertir_tiempo_decimal(segundos):
+    horas = segundos // 3600
+    minutos = (segundos % 3600) // 60
+    
+    minutos = minutos / 60
+
+    suma = horas + minutos
+
+    return Decimal(suma)

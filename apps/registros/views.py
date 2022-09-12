@@ -240,7 +240,7 @@ def get_alumnos_del_proyecto(servicioProyectoId, proyectoId, data):
     
     return data
 
-def calcular_horas_facturadas(proyecto, servicio):
+def calcular_horas_facturadas_proyecto(proyecto, servicio):
     sp = ServiciosProyecto.objects.filter(proyecto=proyecto, servicio=servicio).first()
         
     facturaReg = Factura.objects.filter(proyectosServicios=sp)
@@ -252,6 +252,16 @@ def calcular_horas_facturadas(proyecto, servicio):
 
         for r in regDet:
             seg = seg + r.calcular_total_hs_segundos_detalle()
+    
+    return seg
+
+#Busca todos las horas ya registradas de un alumno en particlar y las suma.
+def calcular_horas_registradas_alumno(registroInstance):
+    registrosDetalle = RegistroDetalle.objects.filter(registro=registroInstance)
+    
+    seg = 0
+    for det in registrosDetalle:
+        seg = seg + det.calcular_total_hs_segundos_detalle()
     
     return seg
 
@@ -292,16 +302,14 @@ class CrearRegistroDetalle(CreateView):
             sp = ServiciosProyecto.objects.filter(proyecto=proyecto, servicio=servicio).first()
             totalHorasSP = (sp.total_horas * 3600)
             
-            hsFacturadasServicio = calcular_horas_facturadas(proyecto, servicio)
+            hsRegistradasAlumno = calcular_horas_registradas_alumno(registroInstance)
             
             #Validar que no se exceda del total de Hs del proyecto.
 
             timediff = (fin - inicio)
             hsRegistroActual = timediff.seconds
-            print('totalHorasSP: ', totalHorasSP)
-            print('hsFacturadasServicio: ', hsFacturadasServicio)
-            print('hsRegistroActual: ', hsRegistroActual)
-            if (hsFacturadasServicio + hsRegistroActual) > totalHorasSP:
+            
+            if (hsRegistradasAlumno + hsRegistroActual) > totalHorasSP:
                 error = 'Las horas que quiere registrar para el participante se exceden del Total de Horas ('+str(sp.total_horas)+') permitidas para este Proyecto y Servicio.'
                 messages.error(self.request, error)
                 context = {
@@ -410,12 +418,10 @@ class CrearFactura(CreateView):
                     hsFacturadasServicio = 0
 
                     sp = ServiciosProyecto.objects.filter(proyecto=proyectoSelId, servicio=serv).first()
-                    totalHorasSP = (sp.total_horas * 3600)
+                    totalHorasSP = (sp.total_horas * sp.cantidad_participantes * 3600)
 
-                    hsFacturadasServicio = calcular_horas_facturadas(proyectoSelId, serv)
-
-                    #print('totalHorasFACTURADAS:: sp=', sp, ' ** hs=', hsFacturadasServicio)
-
+                    hsFacturadasServicio = calcular_horas_facturadas_proyecto(proyectoSelId, serv)
+                    
                     #Sumar horas que se quieren facturar AHORA
                     seg = 0
                     detallesAFacturar = RegistroDetalle.objects.filter( fechaHoraInicio__gte=inicio, fechaHoraFin__lte=fin, factura=None, registro__proyecto_servicio=sp )
@@ -423,7 +429,9 @@ class CrearFactura(CreateView):
                         seg = seg + detF.calcular_total_hs_segundos_detalle()
                     
                     hsAFacturarServicio = seg
-                    #print('totalHoras A FACTURAR:: ', hsAFacturarServicio)
+                    print('totalHoras A FACTURAR:: ', hsAFacturarServicio)
+                    print('totalHoras FACTURADAS:: ', hsFacturadasServicio)
+                    print('TOTAL HS PROY:: ', totalHorasSP)
 
                     if (hsFacturadasServicio + hsAFacturarServicio) > totalHorasSP:
                         error = 'Las horas que quiere facturar se exceden del Total de horas permitidas para el Proyecto "'+ sp.proyecto.nombre +'" y el Servicio "'+ sp.servicio.nombre+'".'
@@ -539,7 +547,7 @@ class PrintPdf(View):
             if regDetMes:
                 if regDetMes['tutoria'] > 0 or regDetMes['mentoria'] > 0 or regDetMes['conserjeria'] > 0 or regDetMes['js'] > 0 or regDetMes['seguimiento'] > 0:
                     for servicio in range(1,6):
-                        print('MES: ', i, ' ++++ serv', servicio)
+                        #print('MES: ', i, ' ++++ serv', servicio)
                         seg = 0
                         reg = RegistroDetalle.objects.filter(factura=facturaInstance.id, fechaHoraInicio__month = i, registro__proyecto_servicio__servicio=servicio)
                         for r in reg:
@@ -548,13 +556,13 @@ class PrintPdf(View):
                         #print('seg en hs: ',convertir_tiempo(seg))
                         hs = convertir_tiempo(seg)
                         if servicio == 1:
-                            regDetMes['tutoriaHs']  = hs
+                            regDetMes['tutoriaHs'] = hs
                             tutoriaHsTotal = tutoriaHsTotal + seg
                         if servicio == 2:
-                            regDetMes['mentoriaHs']  = hs
+                            regDetMes['mentoriaHs'] = hs
                             mentoriaHsTotal = mentoriaHsTotal + seg
                         if servicio == 3:
-                            regDetMes['conserjeriaHs']  = hs
+                            regDetMes['conserjeriaHs'] = hs
                             conserjeriaHsTotal = conserjeriaHsTotal + seg
                         if servicio == 4:
                             regDetMes['jsHs']  = hs
@@ -607,7 +615,7 @@ class PrintPdf(View):
         )
 
         # print('regDetServicio: ',regDetServicio)
-        # print('registrosPorMes:::: ',registrosPorMes)
+        print('registrosPorMes:::: ',registrosPorMes)
         totalParticipantesServidos = regDetServicio['tutoriaCantPart'] + regDetServicio['mentoriaCantPart']  + regDetServicio['conserjeriaCantPart'] + regDetServicio['jsCantPart'] + regDetServicio['seguimientoCantPart']
 
         
@@ -624,15 +632,15 @@ class PrintPdf(View):
             #subtotal = subtotal + (proyServ.precio_por_hora_participante * proyServ.cantidad_participantes)
             
             if proyServ.servicio.id == 1:
-                regDetServicio['tutoriaPrecio'] = round(proyServ.precio_por_hora_participante * regDetServicio['tutoriaCantPart'], 2)
+                regDetServicio['tutoriaPrecio'] = round(proyServ.precio_por_hora_participante * regDetServicio['tutoriaCantPart'] * convertir_tiempo_decimal(tutoriaHsTotal), 2)
             elif proyServ.servicio.id == 2:
-                regDetServicio['mentoriaPrecio'] = round(proyServ.precio_por_hora_participante * regDetServicio['mentoriaCantPart'], 2)
+                regDetServicio['mentoriaPrecio'] = round(proyServ.precio_por_hora_participante * regDetServicio['mentoriaCantPart'] * convertir_tiempo_decimal(mentoriaHsTotal), 2)
             elif proyServ.servicio.id == 3:
-                regDetServicio['conserjeriaPrecio'] = round(proyServ.precio_por_hora_participante * regDetServicio['conserjeriaCantPart'], 2)
+                regDetServicio['conserjeriaPrecio'] = round(proyServ.precio_por_hora_participante * regDetServicio['conserjeriaCantPart'] * convertir_tiempo_decimal(conserjeriaHsTotal), 2)
             elif proyServ.servicio.id == 4:
-                regDetServicio['jsPrecio'] = round(proyServ.precio_por_hora_participante * regDetServicio['jsCantPart'], 2)
+                regDetServicio['jsPrecio'] = round(proyServ.precio_por_hora_participante * regDetServicio['jsCantPart'] * convertir_tiempo_decimal(jsHsTotal), 2)
             elif proyServ.servicio.id == 5:
-                regDetServicio['seguimientoPrecio'] = round(proyServ.precio_por_hora_participante * regDetServicio['seguimientoCantPart'], 2)
+                regDetServicio['seguimientoPrecio'] = round(proyServ.precio_por_hora_participante * regDetServicio['seguimientoCantPart'] * convertir_tiempo_decimal(seguimientoHsTotal), 2)
                 
 
         subtotal = regDetServicio['tutoriaPrecio'] + regDetServicio['mentoriaPrecio'] + regDetServicio['conserjeriaPrecio'] + regDetServicio['jsPrecio'] + regDetServicio['seguimientoPrecio']

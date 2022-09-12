@@ -102,6 +102,7 @@
                   <th class="">FECHA FIN</th>
                   <th class="">CANTIDAD HS</th>
                   <th class="">COMENTARIOS</th>
+                  <th class="">NRO. FACTURA</th>
                   <th class=""></th>
               </tr>
           </thead>
@@ -114,10 +115,13 @@
                   <td>{{ det.calcular_total_hs_detalle }}</td>
 
                   <td>{{ det.comentario | default:'' }}</td>
+                  <td>{{ det.factura.id }}</td>
                   
                   <td>
                       {% comment %} <a class="btn btn-primary btn-sm" href="{% url 'venta:editarDetalle' det.id %}" rel="editar"><icon class="fas fa-fas fa-pencil-alt"></icon></a> {% endcomment %}
-                      <a class="btn btn-danger btn-sm" rel="eliminar" href="#" onClick="eliminarRegistro({{ det.id }}, '../eliminarRegistroDetalle/')" ><icon class="fa fa-trash"></icon></a> 
+                      {% if det.factura.id == none %}
+                        <a class="btn btn-danger btn-sm" rel="eliminar" href="#" onClick="eliminarRegistro({{ det.id }}, '../eliminarRegistroDetalle/')" ><icon class="fa fa-trash"></icon></a> 
+                      {% endif %}
                   </td>
               </tr>
               {% endfor %}

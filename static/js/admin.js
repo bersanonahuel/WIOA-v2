@@ -19,15 +19,19 @@ django.jQuery(function($) {
 
     function calcularPresupuestoTotal(){
         let tipo = $('#id_tipo_facturacion').val();
-        let cantidad = 0;
+        let cantidadHs = 0;
+        let cantidadParticipantes = 0;
         let precio = $('#id_precio_por_hora_participante').val();
 
-        if(tipo == 'Por hora') cantidad = $('#id_total_horas').val();  
-        if(tipo == 'Por participante') cantidad = $('#id_cantidad_participantes').val();
+        //if(tipo == 'Por hora') 
+        //if(tipo == 'Por participante') 
+        
+        cantidadHs = $('#id_total_horas').val();  
+        cantidadParticipantes = $('#id_cantidad_participantes').val();
 
-        let precioTotal = cantidad * precio;
+        let precioTotal = cantidadHs * cantidadParticipantes * precio;
 
-        $('#id_presupuesto_total').val(precioTotal);
+        $('#id_presupuesto_total').val(precioTotal.toFixed(2));
     }
 
 })

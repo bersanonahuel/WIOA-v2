@@ -53,7 +53,7 @@ class ServiciosProyecto(models.Model):
     id = models.AutoField(primary_key=True)
     precio_por_hora_participante = models.DecimalField(max_digits=7, decimal_places=2, blank=False, null=False, default=0, verbose_name="Precio (por Hora | Participante)") #El precio puede ser por hora o por participante, segun opcion elegida en tipo_facturacion
     cantidad_participantes = models.IntegerField(blank=False, null=False, default=0, verbose_name='Límite de participantes')
-    total_horas = models.IntegerField(blank=False, null=False, default=0)
+    total_horas = models.IntegerField(blank=False, null=False, default=0, verbose_name="Total de horas por participante")
     
     presupuesto_total = models.DecimalField(max_digits=10, decimal_places=2, blank=False, null=False, default=0)
     nroPartidaPresupuestaria = models.CharField(max_length=200, blank=True,null=True, verbose_name='Número de Partida Presupuestaria')

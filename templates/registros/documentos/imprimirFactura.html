@@ -290,51 +290,58 @@
         <tbody>
           {% for sp in factura.proyectosServicios.all %}
             <tr>
-              <td>
-                <p>{{ sp.servicio | upper }}</p>
-                <p>{{ sp.total_horas }} horas a razón de $ {{ sp.precio_por_hora_participante }} por participante</p>
-                <p><u>Partida</u>:</p>
-                <p>{{ sp.nroPartidaPresupuestaria }}</p>
-                <p>${{ sp.presupuesto_total }}</p>  
-              </td>
+                              
+              {% for key, value in registrosPorMes.items  %}
+                {% if forloop.last %}
+                  <td>{% comment %} Descripcion {% endcomment %}
+                    <p>{{ sp.servicio | upper }}</p>
+                    <p>
+                      {% if sp.servicio.id == 1 %} {{ value.tutoriaHs }} {% endif %}
+                      {% if sp.servicio.id == 2 %} {{ value.mentoriaHs }} {% endif %}
+                      {% if sp.servicio.id == 3 %} {{ value.conserjeriaHs }} {% endif %}
+                      {% if sp.servicio.id == 4 %} {{ value.jsHs }} {% endif %}
+                      {% if sp.servicio.id == 5 %} {{ value.seguimientoHs }} {% endif %}
+                      horas a razón de $ {{ sp.precio_por_hora_participante }} por participante</p>
+                    <p><u>Partida</u>:</p>
+                    <p>{{ sp.nroPartidaPresupuestaria }}</p>
+                    <p>${{ sp.presupuesto_total }}</p>  
+                  </td>
+    
+                  <td class="color-celeste text-center"> {% comment %} Total PARTICIPANTES {% endcomment %}
+                    <h4>
+                      {% if sp.servicio.id == 1 %} {{ regDetServicio.tutoriaCantPart }} {% endif %}
+                      {% if sp.servicio.id == 2 %} {{ regDetServicio.mentoriaCantPart }} {% endif %}
+                      {% if sp.servicio.id == 3 %} {{ regDetServicio.conserjeriaCantPart }} {% endif %}
+                      {% if sp.servicio.id == 4 %} {{ regDetServicio.jsCantPart }} {% endif %}
+                      {% if sp.servicio.id == 5 %} {{ regDetServicio.seguimientoCantPart }} {% endif %}
+                      {% comment %} {{ sp.cantidad_participantes }}  {% endcomment %}
+                    </h4>
+                  </td>
 
-              <td class="color-celeste text-center">
-                <h4>
-                  {% if sp.servicio.id == 1 %} {{ regDetServicio.tutoriaCantPart }} {% endif %}
-                  {% if sp.servicio.id == 2 %} {{ regDetServicio.mentoriaCantPart }} {% endif %}
-                  {% if sp.servicio.id == 3 %} {{ regDetServicio.conserjeriaCantPart }} {% endif %}
-                  {% if sp.servicio.id == 4 %} {{ regDetServicio.jsCantPart }} {% endif %}
-                  {% if sp.servicio.id == 5 %} {{ regDetServicio.seguimientoCantPart }} {% endif %}
-                  {% comment %} {{ sp.cantidad_participantes }}  {% endcomment %}
-                </h4>
-              </td>
-                
-              <td class="color-celeste text-center">
-                <h4>
-                {% for key, value in registrosPorMes.items  %}
-                  {% if forloop.last %}
-                    {% if sp.servicio.id == 1 %} {{ value.tutoriaHs }} {% endif %}
-                    {% if sp.servicio.id == 2 %} {{ value.mentoriaHs }} {% endif %}
-                    {% if sp.servicio.id == 3 %} {{ value.conserjeriaHs }} {% endif %}
-                    {% if sp.servicio.id == 4 %} {{ value.jsHs }} {% endif %}
-                    {% if sp.servicio.id == 5 %} {{ value.seguimientoHs }} {% endif %}
-                  {% endif %}
-                {% endfor %}
-                </h4>
-              </td>
-
-              <td class="color-celeste text-center">
-                <h4> 
-                  {% if sp.servicio.id == 1 %} {{ regDetServicio.tutoriaCantPart }} X ${{ sp.precio_por_hora_participante }} = ${{ regDetServicio.tutoriaPrecio }} {% endif %}
-                  {% if sp.servicio.id == 2 %} {{ regDetServicio.mentoriaCantPart }} X ${{ sp.precio_por_hora_participante }} = ${{ regDetServicio.mentoriaPrecio }} {% endif %}
-                  {% if sp.servicio.id == 3 %} {{ regDetServicio.conserjeriaCantPart }} X ${{ sp.precio_por_hora_participante }} = ${{ regDetServicio.conserjeriaPrecio }} {% endif %}
-                  {% if sp.servicio.id == 4 %} {{ regDetServicio.jsCantPart }} X ${{ sp.precio_por_hora_participante }} = ${{ regDetServicio.jsPrecio }} {% endif %}
-                  {% if sp.servicio.id == 5 %} {{ regDetServicio.seguimientoCantPart }} X ${{ sp.precio_por_hora_participante }} = ${{ regDetServicio.seguimientoPrecio }} {% endif %}
+                  <td class="color-celeste text-center"> {% comment %} Total HORAS {% endcomment %}
+                    <h4>
+                        {% if sp.servicio.id == 1 %} {{ value.tutoriaHs }} {% endif %}
+                        {% if sp.servicio.id == 2 %} {{ value.mentoriaHs }} {% endif %}
+                        {% if sp.servicio.id == 3 %} {{ value.conserjeriaHs }} {% endif %}
+                        {% if sp.servicio.id == 4 %} {{ value.jsHs }} {% endif %}
+                        {% if sp.servicio.id == 5 %} {{ value.seguimientoHs }} {% endif %}
+                    </h4>
+                  </td>
                   
-                  {% comment %} {{ sp.calcular_precio_total }}  {% endcomment %}
-                </h4>
-              
-              </td>
+                  <td class="color-celeste text-center"> {% comment %} COSOTO TOTAL {% endcomment %}
+                    <h4> 
+                      {% if sp.servicio.id == 1 %} {{ regDetServicio.tutoriaCantPart }} X {{ value.tutoriaHs }} X ${{ sp.precio_por_hora_participante }} = ${{ regDetServicio.tutoriaPrecio }} {% endif %}
+                      {% if sp.servicio.id == 2 %} {{ regDetServicio.mentoriaCantPart }} X {{ value.mentoriaHs }} X ${{ sp.precio_por_hora_participante }} = ${{ regDetServicio.mentoriaPrecio }} {% endif %}
+                      {% if sp.servicio.id == 3 %} {{ regDetServicio.conserjeriaCantPart }} X {{ value.conserjeriaHs }} X ${{ sp.precio_por_hora_participante }} = ${{ regDetServicio.conserjeriaPrecio }} {% endif %}
+                      {% if sp.servicio.id == 4 %} {{ regDetServicio.jsCantPart }} X {{ value.jsHs }} X ${{ sp.precio_por_hora_participante }} = ${{ regDetServicio.jsPrecio }} {% endif %}
+                      {% if sp.servicio.id == 5 %} {{ regDetServicio.seguimientoCantPart }} X {{ value.seguimientoHs }} X ${{ sp.precio_por_hora_participante }} = ${{ regDetServicio.seguimientoPrecio }} {% endif %}
+                    </h4>              
+                  </td>
+
+
+                {% endif %}
+              {% endfor %}
+
             </tr>
           {% endfor %}
 
