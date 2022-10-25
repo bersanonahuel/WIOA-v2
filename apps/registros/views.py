@@ -615,7 +615,7 @@ class PrintPdf(View):
         )
 
         # print('regDetServicio: ',regDetServicio)
-        print('registrosPorMes:::: ',registrosPorMes)
+        #print('registrosPorMes:::: ',registrosPorMes)
         totalParticipantesServidos = regDetServicio['tutoriaCantPart'] + regDetServicio['mentoriaCantPart']  + regDetServicio['conserjeriaCantPart'] + regDetServicio['jsCantPart'] + regDetServicio['seguimientoCantPart']
 
         
@@ -630,17 +630,29 @@ class PrintPdf(View):
 
         for proyServ in facturaInstance.proyectosServicios.all():
             #subtotal = subtotal + (proyServ.precio_por_hora_participante * proyServ.cantidad_participantes)
-            
+            print('TIPO :::: ',proyServ.tipo_facturacion)
+
+            precio = 0.0
+            if(proyServ.tipo_facturacion == 'Por hora'):
+                precio = proyServ.precio_por_hora_participante
+            else:
+                precio = proyServ.calcular_precio_por_hora()
+
             if proyServ.servicio.id == 1:
-                regDetServicio['tutoriaPrecio'] = round(proyServ.precio_por_hora_participante * regDetServicio['tutoriaCantPart'] * convertir_tiempo_decimal(tutoriaHsTotal), 2)
+                #regDetServicio['tutoriaPrecio'] = round(precio * regDetServicio['tutoriaCantPart'] * convertir_tiempo_decimal(tutoriaHsTotal), 2)
+                regDetServicio['tutoriaPrecio'] = round(precio * convertir_tiempo_decimal(tutoriaHsTotal), 2)
             elif proyServ.servicio.id == 2:
-                regDetServicio['mentoriaPrecio'] = round(proyServ.precio_por_hora_participante * regDetServicio['mentoriaCantPart'] * convertir_tiempo_decimal(mentoriaHsTotal), 2)
+                #regDetServicio['mentoriaPrecio'] = round(precio * regDetServicio['mentoriaCantPart'] * convertir_tiempo_decimal(mentoriaHsTotal), 2)
+                regDetServicio['mentoriaPrecio'] = round(precio * convertir_tiempo_decimal(mentoriaHsTotal), 2)
             elif proyServ.servicio.id == 3:
-                regDetServicio['conserjeriaPrecio'] = round(proyServ.precio_por_hora_participante * regDetServicio['conserjeriaCantPart'] * convertir_tiempo_decimal(conserjeriaHsTotal), 2)
+                #regDetServicio['conserjeriaPrecio'] = round(precio * regDetServicio['conserjeriaCantPart'] * convertir_tiempo_decimal(conserjeriaHsTotal), 2)
+                regDetServicio['conserjeriaPrecio'] = round(precio * convertir_tiempo_decimal(conserjeriaHsTotal), 2)
             elif proyServ.servicio.id == 4:
-                regDetServicio['jsPrecio'] = round(proyServ.precio_por_hora_participante * regDetServicio['jsCantPart'] * convertir_tiempo_decimal(jsHsTotal), 2)
+                #regDetServicio['jsPrecio'] = round(precio * regDetServicio['jsCantPart'] * convertir_tiempo_decimal(jsHsTotal), 2)
+                regDetServicio['jsPrecio'] = round(precio * convertir_tiempo_decimal(jsHsTotal), 2)
             elif proyServ.servicio.id == 5:
-                regDetServicio['seguimientoPrecio'] = round(proyServ.precio_por_hora_participante * regDetServicio['seguimientoCantPart'] * convertir_tiempo_decimal(seguimientoHsTotal), 2)
+                #regDetServicio['seguimientoPrecio'] = round(precio * regDetServicio['seguimientoCantPart'] * convertir_tiempo_decimal(seguimientoHsTotal), 2)
+                regDetServicio['seguimientoPrecio'] = round(precio * convertir_tiempo_decimal(seguimientoHsTotal), 2)
                 
 
         subtotal = regDetServicio['tutoriaPrecio'] + regDetServicio['mentoriaPrecio'] + regDetServicio['conserjeriaPrecio'] + regDetServicio['jsPrecio'] + regDetServicio['seguimientoPrecio']

@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'apps.registros',
     'apps.session',
     'apps.proyecto',
-    'import_export',
+    'import_export'
 ]
 
 X_FRAME_OPTIONS = "SAMEORIGIN"

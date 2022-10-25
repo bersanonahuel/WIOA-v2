@@ -91,3 +91,6 @@ class ServiciosProyecto(models.Model):
 
         return serviciosProyecto
     
+    #Cuando la facturacion es por participante, pero no completo sus horas totales del proyecto, hay sacar el calculo de cada participante por hora.
+    def calcular_precio_por_hora(self):
+        return round(self.precio_por_hora_participante / self.total_horas, 2)

@@ -330,15 +330,37 @@
                   
                   <td class="color-celeste text-center"> {% comment %} COSOTO TOTAL {% endcomment %}
                     <h4> 
-                      {% if sp.servicio.id == 1 %} {{ regDetServicio.tutoriaCantPart }} X {{ value.tutoriaHs }} X ${{ sp.precio_por_hora_participante }} = ${{ regDetServicio.tutoriaPrecio }} {% endif %}
-                      {% if sp.servicio.id == 2 %} {{ regDetServicio.mentoriaCantPart }} X {{ value.mentoriaHs }} X ${{ sp.precio_por_hora_participante }} = ${{ regDetServicio.mentoriaPrecio }} {% endif %}
-                      {% if sp.servicio.id == 3 %} {{ regDetServicio.conserjeriaCantPart }} X {{ value.conserjeriaHs }} X ${{ sp.precio_por_hora_participante }} = ${{ regDetServicio.conserjeriaPrecio }} {% endif %}
-                      {% if sp.servicio.id == 4 %} {{ regDetServicio.jsCantPart }} X {{ value.jsHs }} X ${{ sp.precio_por_hora_participante }} = ${{ regDetServicio.jsPrecio }} {% endif %}
-                      {% if sp.servicio.id == 5 %} {{ regDetServicio.seguimientoCantPart }} X {{ value.seguimientoHs }} X ${{ sp.precio_por_hora_participante }} = ${{ regDetServicio.seguimientoPrecio }} {% endif %}
+                      {% comment %} Multiplica por cantidad de participantes.
+                      {% if sp.tipo_facturacion == 'Por hora' %}
+                        {% if sp.servicio.id == 1 %} {{ regDetServicio.tutoriaCantPart }} X {{ value.tutoriaHs }} X ${{ sp.precio_por_hora_participante }} = ${{ regDetServicio.tutoriaPrecio }} {% endif %}
+                        {% if sp.servicio.id == 2 %} {{ regDetServicio.mentoriaCantPart }} X {{ value.mentoriaHs }} X ${{ sp.precio_por_hora_participante }} = ${{ regDetServicio.mentoriaPrecio }} {% endif %}
+                        {% if sp.servicio.id == 3 %} {{ regDetServicio.conserjeriaCantPart }} X {{ value.conserjeriaHs }} X ${{ sp.precio_por_hora_participante }} = ${{ regDetServicio.conserjeriaPrecio }} {% endif %}
+                        {% if sp.servicio.id == 4 %} {{ regDetServicio.jsCantPart }} X {{ value.jsHs }} X ${{ sp.precio_por_hora_participante }} = ${{ regDetServicio.jsPrecio }} {% endif %}
+                        {% if sp.servicio.id == 5 %} {{ regDetServicio.seguimientoCantPart }} X {{ value.seguimientoHs }} X ${{ sp.precio_por_hora_participante }} = ${{ regDetServicio.seguimientoPrecio }} {% endif %}
+                      {% else %}
+                        {% if sp.servicio.id == 1 %} {{ regDetServicio.tutoriaCantPart }} X {{ value.tutoriaHs }} X ${{ sp.calcular_precio_por_hora }} = ${{ regDetServicio.tutoriaPrecio }} {% endif %}
+                        {% if sp.servicio.id == 2 %} {{ regDetServicio.mentoriaCantPart }} X {{ value.mentoriaHs }} X ${{ sp.calcular_precio_por_hora }} = ${{ regDetServicio.mentoriaPrecio }} {% endif %}
+                        {% if sp.servicio.id == 3 %} {{ regDetServicio.conserjeriaCantPart }} X {{ value.conserjeriaHs }} X ${{ sp.calcular_precio_por_hora }} = ${{ regDetServicio.conserjeriaPrecio }} {% endif %}
+                        {% if sp.servicio.id == 4 %} {{ regDetServicio.jsCantPart }} X {{ value.jsHs }} X ${{ sp.calcular_precio_por_hora }} = ${{ regDetServicio.jsPrecio }} {% endif %}
+                        {% if sp.servicio.id == 5 %} {{ regDetServicio.seguimientoCantPart }} X {{ value.seguimientoHs }} X ${{ sp.calcular_precio_por_hora }} = ${{ regDetServicio.seguimientoPrecio }} {% endif %}
+                      {% endif %} {% endcomment %}
+
+                      {% if sp.tipo_facturacion == 'Por hora' %}
+                        {% if sp.servicio.id == 1 %} {{ value.tutoriaHs }} X ${{ sp.precio_por_hora_participante }} = ${{ regDetServicio.tutoriaPrecio }} {% endif %}
+                        {% if sp.servicio.id == 2 %} {{ value.mentoriaHs }} X ${{ sp.precio_por_hora_participante }} = ${{ regDetServicio.mentoriaPrecio }} {% endif %}
+                        {% if sp.servicio.id == 3 %} {{ value.conserjeriaHs }} X ${{ sp.precio_por_hora_participante }} = ${{ regDetServicio.conserjeriaPrecio }} {% endif %}
+                        {% if sp.servicio.id == 4 %} {{ value.jsHs }} X ${{ sp.precio_por_hora_participante }} = ${{ regDetServicio.jsPrecio }} {% endif %}
+                        {% if sp.servicio.id == 5 %} {{ value.seguimientoHs }} X ${{ sp.precio_por_hora_participante }} = ${{ regDetServicio.seguimientoPrecio }} {% endif %}
+                      {% else %}
+                        {% if sp.servicio.id == 1 %} {{ value.tutoriaHs }} X ${{ sp.calcular_precio_por_hora }} = ${{ regDetServicio.tutoriaPrecio }} {% endif %}
+                        {% if sp.servicio.id == 2 %} {{ value.mentoriaHs }} X ${{ sp.calcular_precio_por_hora }} = ${{ regDetServicio.mentoriaPrecio }} {% endif %}
+                        {% if sp.servicio.id == 3 %} {{ value.conserjeriaHs }} X ${{ sp.calcular_precio_por_hora }} = ${{ regDetServicio.conserjeriaPrecio }} {% endif %}
+                        {% if sp.servicio.id == 4 %} {{ value.jsHs }} X ${{ sp.calcular_precio_por_hora }} = ${{ regDetServicio.jsPrecio }} {% endif %}
+                        {% if sp.servicio.id == 5 %} {{ value.seguimientoHs }} X ${{ sp.calcular_precio_por_hora }} = ${{ regDetServicio.seguimientoPrecio }} {% endif %}
+                      {% endif %}
                     </h4>              
                   </td>
-
-
+                  
                 {% endif %}
               {% endfor %}
 
