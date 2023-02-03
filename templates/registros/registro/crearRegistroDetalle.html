@@ -64,7 +64,7 @@
 
             {% comment %} Registro cronometro {% endcomment %}
             <div class="text-center item col-12 col-md-6">
-              <label>Crónometro:</label>
+              <label>Cronómetro:</label>
               <div class="countup" id="countup1">
                 <span id="hour" class="timeel hours">00</span>
                 <span class="timeel timeRefHours">horas</span>
@@ -98,11 +98,12 @@
       <table id="tablaDetalleRegistro" class="table table-bordered table-hover dataTable table-head-fixed text-nowrap bg-white">
           <thead class="text-center bg-header-tabla">
               <tr>
-                  <th class="">FECHA INICIO</th>
-                  <th class="">FECHA FIN</th>
-                  <th class="">CANTIDAD HS</th>
+                  <th class="">FECHA</th>
+                  <th class="">HORA INICIO</th>
+                  <th class="">HORA FIN</th>
+                  <th class="">CANTIDAD HORAS</th>
                   <th class="">COMENTARIOS</th>
-                  <th class="">NRO. FACTURA</th>
+                  <th class="">NÚM. FACTURA</th>
                   <th class=""></th>
               </tr>
           </thead>
@@ -110,8 +111,9 @@
 
               {% for det in registrosDet %}
               <tr class="text-center">
-                  <td>{{ det.fechaHoraInicio | date:"m-d-Y h:i a" }}</td>
-                  <td>{{ det.fechaHoraFin | date:"m-d-Y h:i a" }}</td>
+                  <td>{{ det.fechaHoraInicio | date:"m-d-Y" }}</td>
+                  <td>{{ det.fechaHoraInicio | date:"h:i a" }}</td>
+                  <td>{{ det.fechaHoraFin | date:"h:i a" }}</td>
                   <td>{{ det.calcular_total_hs_detalle }}</td>
 
                   <td>{{ det.comentario | default:'' }}</td>

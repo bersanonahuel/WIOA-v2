@@ -1,13 +1,13 @@
 {% load static %}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="es">
   <head>
     <title>Factura nro. {{ factura.id }}</title>
-    {% comment %} <link href="{% static 'lib/adminlte-3.1.0/css/adminlte.css' %}" rel="stylesheet"> {% endcomment %}
     <link href="{% static 'css/pdf.css' %}" rel="stylesheet">
   </head>
 
-
+  {% language 'es' %}
   <body>
     <!-- HOJA 1 -->
     <article id="hoja-1" class="border">
@@ -33,30 +33,29 @@
                 {% endif %}
               {% endfor %}
             </span></h1>
-            <h1>CENTRO: <span> {{ factura.cliente.centroGestion }}</span></h1>
+            <h1>CENTRO: <span> {{ factura.cliente.centroGestion }}</span></h1>           
             <h1>DESDE <u>{{ factura.fechaInicio|date:'d' }} de {{ factura.fechaInicio|date:'F' }}</u> HASTA EL <u>{{ factura.fechaFin|date:"d" }} de {{ factura.fechaFin|date:"F" }}</u> {{ factura.fechaFin | date:"Y" }}</h1>
         </div>
       </div>
     </article>
     
     <!-- HOJA 2 -->
-    <article id="hoja-2" style="page: landscape">
-      <div style="margin-bottom:80px;">
-        <section class="float-left">
-          <h3>{{ factura.proveedor }}</h3>
-          <p>{{ factura.proveedor.direccionFisica }}</p>
-          <p>Teléfono: {{ factura.proveedor.telefono }} Fax: {{ factura.proveedor.fax }}</p>
-          <p><span>{{ factura.proveedor.numeroFiscal }}</span></p>
-        </section>
-        <section style="padding-top: 25px;">
-          {% if factura.proyectosServicios.all.first.proyecto.logoCliente %}
-            <img src="{{ factura.proyectosServicios.all.first.proyecto.logoCliente.url }}" style="width:300px; float:right;" />
-          {% endif %}
-        </section>
-      </div>
-
-      <br>
+    <p style="break-before: always;"></p>
+    <article id="hoja-2">
       
+      <div class="text-center" style="margin-top:-45px;">
+        {% if factura.proyectosServicios.all.first.proyecto.logoCliente %}
+          <img src="{{ factura.proyectosServicios.all.first.proyecto.logoCliente.url }}" class="logo-header" />
+        {% endif %}
+      </div>
+      <section class="float-left">
+        <h3>{{ factura.proveedor }}</h3>
+        <p>{{ factura.proveedor.direccionFisica }}</p>
+        <p>Teléfono: {{ factura.proveedor.telefono }} Fax: {{ factura.proveedor.fax }}</p>
+        <p><span>{{ factura.proveedor.numeroFiscal }}</span></p>
+      </section>      
+
+      <br>      
       <section style="float:right;">
         <h2 class="text-center" style="color:gray; ">INVOICE</h2>
         <table>
@@ -73,8 +72,7 @@
         </table>
       </section>
       
-      <br>
-        
+      <br>        
       <section style="margin-top: 125px;">
         <h4>A FAVOR DE:</h4>
         <p>{{ factura.cliente }}</p>
@@ -109,7 +107,6 @@
               <tr>
                   <td>
                     {{ proyServ.servicio }}
-                    {% comment %} <span class="color-rojo">{{ factura.descripcion }}</span> {% endcomment %}
                   </td>
                   <td class="text-right"><span class="color-rojo">
                     {% if proyServ.servicio.id == 1 %} ${{ regDetServicio.tutoriaPrecio }} {% endif %}
@@ -144,24 +141,32 @@
       <br><br><br><br>
 
       <section class="float-left">
-        <p class="text-bold">{{ factura.mensajeInstitucional }}</p>
+        <p class="text-bold">{{ factura.mensajeInstitucional | default:''}}</p>
       </section>
       <section class="float-right">
         <p>____________________________________________</p>
-        <p class="text-center text-bold">Soraya M. Sesto Martínez, President</p>
+        <p class="text-center text-bold"> Firma de Administrador</p>
       </section>
     </article>
     
-
     <!-- HOJA 3 -->
     <p style="break-before: always;"></p>
     <article>
-      <h2 class="text-center">Certificación de Factura <u>{{ factura.id }}</u></h2>
+      <div class="text-center" style="margin-top:-45px;">
+        {% if factura.proyectosServicios.all.first.proyecto.logoCliente %}
+          <img src="{{ factura.proyectosServicios.all.first.proyecto.logoCliente.url }}" class="logo-header" />
+        {% endif %}
+      </div>
+
+      <h2 class="text-center">Certificación de Factura número <u>{{ factura.id }}</u></h2>
       <br><br>
-      <h2 style="text-align: justify; font-size:20px; line-height: 28px;">"Bajo pena de nulidad absoluta certifico que ningún servidor público de La Alianza Municipal de Servicios Integrados, Inc./ Área Local de Desarrollo Laboral Caguas-Guayama, es parte o tiene algún interés en las ganancias o beneficios producto del contrato objeto de esta factura y de ser parte o tener interés en las ganancias o beneficios producto del contrato objeto de esta factura y de ser parte o tener interés en las ganancias o beneficios producto del contrato, ha mediado una dispensa previa. La única consideración para suministrar los bienes o servicios objeto del contrato ha sido el pago acordado con el representant autorizado de La Alianza Municipal de Servicios Integrados/Área Local de Desarrollo Laboral Caguas-Guayama. El importe de esta factura es justo y correcto. Los servicios profesionales aquí facturados han sido prestados a la Alianza Municipal de Servicios Integrados/Área Local de Desarrollo Laboral Caguas-Guayama y no han sido pagados".</h2>
-      <br><br>
-      <p class="text-center">______________________________</p>
-      <p class="text-center">Firma</p>
+      <h2 style="text-align: justify; font-size:20px; line-height: 28px;">"Bajo pena de nulidad absoluta certifico que ningún servidor público de La Alianza Municipal de Servicios Integrados, Inc./ Área Local de Desarrollo Laboral, es parte o tiene algún interés en las ganancias o beneficios producto del contrato objeto de esta factura y de ser parte o tener interés en las ganancias o beneficios producto del contrato objeto de esta factura y de ser parte o tener interés en las ganancias o beneficios producto del contrato, ha mediado una dispensa previa. La única consideración para suministrar los bienes o servicios objeto del contrato ha sido el pago acordado con el representante autorizado de La Alianza Municipal de Servicios Integrados/Área Local de Desarrollo Laboral. El importe de esta factura es justo y correcto. Los servicios profesionales aquí facturados han sido prestados a la Alianza Municipal de Servicios Integrados/Área Local de Desarrollo Laboral y no han sido pagados".</h2>
+      <br><br><br>
+      
+      <p class="text-left">Certifico correcto: ____________________________________</p>
+      <p class="text-left" style="padding-left:180px;">José Enrique Ramírez</p>
+      <p class="text-left" style="padding-left:120px;">Administrador Casa Grande Interactive Inc.</p>
+
     </article>
 
     <!-- HOJA 4 -->
@@ -170,8 +175,8 @@
       <table id="header-hoja-4">
         <tr>
           <td class="border-0" style="width: 120px;">
-            <label>Modelo SC 2756</label><br>
-            <label>Rev. 10 dic 19</label><br><br>
+            <label>Modelo SC 2755</label><br>
+            <label>Rev. 10 feb 22</label><br><br>
             <img src="{% static 'img/logo-gob-pr.png' %}" style="width:100px;"/>
           </td>
           <td class="text-center border-0">
@@ -191,7 +196,7 @@
           <tr>
               <td style="width:340px;"></td>
               <td>Fecha:</td>
-              <td class="text-right">16 diciembre 2020</td>
+              <td class="text-right">19 diciembre 2022</td>
           </tr>
           <tr>
               <td>ADP TAX FILING SERVICE</td>
@@ -201,7 +206,7 @@
           <tr>
               <td>CASA GRANDE INTERACTIVE COMMUNICATIONS INC</td>
               <td>ID de Correspondencia:</td>
-              <td class="text-right">L0823263872</td>
+              <td class="text-right">L0869816640</td>
           </tr>
           <tr>
               <td>807 AVE PONCE DE LEON</td>
@@ -217,7 +222,7 @@
               <td></td>
               <td></td>
               <td>Número de Control:</td>
-              <td class="text-right">L0823263872</td>
+              <td class="text-right">L0869816640</td>
           </tr>
       </table>
       <br>
@@ -226,24 +231,26 @@
           <br>
           <h4 class="text-center" style="width:90%;">Certificado de Relevo Total de la Retención en el Origen sobre Pagos por <br> Servicios Prestados por Corporaciones, Sociedades y otras Entidades</h4>
           <br><br>
-          <p>De acuerdo a lo establecido en la Sección 1062.03(g) del Código de Rentas Internas de Puerto Rico del 2011, según enmendado, y conforme a los requisitos establecidos en dicha sección, se le concede este Certificado de Relevo Total de Retención sobre Pagos por Servicios Prestados en Puerto Rico. Este relevo estará en vigor con respecto a los pagos efectuados durante el año natural 2021.</p>
-          <p>Deberá entregar copia de este Certificado a toda persona responsable de efectuar la retención sobre los pagos por servicios prestados.</p>
-          <p>Si las condiciones bajo las que se emite este Certificado no aplican a su caso, favor de ignorar el mismo.</p>
+          <p>De acuerdo a lo establecido en la Sección 1062.03(g) del Código de Rentas Internas de Puerto Rico del 2011, según enmendado, y conforme a los requisitos establecidos en dicha sección, se le concede este Certificado de Relevo Parcial de Retención de 4% sobre Pagos por Servicios Prestados en Puerto Rico. Por lo tanto, todos los pagos por servicios prestados que reciba la corporación, sociedad o entidad estarán sujetos a una retención en el origen de un 6%. Este relevo estará en vigor con respecto a los pagos efectuados durante el año natural 2023.</p>
+          <p>Deberá entregar copia de este Certificado a toda persona o entidad responsable de la retención sobre los pagos por servicios prestados.</p>
+          <p>Si las condiciones bajo las que se emite este certificado no aplican a su caso,haga caso omiso.</p>
           <p>Para aclarar cualquier duda u obtener información sobre este particular, puede comunicarse al (787) 622-0123.</p>
           <p>Este relevo no lo exime del pago de cualquier deuda contributiva.</p>
+          <p class="text-italic">En Hacienda estamos para servirle.</p>
       </div>
       <br><br><br><br>
+      <img src="{% static 'img/firma.png' %}" style="width:100px;"/>
       <p>Roxanna Santiago Ortiz</p><br>
       <p>Secretaria Auxiliar</p>
       <p>Área de Rentas Internas</p>
 
       <div id="footer-hoja-4">
-          <p class="text-center">Vence el: 31 dic. 2021</p>
-          <label style="font-size:9px;">Para verificar si este Certificado es válido, acceda a <u>https://suri.hacienda.pr.gov</u> y presione el enlace "Validar un certificado o licencia".</label><br>
+          <p class="text-center text-bold">Vence el: 31 dic. 2023</p>
+          <label style="font-size:9px;">Para verificar si este certificado es válido, acceda a <u>https://suri.hacienda.pr.gov</u> y presione el enlace "Valide certificados o licencias".</label><br>
           <table>
               <tr>
                   <td style="width:650px;">Periodo de Conservación: Seis (6) años o una intervención del Contralor, lo que ocurra primero.</td>
-                  <td style="text-right">mL072</td>
+                  <td style="text-right">mL071</td>
               </tr>
               <tr>
                   <td></td>
@@ -260,7 +267,7 @@
         {% if factura.proyectosServicios.all.first.proyecto.logoCliente %}
           <img src="{{ factura.proyectosServicios.all.first.proyecto.logoCliente.url }}" class="logo-header" />
         {% endif %}
-        <h3>HOJA DE FACTURACIÓN #2 <span class="color-rojo">
+        <h3>HOJA DE FACTURACIÓN NÚMERO 2 <span class="color-rojo">
           {% for sp in factura.proyectosServicios.all %}
             {% if forloop.first %} 
               {{ sp.servicio | upper }}
@@ -273,7 +280,7 @@
       <div>  
         <h4 class="ml-30">Periodo: <span class="color-celeste">{{ factura.fechaInicio|date:'d F Y' }} hasta {{ factura.fechaFin|date:'d F Y' }}</span></h4>
         <h4 class="ml-30">CENTRO DE GESTIÓN: <span class="color-celeste"><u><span>{{ factura.cliente.centroGestion }}</span></u></span></h4>
-        <h4 class="ml-30">LÍMITE DE PARTICIPANTES: <span class="color-celeste"> {{ totalParticipantesMatriculados.total }} </span></h4>
+        <h4 class="ml-30">PARTICIPANTES: <span class="color-celeste"> {{ totalParticipantesMatriculados.total }} </span></h4>
         <h4 class="ml-30">CUADRE DE HORAS DE SERVICIO</h4>
       <div>
       <br>
@@ -408,7 +415,7 @@
       <div>  
         <h4 class="ml-30">Periodo: <span class="color-celeste">{{ factura.fechaInicio|date:'d F Y' }} hasta {{ factura.fechaFin|date:'d F Y' }}</span></h4>
         <h4 class="ml-30">CENTRO DE GESTIÓN: <span class="color-celeste"><u><span>{{ factura.cliente.centroGestion }}</span></u></span></h4>
-        <h4 class="ml-30">LÍMITE DE PARTICIPANTES: <span class="color-celeste"><span class="color-rojo">{{ totalParticipantesMatriculados.total }}</span></span></h4>
+        <h4 class="ml-30">PARTICIPANTES: <span class="color-celeste"><span class="color-rojo">{{ totalParticipantesMatriculados.total }}</span></span></h4>
         <h4 class="ml-30">CUADRE DE HORAS DE SERVICIO A LOS PARTICIPANTES</h4>
       <div>
       <br>
@@ -423,7 +430,7 @@
             <th class="bg-celeste" colspan="2" >TUTORÍA</th>
             <th class="bg-celeste" colspan="2" >MENTORÍA</th>
             <th class="bg-celeste" colspan="2" >CONSEJERÍA</th>
-            <th class="bg-celeste" colspan="2" >JD</th>
+            <th class="bg-celeste" colspan="2" >JOB SHADOWING</th>
             <th class="bg-celeste" colspan="2" >SEGUIMIENTO</th>
           </tr>
           <tr>
@@ -519,7 +526,7 @@
       </table>
       <br>
 
-      <h4 class="ml-10">#P = Número de participantes que acumularon horas</h4>
+      <h4 class="ml-10">P = Número de participantes que acumularon horas</h4>
       <h4 class="ml-10">TH = Total de horas de servicio</h4>
 
     </article>
@@ -560,7 +567,7 @@
                   {% endif %}
                 </td>
                 <td class="w-650 text-right" style="border-right:3px solid gray !important;">
-                  <h3 style="margin-right:15px;">Hoja de Trabajo - evidencia de servicio para Proyecto Uno a Uno</h3>
+                  <h3 style="margin-right:15px;">Hoja de servicio - Resumen de servicio por participante Proyecto Uno a Uno</h3>
                 </td>
                 <td>
                   {% if factura.proyectosServicios.all.first.proyecto.logoAdmin1 %}
@@ -577,7 +584,15 @@
           </header>
 
           <div style="margin: 20px 0; display: flex;">
-            <h4 class="border" style="width: 60%; padding: 10px; margin-right:10px;">NOMBRE CONSEJERO PROFESIONAL: <span class="color-rojo">{{ usuario.usuario__first_name }}  {{ usuario.usuario__last_name }}</span></h4>
+            <h4 class="border" style="width: 60%; padding: 10px; margin-right:10px;">COMPONENTE DE SERVICIO: 
+              {% for sp in factura.proyectosServicios.all %}
+                {% if forloop.first %} 
+                  {{ sp.servicio | upper }}
+                {% else %}
+                  - {{ sp.servicio | upper }}
+                {% endif %}
+              {% endfor %}
+            </h4>
             <h4 class="border" style="width: 40%; padding: 10px;">FECHA PERÍODO: {{ factura.fechaInicio|date:'d F Y' }} {{ factura.fechaFin|date:'d F Y' }}</h4>
           </div>
         
@@ -588,7 +603,6 @@
                 <th class="w-200 bg-gris-claro">NOMBRE ESTUDIANTE</th>
                 <th class="bg-gris-claro" colspan="2">DÍA Y HORA (AM/PM)</th>
                 <th class="bg-gris-claro w-100">CANTIDAD DE HORAS</th>
-                <th class="w-200 bg-gris-claro">COMENTARIO (Indique si es Seguimiento)</th>
               </tr>
             </thead>
             <tbody>
@@ -601,40 +615,17 @@
                   <td class="text-left w-250">{{ det.fechaHoraInicio | date:"l, F d, Y"}} </td>
                   <td class="text-left">{{ det.fechaHoraInicio | date:"h:i a"}} a {{ det.fechaHoraFin | date:"h:i a" }}</td>
                   <td class="text-right">{{ det.calcular_total_hs_detalle }}</td>
-                  <td class="text-center">{{ det.comentario | default:" " }}</td>
                 </tr>
               {% endif %}
             {% endfor %} <!-- /For Detalle Registros -->
 
             </tbody>
           </table>
-
-          <br><br><br>
-          <p>Firma del tutor/consejero/mentor: ____________________________________________</p>
-          <br>
-          <p>Firma de Coordinadora de Proyecto: ____________________________________________</p>
         </article>
 
     {% endfor %} <!-- /For Lista Usuarios -->
 
-    <!-- HOJA 9 -->
-    <div style="page-break-after: always"></div>
-    <article style="page: landscape">
-      <div id="contenido-hoja-9">
-        <p>Descripción de tareas realizadas durante la semana:</p>
-        <p class="cuadro border">{{ factura.descripcionTareas | default:' ' }}</p>
-        
-        <br><br>
-        <p>Logros obtenidos en la semana/Historia de Éxito:</p>
-        <p class="cuadro border"><span>{{ factura.logrosObtenidos | default:' ' }}</span></p>
-      </div>
-
-      <br><br><br>
-      <p>Firma del tutor/consejero/mentor: ____________________________________________</p>
-      <br>
-      <p>Firma de Coordinadora de Proyecto: ____________________________________________</p>
-    </article>
-
   </body>
+  {% endlanguage %}
 </html>
 

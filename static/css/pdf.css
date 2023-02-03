@@ -70,6 +70,9 @@ tr {
 .text-bold{
     font-weight: bold !important;
 }
+.text-italic{
+    font-style: italic !important;
+}
 .float-left{
     float: left;
 }
@@ -161,7 +164,7 @@ tr {
     margin-bottom: 10px;
 }
 #footer-hoja-4{
-    margin-top: 160px !important;
+    margin-top: 70px !important;
 }
 #footer-hoja-4 td{
     font-size:8px;

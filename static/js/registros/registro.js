@@ -4,8 +4,9 @@ function set_fechas(inicio, fin){
   if (inicio != null){
     $('#fInicio').val(inicio);
   }
-  //console.log('SET FECHAS fin', fin);
-  $('#fFin').val(fin);
+  if (fin != null){
+    $('#fFin').val(fin);
+  }
 }
 
 $(function() {
@@ -27,7 +28,16 @@ $(function() {
       date_range = picker;
       set_fechas(date_range.startDate.format('YYYY-MM-DD HH:mm'), date_range.endDate.format('YYYY-MM-DD HH:mm'));
       //Desp que selecciona la fecha habilito el boton para crear.
-      $("#crearRegistro").prop("disabled", false);
+      let inicio = date_range.startDate.format('YYYY-MM-DD');
+      let fin = date_range.endDate.format('YYYY-MM-DD');
+      
+      if(fin > inicio){
+        alert('La fecha de inicio y fin deben ser las mismas.');
+        $(this).val('');
+      }
+      else{
+        $("#crearRegistro").prop("disabled", false);
+      }
   });
   $('.reservationtime').on('cancel.daterangepicker', function(ev, picker) {
       $(this).val('');
@@ -49,9 +59,6 @@ $(function() {
       $(this).val(picker.startDate.format('MM-DD-YYYY') + ' - ' + picker.endDate.format('MM-DD-YYYY'));
       date_range = picker;
       set_fechas(date_range.startDate.format('YYYY-MM-DD'), date_range.endDate.format('YYYY-MM-DD'));
-  });
-  $('#periodoFacturacion').on('cancel.daterangepicker', function(ev, picker) {
-      $(this).val('');
   });
   
 
@@ -76,9 +83,6 @@ $(function() {
   
   //Busca los alumnos del proyecto o servicio, o ambos; segun parametros
   function getAlumnosDelProyecto(servicioProyectoId, proyectoId, type) {
-
-    console.log('servicioProyectoId',servicioProyectoId);
-    console.log('proyectoId',proyectoId);
     if(servicioProyectoId > 0 || proyectoId > 0){
 
       $.ajax({
@@ -107,9 +111,7 @@ $(function() {
       .fail(function (jqXHR, textStatus, errorThrown) {
           alert('ERROR: ', textStatus + ': ' + errorThrown);
       }).always(function (data) {
-          
       });
-
     }
     else{
       verificarComboAlumnos();
@@ -142,7 +144,6 @@ $(function() {
   // **************** FUNCIONES GENERALES **************** //
   function vaciarCombo(combo){
     if(combo){
-      // console.log('long: ', combo.length);
       for (var i = combo.length - 1; i > 0; --i) {
           combo.remove(i);
       }

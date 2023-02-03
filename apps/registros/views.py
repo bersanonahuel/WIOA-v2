@@ -231,7 +231,6 @@ def get_alumnos_del_proyecto(servicioProyectoId, proyectoId, data):
     else:
         #data['error'] = 'No se seleccionó ningún Proyecto'
         alumnos = Alumnos.objects.all().values('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno')
-        #print('Alumnos = ', alumnos)
 
     if alumnos:
         data = { 'alumnos': list(alumnos) }
@@ -402,17 +401,16 @@ class CrearFactura(CreateView):
             date_string_fin = request.POST['fechaFin']
             fin = datetime.strptime(date_string_fin, format)
             
-            request.POST['proyectosServicios'] = 1
+            request.POST['proyectosServicios'] = ServiciosProyecto.objects.all().first() #Poner uno por defecto para que valide el formulario.
             request.POST['usuario'] = request.user
             
             form = FacturaForm(request.POST)
             
             if form.is_valid():
-                proyectoSelId = request.POST['proyectoSelId']
-                
+                proyectoSelId = request.POST['proyectoSelId']                
                 # Validar que no se exeda la cantidad de HS a Facturar establecidas del ProyectoServicio
 
-                #Busco hs ya facturadas                
+                #Busco hs ya facturadas
                 for serv in request.POST.getlist('serviciosCheck'):
                     hsAFacturarServicio = 0
                     hsFacturadasServicio = 0
@@ -429,10 +427,7 @@ class CrearFactura(CreateView):
                         seg = seg + detF.calcular_total_hs_segundos_detalle()
                     
                     hsAFacturarServicio = seg
-                    print('totalHoras A FACTURAR:: ', hsAFacturarServicio)
-                    print('totalHoras FACTURADAS:: ', hsFacturadasServicio)
-                    print('TOTAL HS PROY:: ', totalHorasSP)
-
+                    
                     if (hsFacturadasServicio + hsAFacturarServicio) > totalHorasSP:
                         error = 'Las horas que quiere facturar se exceden del Total de horas permitidas para el Proyecto "'+ sp.proyecto.nombre +'" y el Servicio "'+ sp.servicio.nombre+'".'
                         messages.error(self.request, error)
@@ -452,7 +447,7 @@ class CrearFactura(CreateView):
                     factura.proveedor = Proveedor.objects.get(id=request.POST['proveedor'])
                     factura.usuario = request.user
                     factura.save()
-                    #print('Se guardo catura ---------------- ')
+                    
                     #Guardar tabla intermedia Factura-ProyectoServicios
                     for serv in request.POST.getlist('serviciosCheck'):
                         sp = ServiciosProyecto.objects.filter(proyecto=proyectoSelId, servicio=serv).first()
@@ -465,7 +460,7 @@ class CrearFactura(CreateView):
                     #Buscar todos los registros de hs que se incluyan en el periodo ingresado.
                     detalles = RegistroDetalle.objects.filter( fechaHoraInicio__gte=inicio, fechaHoraFin__lte=fin, factura=None )
                     listaProyServFactura = factura.proyectosServicios.values_list('id',flat=True)
-                    #print('listaProyServFactura:: ', listaProyServFactura)
+
                     if detalles:
                         for det in detalles:
                             if det.registro.proyecto_servicio.id in listaProyServFactura:
@@ -547,13 +542,13 @@ class PrintPdf(View):
             if regDetMes:
                 if regDetMes['tutoria'] > 0 or regDetMes['mentoria'] > 0 or regDetMes['conserjeria'] > 0 or regDetMes['js'] > 0 or regDetMes['seguimiento'] > 0:
                     for servicio in range(1,6):
-                        #print('MES: ', i, ' ++++ serv', servicio)
+
                         seg = 0
                         reg = RegistroDetalle.objects.filter(factura=facturaInstance.id, fechaHoraInicio__month = i, registro__proyecto_servicio__servicio=servicio)
                         for r in reg:
                             seg = seg + r.calcular_total_hs_segundos_detalle()
 
-                        #print('seg en hs: ',convertir_tiempo(seg))
+
                         hs = convertir_tiempo(seg)
                         if servicio == 1:
                             regDetMes['tutoriaHs'] = hs
@@ -614,11 +609,8 @@ class PrintPdf(View):
             seguimientoCantPart=Count('registro', distinct=True, filter=Q(registro__proyecto_servicio__servicio=5)),
         )
 
-        # print('regDetServicio: ',regDetServicio)
-        #print('registrosPorMes:::: ',registrosPorMes)
         totalParticipantesServidos = regDetServicio['tutoriaCantPart'] + regDetServicio['mentoriaCantPart']  + regDetServicio['conserjeriaCantPart'] + regDetServicio['jsCantPart'] + regDetServicio['seguimientoCantPart']
 
-        
         # ······ Total y subtotal Factura
         subtotal = Decimal(0.0)
         total = Decimal(0.0)
@@ -629,8 +621,6 @@ class PrintPdf(View):
         regDetServicio['seguimientoPrecio'] =  Decimal(0.0)
 
         for proyServ in facturaInstance.proyectosServicios.all():
-            #subtotal = subtotal + (proyServ.precio_por_hora_participante * proyServ.cantidad_participantes)
-            print('TIPO :::: ',proyServ.tipo_facturacion)
 
             precio = 0.0
             if(proyServ.tipo_facturacion == 'Por hora'):
@@ -692,8 +682,6 @@ class PrintPdf(View):
 
 class DescargarExcelRegistros(TemplateView):
     def get(self, request, *args, **kwargs):
-        print('get excel request == ', request.GET)
-        print('get excel kwargs == ', kwargs)
         #Creamos el libro de trabajo
         wb = Workbook()
         #Definimos como nuestra hoja de trabajo, la hoja activa, por defecto la primera del libro
