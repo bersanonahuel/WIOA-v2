@@ -12,8 +12,8 @@
     <!-- HOJA 1 -->
     <article id="hoja-1" class="border">
       <div class="text-center">
-        {% if factura.proyectosServicios.all.first.proyecto.logoCliente %}
-          <img src="{{ factura.proyectosServicios.all.first.proyecto.logoCliente.url }}" class="logo-header" />
+        {% if factura.proyectosServicios.all.first.proyecto.logoAdmin1 %}
+          <img src="{{ factura.proyectosServicios.all.first.proyecto.logoAdmin1.url }}" class="logo-header" />
         {% endif %}
       </div>
       <div style="margin: 250px 0 420px 0;">
@@ -44,8 +44,8 @@
     <article id="hoja-2">
       
       <div class="text-center" style="margin-top:-45px;">
-        {% if factura.proyectosServicios.all.first.proyecto.logoCliente %}
-          <img src="{{ factura.proyectosServicios.all.first.proyecto.logoCliente.url }}" class="logo-header" />
+        {% if factura.proyectosServicios.all.first.proyecto.logoAdmin1 %}
+          <img src="{{ factura.proyectosServicios.all.first.proyecto.logoAdmin1.url }}" class="logo-header" />
         {% endif %}
       </div>
       <section class="float-left">
@@ -103,6 +103,7 @@
               </tr>
           </thead>
           <tbody>
+            {% language 'en' %}
               {% for proyServ in factura.proyectosServicios.all %}
               <tr>
                   <td>
@@ -136,6 +137,7 @@
                   <td class="text-right border-0 text-bold pr-100">TOTAL</td>
                   <td class="text-right"><span class="color-rojo">$ {{ totalFactura }}</span></td>
               </tr>
+            {% endlanguage %}
           </tbody>
       </table>
       <br><br><br><br>
@@ -153,8 +155,8 @@
     <p style="break-before: always;"></p>
     <article>
       <div class="text-center" style="margin-top:-45px;">
-        {% if factura.proyectosServicios.all.first.proyecto.logoCliente %}
-          <img src="{{ factura.proyectosServicios.all.first.proyecto.logoCliente.url }}" class="logo-header" />
+        {% if factura.proyectosServicios.all.first.proyecto.logoAdmin1 %}
+          <img src="{{ factura.proyectosServicios.all.first.proyecto.logoAdmin1.url }}" class="logo-header" />
         {% endif %}
       </div>
 
@@ -183,7 +185,7 @@
             <p>Gobierno de Puerto Rico</p>
             <p>DEPARTAMENTO DE HACIENDA</p>
             <p>Área de Rentas Internas</p><br>
-            <p>Certificado de Relevo Total - Entidades Jurídicas</p>
+            <p>Certificado de Relevo Parcial - Entidades Jurídicas</p>
           </td>                
         </tr>
       </table>
@@ -264,8 +266,8 @@
     <p style="break-before: always;"></p>
     <article id="hoja-5" class="border">
       <div class="text-center">
-        {% if factura.proyectosServicios.all.first.proyecto.logoCliente %}
-          <img src="{{ factura.proyectosServicios.all.first.proyecto.logoCliente.url }}" class="logo-header" />
+        {% if factura.proyectosServicios.all.first.proyecto.logoAdmin1 %}
+          <img src="{{ factura.proyectosServicios.all.first.proyecto.logoAdmin1.url }}" class="logo-header" />
         {% endif %}
         <h3>HOJA DE FACTURACIÓN NÚMERO 2 <span class="color-rojo">
           {% for sp in factura.proyectosServicios.all %}
@@ -286,6 +288,7 @@
       <br>
 
       <table class="tabla-hoja-5">
+        {% language 'en' %}
         <thead>
           <tr>
             <th class="bg-celeste" style="width: 310px;">DESCRIPCIÓN DE COSTO:</th>
@@ -308,7 +311,7 @@
                       {% if sp.servicio.id == 3 %} {{ value.conserjeriaHs }} {% endif %}
                       {% if sp.servicio.id == 4 %} {{ value.jsHs }} {% endif %}
                       {% if sp.servicio.id == 5 %} {{ value.seguimientoHs }} {% endif %}
-                      horas a razón de $ {{ sp.precio_por_hora_participante }} por participante</p>
+                      horas a razón de $ {{ sp.precio_por_hora_participante }} {{ sp.tipo_facturacion | lower }}</p>
                     <p><u>Partida</u>:</p>
                     <p>{{ sp.nroPartidaPresupuestaria }}</p>
                     <p>${{ sp.presupuesto_total }}</p>  
@@ -399,6 +402,7 @@
           </tr>
 
         </tbody>
+        {% endlanguage %}
       </table>
     </article>
 
@@ -407,8 +411,8 @@
     <p style="break-before: always;"></p>
     <article id="hoja-6" class="border">
       <div class="text-center">
-        {% if factura.proyectosServicios.all.first.proyecto.logoCliente %}
-          <img src="{{ factura.proyectosServicios.all.first.proyecto.logoCliente.url }}" class="logo-header" />
+        {% if factura.proyectosServicios.all.first.proyecto.logoAdmin1 %}
+          <img src="{{ factura.proyectosServicios.all.first.proyecto.logoAdmin1.url }}" class="logo-header" />
         {% endif %}
         <h3>HOJA DE TABULACIÓN</h3>
       </div>
@@ -536,8 +540,8 @@
     {% comment %} <p style="break-before: always;"></p> {% endcomment %}
     <article class="border">
       <div class="text-center">
-        {% if factura.proyectosServicios.all.first.proyecto.logoCliente %}
-          <img src="{{ factura.proyectosServicios.all.first.proyecto.logoCliente.url }}" class="logo-header" />
+        {% if factura.proyectosServicios.all.first.proyecto.logoAdmin1 %}
+          <img src="{{ factura.proyectosServicios.all.first.proyecto.logoAdmin1.url }}" class="logo-header" />
         {% endif %}
       </div>
       <h1 class="text-center" style="margin: 450px 0">COMPONENTE DE 
@@ -562,16 +566,16 @@
             <table id="header-hoja-8" >
               <tr>
                 <td>
-                  {% if factura.proyectosServicios.all.first.proyecto.logoCliente %}
-                    <img src="{{ factura.proyectosServicios.all.first.proyecto.logoCliente.url }}" style="width:160px;" />
+                  {% if factura.proyectosServicios.all.first.proyecto.logoAdmin1 %}
+                    <img src="{{ factura.proyectosServicios.all.first.proyecto.logoAdmin1.url }}" style="width:160px;" />
                   {% endif %}
                 </td>
                 <td class="w-650 text-right" style="border-right:3px solid gray !important;">
                   <h3 style="margin-right:15px;">Hoja de servicio - Resumen de servicio por participante Proyecto Uno a Uno</h3>
                 </td>
                 <td>
-                  {% if factura.proyectosServicios.all.first.proyecto.logoAdmin1 %}
-                    <img src="{{ factura.proyectosServicios.all.first.proyecto.logoAdmin1.url }}" class="w-50" style="margin:0 15px;" />
+                  {% if factura.proyectosServicios.all.first.proyecto.logoCliente %}
+                    <img src="{{ factura.proyectosServicios.all.first.proyecto.logoCliente.url }}" class="w-50" style="margin:0 15px;" />
                   {% endif %}
                 </td>
                 <td>
