@@ -51,8 +51,8 @@
       <section class="float-left">
         <h3>{{ factura.proveedor }}</h3>
         <p>{{ factura.proveedor.direccionFisica }}</p>
-        <p>Teléfono: {{ factura.proveedor.telefono }} Fax: {{ factura.proveedor.fax }}</p>
-        <p><span>{{ factura.proveedor.numeroFiscal }}</span></p>
+        <p>Teléfono: {{ factura.proveedor.telefono | default:'' }} Fax: {{ factura.proveedor.fax | default:'' }}</p>
+        <p><span>{{ factura.proveedor.numeroFiscal  | default:'' }}</span></p>
       </section>      
 
       <br>      
@@ -90,7 +90,7 @@
         </thead>
         <tbody>
             <tr>
-                <td class="border-0">{{ factura.proyectosServicios.all.first.proyecto }}<span class="color-rojo"> ({{ totalParticipantesServidos }} participantes)</span></td>
+                <td class="border-0">{{ factura.proyectosServicios.all.first.proyecto }}<span class="color-rojo"> ({{ totalParticipantesMatriculados }} participantes)</span></td>
                 <td class="text-center text-bold">{{ factura.terminosPago }}</td>
             </tr>
         </tbody>
@@ -282,7 +282,7 @@
       <div>  
         <h4 class="ml-30">Periodo: <span class="color-celeste">{{ factura.fechaInicio|date:'d F Y' }} hasta {{ factura.fechaFin|date:'d F Y' }}</span></h4>
         <h4 class="ml-30">CENTRO DE GESTIÓN: <span class="color-celeste"><u><span>{{ factura.cliente.centroGestion }}</span></u></span></h4>
-        <h4 class="ml-30">PARTICIPANTES: <span class="color-celeste"> {{ totalParticipantesMatriculados.total }} </span></h4>
+        <h4 class="ml-30">PARTICIPANTES: <span class="color-celeste"> {{ totalParticipantesMatriculados }} </span></h4>
         <h4 class="ml-30">CUADRE DE HORAS DE SERVICIO</h4>
       <div>
       <br>
@@ -393,11 +393,9 @@
           {% endfor %}
 
           <tr>
-            <td class="text-right">
-              <br> <p><b>TOTAL</b></p> <br>
-            </td>
-            <td class="color-celeste text-center" ><b>{{ totalParticipantesServidos }}</b></td>
-            <td class="color-celeste text-center" ><b>{{ totalHorasServicios }}</b></td>
+            <td></td>
+            <td></td>
+            <td class="text-right" ><br> <p><b>TOTAL</b></p> <br> </b></td>
             <td class="color-celeste text-center" ><b>$ {{ subtotalFactura }}</b></td>
           </tr>
 
@@ -419,7 +417,7 @@
       <div>  
         <h4 class="ml-30">Periodo: <span class="color-celeste">{{ factura.fechaInicio|date:'d F Y' }} hasta {{ factura.fechaFin|date:'d F Y' }}</span></h4>
         <h4 class="ml-30">CENTRO DE GESTIÓN: <span class="color-celeste"><u><span>{{ factura.cliente.centroGestion }}</span></u></span></h4>
-        <h4 class="ml-30">PARTICIPANTES: <span class="color-celeste"><span class="color-rojo">{{ totalParticipantesMatriculados.total }}</span></span></h4>
+        <h4 class="ml-30">PARTICIPANTES: <span class="color-celeste"><span class="color-rojo">{{ totalParticipantesMatriculados }}</span></span></h4>
         <h4 class="ml-30">CUADRE DE HORAS DE SERVICIO A LOS PARTICIPANTES</h4>
       <div>
       <br>
@@ -474,55 +472,52 @@
                   </p>
                 </td>
 
-              {% else %}
-                <td class="bg-celeste"> <p>TOTAL</p> </td>
+                <!-- Tutoria ID=1 -->
+                {% if value.tutoria > 0 %} 
+                  <td> {{ value.tutoria }} </td> 
+                  <td> {{ value.tutoriaHs }} </td>
+                {% else %}
+                  <td class="bg-celeste"></td> 
+                  <td class="bg-celeste"></td> 
+                {% endif %}
+                                
+                <!-- Mentoria ID=2 -->
+                {% if value.mentoria > 0 %} 
+                  <td> {{ value.mentoria }} </td> 
+                  <td> {{ value.mentoriaHs }} </td>
+                {% else %}
+                  <td class="bg-celeste"></td> 
+                  <td class="bg-celeste"></td> 
+                {% endif %}
+                
+                <!-- Conserjeria ID=3 -->
+                {% if value.conserjeria > 0 %} 
+                  <td> {{ value.conserjeria }} </td> 
+                  <td> {{ value.conserjeriaHs }} </td>
+                {% else %}
+                  <td class="bg-celeste"></td> 
+                  <td class="bg-celeste"></td> 
+                {% endif %}
+
+                <!-- JS ID=4 -->
+                {% if value.js > 0 %} 
+                  <td> {{ value.js }} </td> 
+                  <td> {{ value.jsHs }} </td>
+                {% else %}
+                  <td class="bg-celeste"></td> 
+                  <td class="bg-celeste"></td> 
+                {% endif %}
+                
+                <!-- Seguimiento ID=5 -->
+                {% if value.seguimiento > 0 %} 
+                  <td> {{ value.seguimiento }} </td> 
+                  <td> {{ value.seguimientoHs }} </td>
+                {% else %}
+                  <td class="bg-celeste"></td> 
+                  <td class="bg-celeste"></td> 
+                {% endif %}
+
               {% endif %} <!-- /if Not TOTAL -->
-
-
-              <!-- Tutoria ID=1 -->
-              {% if value.tutoria > 0 %} 
-                <td> {{ value.tutoria }} </td> 
-                <td> {{ value.tutoriaHs }} </td>
-              {% else %}
-                <td class="bg-celeste"></td> 
-                <td class="bg-celeste"></td> 
-              {% endif %}
-                              
-              <!-- Mentoria ID=2 -->
-              {% if value.mentoria > 0 %} 
-                <td> {{ value.mentoria }} </td> 
-                <td> {{ value.mentoriaHs }} </td>
-              {% else %}
-                <td class="bg-celeste"></td> 
-                <td class="bg-celeste"></td> 
-              {% endif %}
-              
-              <!-- Conserjeria ID=3 -->
-              {% if value.conserjeria > 0 %} 
-                <td> {{ value.conserjeria }} </td> 
-                <td> {{ value.conserjeriaHs }} </td>
-              {% else %}
-                <td class="bg-celeste"></td> 
-                <td class="bg-celeste"></td> 
-              {% endif %}
-
-              <!-- JS ID=4 -->
-              {% if value.js > 0 %} 
-                <td> {{ value.js }} </td> 
-                <td> {{ value.jsHs }} </td>
-              {% else %}
-                <td class="bg-celeste"></td> 
-                <td class="bg-celeste"></td> 
-              {% endif %}
-              
-              <!-- Seguimiento ID=5 -->
-              {% if value.seguimiento > 0 %} 
-                <td> {{ value.seguimiento }} </td> 
-                <td> {{ value.seguimientoHs }} </td>
-              {% else %}
-                <td class="bg-celeste"></td> 
-                <td class="bg-celeste"></td> 
-              {% endif %}
 
             </tr>            
           {% endfor %} <!-- /for Key -->
@@ -605,23 +600,33 @@
               <tr class="text-center pt-2">
                 {% comment %} <th></th> {% endcomment %}
                 <th class="w-200 bg-gris-claro">NOMBRE ESTUDIANTE</th>
-                <th class="bg-gris-claro" colspan="2">DÍA Y HORA (AM/PM)</th>
+                <th class="w-300 bg-gris-claro">ESCUELA</th>
+                <th class="bg-gris-claro" >SERVICIO </th>
                 <th class="bg-gris-claro w-100">CANTIDAD DE HORAS</th>
               </tr>
             </thead>
             <tbody>
               
-            {% for det in registrosDetalle %}
-              {% if det.usuario_id == usuario.usuario %}
+              {% for det in sumaTiempoPorRegistro %}                
                 <tr class="pt-2">
-                  {% comment %} <td>{{ det.usuario_id }}</td> {% endcomment %}
-                  <td class="text-left">{{ det.registro.alumno }}</td>
-                  <td class="text-left w-250">{{ det.fechaHoraInicio | date:"l, F d, Y"}} </td>
-                  <td class="text-left">{{ det.fechaHoraInicio | date:"h:i a"}} a {{ det.fechaHoraFin | date:"h:i a" }}</td>
-                  <td class="text-right">{{ det.calcular_total_hs_detalle }}</td>
+                  <td class="text-left">{{ det.registro__alumno__nombre}}, {{det.registro__alumno__apellidoPaterno | default:''}} {{det.registro__alumno__apellidoPaterno | default:''}}</td>
+                  <td class="text-left w-250">{{ det.escuela }}</td>
+                  <td class="text-left w-250">{{ det.servicio }}</td>
+                  {% comment %} <td class="text-right">{{ det.tiempo|stringformat:"d" }}</td> {% endcomment %}
+                  <td class="text-right">-</td>
                 </tr>
-              {% endif %}
-            {% endfor %} <!-- /For Detalle Registros -->
+              {% endfor %}
+
+              {% comment %} {% for det in registrosDetalle %}
+                {% if det.usuario_id == usuario.usuario %}
+                  <tr class="pt-2">
+                    <td class="text-left">{{ det.registro.alumno }}</td>
+                    <td class="text-left w-250">{{ det.fechaHoraInicio | date:"l, F d, Y"}} </td>
+                    <td class="text-left">{{ det.fechaHoraInicio | date:"h:i a"}} a {{ det.fechaHoraFin | date:"h:i a" }}</td>
+                    <td class="text-right">{{ det.calcular_total_hs_detalle }}</td>
+                  </tr>
+                {% endif %}
+              {% endfor %} <!-- /For Detalle Registros --> {% endcomment %}
 
             </tbody>
           </table>

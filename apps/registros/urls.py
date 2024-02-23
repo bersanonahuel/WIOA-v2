@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth.decorators import login_required
-from .views import  CrearRegistro, ListarRegistro, ListarRegistroPorProyecto, CrearRegistroDetalle, EliminarRegistroDetalle, CrearFactura, EditarFactura, ListarFactura, PrintPdf, DescargarExcelRegistros #, ListarFacturaPdf, ImprimirFactura
+from .views import  CrearRegistro, ListarRegistro, ListarRegistroPorProyecto, CrearRegistroDetalle, EliminarRegistroDetalle, CrearFactura, EditarFactura, ListarFactura, PrintPdf, DescargarExcelRegistros, CrearRegistroDetalleMasivo
 
 urlpatterns = [
     path('crearRegistro/', login_required(CrearRegistro.as_view()), name = 'crearRegistro'),
@@ -9,6 +9,8 @@ urlpatterns = [
     
     path('crearRegistroDetalle/<int:registropk>', login_required(CrearRegistroDetalle.as_view()), name = 'crearRegistroDetalle'),
     path('eliminarRegistroDetalle/<int:pk>', login_required(EliminarRegistroDetalle.as_view()), name = 'eliminarRegistroDetalle'),
+
+    path('crearRegistroDetalleMasivo/', login_required(CrearRegistroDetalleMasivo.as_view()), name = 'crearRegistroDetalleMasivo'),
 
     path('crearFactura/', login_required(CrearFactura.as_view()), name = 'crearFactura'),
     path('editarFactura/<int:pk>', login_required(EditarFactura.as_view()), name = 'editarFactura'),

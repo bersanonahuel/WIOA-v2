@@ -10,12 +10,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import JsonResponse, HttpResponse
-from django.db.models import Count, Sum, F, Q
+from django.db.models import FloatField, DecimalField, ExpressionWrapper, Count, Sum, F, Q
 from .models import *
 from .forms import RegistroForm, RegistroDetalleForm, FacturaForm
 from apps.proyecto.models import ServiciosProyecto, Proyecto, Servicio
 from apps.administracion import models
-
+ 
 from datetime import datetime, timedelta
 from decimal import Decimal
 #Para PDF
@@ -38,6 +38,7 @@ LISTAR_REGISTRO_PROYECTO_FILE = 'registros/registro/listarRegistroPorProyecto.ht
 CREAR_REGISTRO_DETALLE_FILE = 'registros/registro/crearRegistroDetalle.html'
 LISTAR_FACTURA_FILE  = 'registros/factura/listarFactura.html'
 CREAR_FACTURA_FILE   = 'registros/factura/crearFactura.html'
+CREAR_REGISTRO_DETALLE_MASIVO_FILE = 'registros/registro/crearRegistroDetalleMasivo.html'
 
 class CrearRegistro(CreateView):
     models = Registro
@@ -352,6 +353,130 @@ class EliminarRegistroDetalle(DeleteView):
             }
             return JsonResponse(res, safe=False)
 
+
+class CrearRegistroDetalleMasivo(CreateView):
+    models = RegistroDetalle
+    form_class = RegistroDetalleForm
+    template_name = CREAR_REGISTRO_DETALLE_MASIVO_FILE
+
+    @method_decorator(csrf_exempt)
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        if request.is_ajax():
+            data = {}
+            try:
+                action = request.POST['action']
+                
+                if action == 'getAlumnosDelProyecto':
+                    proyectoId = 0
+                    serviciosProyectoSelectId = request.POST['servicioProyectoId']
+                    serviciosProyecto = None
+                    if serviciosProyectoSelectId:
+                        serviciosProyecto = ServiciosProyecto.objects.get(id=serviciosProyectoSelectId)
+                        proyectoId = serviciosProyecto.proyecto.id
+                        
+                        p = Proyecto.objects.get(id=proyectoId)
+                        
+                        alumnos = p.alumnos.values('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno')
+                    
+                        if alumnos:
+                            data = { 'alumnos': list(alumnos) }
+                        else:
+                            data['error'] = 'No se encontró ningún alumno asignado a este Proyecto.'
+
+                    else:
+                        data['error'] = 'No se seleccionó ningún Proyecto.'
+
+                else:
+                    data['error'] = 'Ha ocurrido un error'
+
+            except Exception as e:
+                data['error'] = str(e)
+            return JsonResponse(data, safe=False)
+        
+        if request.method == 'POST':
+            request.POST._mutable = True
+            
+            #Pruebas convertir time AM/PM
+            format = '%Y-%m-%d %H:%M'
+            date_string_inicio = request.POST['fechaHoraInicio']  #'2009-11-29 03:17:00.0000'
+            inicio = datetime.strptime(date_string_inicio, format)
+    
+            date_string_fin = request.POST['fechaHoraFin']
+            fin = datetime.strptime(date_string_fin, format)
+
+            sp = ServiciosProyecto.objects.get(id=request.POST['proyectoServicioSelectId'])
+
+            for alumno in request.POST.getlist('alumnosCheck'):
+        
+                registroInstance = Registro.objects.filter(alumno=alumno, proyecto_servicio=sp).first()
+                alumnoInstance = Alumno.objects.get(id=alumno)
+
+                print(' ********** registroInstance ')
+                print(registroInstance)
+
+                if not registroInstance:
+                        #Creo el registro nuevo del alumno
+                        print(' ----- no hay registro creado para este alumno y servicio')
+                        form = RegistroForm()
+                        registro = form.save(commit=False)
+                        registro.alumno = alumnoInstance
+                        registro.proyecto_servicio = sp
+                        registro.usuario = request.user
+                        
+                        if registro.save():
+                            registroInstance = registro
+                        else:
+                            error = "No se pudo crear el registro de horas para el alumno " + alumnoInstance.nombre + " " + alumnoInstance.apellidoPaterno + '.'
+                            messages.error(self.request, error)
+
+                form = RegistroDetalleForm()
+                regDet = form.save(commit=False)
+                regDet.fechaHoraInicio = inicio.strftime(format)
+                regDet.fechaHoraFin = fin.strftime(format)
+                regDet.registro = registroInstance
+                regDet.usuario = request.user
+                regDet.comentario = request.POST['comentario']
+
+                totalHorasSP = (sp.total_horas * 3600)
+                
+                hsRegistradasAlumno = calcular_horas_registradas_alumno(registroInstance)
+                
+                #Validar que no se exceda del total de Hs del proyecto.
+                timediff = (fin - inicio)
+                hsRegistroActual = timediff.seconds
+                
+                if (hsRegistradasAlumno + hsRegistroActual) > totalHorasSP:
+                    error = 'Las horas que quiere registrar para el participante '+ alumnoInstance.nombre + ' ' + alumnoInstance.apellidoPaterno +' se exceden del Total de Horas ('+str(sp.total_horas)+') permitidas para este Proyecto y Servicio.'
+                    messages.error(self.request, error)
+                    context = {
+                        'titulo': 'Crear registro de horas para varios alumnos',
+                        'serviciosProyecto': ServiciosProyecto.objects.all()
+                    }
+                    return render(request, CREAR_REGISTRO_DETALLE_MASIVO_FILE, context)
+                else:
+                    regDet.save()
+                    success = 'El registro se guardó correctamente.'
+                    messages.success(self.request, success)
+            
+            return super().form_valid(regDet)
+    
+    def get_context_data(self, *args, **kwargs):
+        kwargs['titulo'] = 'Crear registro de horas para varios alumnos'
+        kwargs['serviciosProyecto'] = ServiciosProyecto.objects.all()
+
+        return super(CrearRegistroDetalleMasivo,self).get_context_data(**kwargs)
+    
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('registros:crearRegistroDetalleMasivo')
+
+
 class CrearFactura(CreateView):
     models = Factura
     form_class = FacturaForm
@@ -397,10 +522,11 @@ class CrearFactura(CreateView):
             format = '%Y-%m-%d'
             date_string_inicio = request.POST['fechaInicio']
             inicio = datetime.strptime(date_string_inicio, format)
+            inicioDate=inicio.date()
     
             date_string_fin = request.POST['fechaFin']
             fin = datetime.strptime(date_string_fin, format)
-            
+            finDate = fin.date()
             request.POST['proyectosServicios'] = ServiciosProyecto.objects.all().first() #Poner uno por defecto para que valide el formulario.
             request.POST['usuario'] = request.user
             
@@ -422,7 +548,8 @@ class CrearFactura(CreateView):
                     
                     #Sumar horas que se quieren facturar AHORA
                     seg = 0
-                    detallesAFacturar = RegistroDetalle.objects.filter( fechaHoraInicio__gte=inicio, fechaHoraFin__lte=fin, factura=None, registro__proyecto_servicio=sp )
+                    detallesAFacturar = RegistroDetalle.objects.filter( fechaHoraInicio__date__gte=inicioDate, fechaHoraFin__date__lte=finDate, factura=None, registro__proyecto_servicio=sp )
+                    
                     for detF in detallesAFacturar:
                         seg = seg + detF.calcular_total_hs_segundos_detalle()
                     
@@ -458,7 +585,7 @@ class CrearFactura(CreateView):
                     messages.success(self.request, 'La factura se creó correctamente.')
 
                     #Buscar todos los registros de hs que se incluyan en el periodo ingresado.
-                    detalles = RegistroDetalle.objects.filter( fechaHoraInicio__gte=inicio, fechaHoraFin__lte=fin, factura=None )
+                    detalles = RegistroDetalle.objects.filter( fechaHoraInicio__date__gte=inicioDate, fechaHoraFin__date__lte=finDate, factura=None )
                     listaProyServFactura = factura.proyectosServicios.values_list('id',flat=True)
 
                     if detalles:
@@ -511,11 +638,20 @@ class PrintPdf(View):
         
         registrosDetalle = dict()
         registrosDetalle = RegistroDetalle.objects.filter(factura=facturaInstance.id).order_by('usuario', 'registro', 'fechaHoraInicio')
+        
+        diffMiliseg = registrosDetalle.values('registro_id').order_by('registro_id').annotate(timesDif = ExpressionWrapper( (F("fechaHoraFin") - F("fechaHoraInicio")), output_field=DecimalField()) )
+        #diffMiliseg = registrosDetalle.values('registro_id').order_by('registro_id').annotate(timesDif = ExpressionWrapper( (F("fechaHoraFin") - F("fechaHoraInicio"))/1000, output_field=DecimalField()) )
+        #sumaTiempoPorRegistro = diffMiliseg.values('registro_id', 'registro__alumno__nombre', 'registro__alumno__apellidoPaterno', 'registro__alumno__apellidoMaterno', servicio=F('registro__proyecto_servicio__servicio__nombre'), escuela=F('registro__alumno__escuela__nombre')).order_by('registro_id').annotate(tiempo= ExpressionWrapper((((Sum('timesDif'))/3600)/1000), output_field=FloatField())).order_by('registro__alumno__nombre')
+        sumaTiempoPorRegistro = diffMiliseg.values('registro_id', 'registro__alumno__nombre', 'registro__alumno__apellidoPaterno', 'registro__alumno__apellidoMaterno', servicio=F('registro__proyecto_servicio__servicio__nombre'), escuela=F('registro__alumno__escuela__nombre')).order_by('registro_id').annotate(tiempo= ExpressionWrapper(Sum('timesDif'), output_field=DecimalField())).order_by('registro__alumno__nombre')
+        
         usuariosList = RegistroDetalle.objects.filter(factura=facturaInstance.id).values('usuario', 'usuario__first_name', 'usuario__last_name').distinct()
         
         #Total participantes Matriculados
-        totalParticipantesMatriculados = facturaInstance.proyectosServicios.all().aggregate(total=Sum('cantidad_participantes'))
-
+        #totalParticipantesMatriculados = facturaInstance.proyectosServicios.all().aggregate(total=Sum('cantidad_participantes'))
+        totalParticipantesMatriculados = 0
+        if facturaInstance.proyectosServicios.all().first():
+            totalParticipantesMatriculados = facturaInstance.proyectosServicios.all().first().cantidad_participantes    
+        
         # ······ Detalle de Hs por MES
         registrosPorMes = dict()
         nro = 1
@@ -609,7 +745,8 @@ class PrintPdf(View):
             seguimientoCantPart=Count('registro', distinct=True, filter=Q(registro__proyecto_servicio__servicio=5)),
         )
 
-        totalParticipantesServidos = regDetServicio['tutoriaCantPart'] + regDetServicio['mentoriaCantPart']  + regDetServicio['conserjeriaCantPart'] + regDetServicio['jsCantPart'] + regDetServicio['seguimientoCantPart']
+        #totalParticipantesServidos = regDetServicio['tutoriaCantPart'] + regDetServicio['mentoriaCantPart']  + regDetServicio['conserjeriaCantPart'] + regDetServicio['jsCantPart'] + regDetServicio['seguimientoCantPart']
+       
 
         # ······ Total y subtotal Factura
         subtotal = Decimal(0.0)
@@ -670,7 +807,8 @@ class PrintPdf(View):
             'registrosPorMes': registrosPorMes,
 
             'regDetServicio': regDetServicio,
-            'totalParticipantesServidos': totalParticipantesServidos
+            'sumaTiempoPorRegistro': sumaTiempoPorRegistro
+            #'totalParticipantesServidos': totalParticipantesServidos
         }
 
         html_template = template.render(context)

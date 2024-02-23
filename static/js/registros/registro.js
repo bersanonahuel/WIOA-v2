@@ -74,11 +74,45 @@ $(function() {
     getAlumnosDelProyecto(null, proyectoId, 'GET');
   });
   
-  // $('#id_proyecto_servicio.proyectoServicioFilter').on('change', function(){
-  //   var servicioProyectoId = $(this).val();
-  //   getAlumnosDelProyecto(servicioProyectoId, 'GET');
-  // }); 
-  
+  $('#selProyectoRegistro').on('change', function(){
+    getAlumnosDelProyectoMasivo($(this).val());
+  });
+
+  function getAlumnosDelProyectoMasivo(proyectoServicioId) {
+      $.ajax({
+          url: window.location.pathname,
+          type: 'POST',
+          data: {
+            'action': 'getAlumnosDelProyecto',
+            'servicioProyectoId': proyectoServicioId
+          },
+          dataType: 'json',
+      }).done(function (data) {
+
+          if (!data.hasOwnProperty('error')) {
+              var alumnosList = data.alumnos
+              $('#checkAlumnosRegistro .contenidoCheck').remove()
+              html = '<div class="contenidoCheck">';
+              for(var i=0; i < alumnosList.length; i++){
+                  html+= '<div class="form-check">'
+                  html+= '<input class="form-check-input" type="checkbox" name="alumnosCheck" value="'+ alumnosList[i].id +'" id="flexCheckDefault">'
+                  html+= '<label class="form-check-label" for="flexCheckDefault">'+ alumnosList[i].nombre + ' ' + alumnosList[i].apellidoPaterno + ' ' + alumnosList[i].apellidoMaterno +'</label>'
+                  html+= '</div>'
+              }
+              html+='</div>'
+              $('#checkAlumnosRegistro').append(html);
+
+              $('#proyectoServicioSelectId').val(proyectoServicioId);
+          }
+          else{
+              alert(data.error);
+          }
+      }).fail(function (jqXHR, textStatus, errorThrown) {
+          alert(textStatus + ': ' + errorThrown);
+      }).always(function (data) {
+          
+      });
+  } 
   verificarComboAlumnos();
   
   //Busca los alumnos del proyecto o servicio, o ambos; segun parametros

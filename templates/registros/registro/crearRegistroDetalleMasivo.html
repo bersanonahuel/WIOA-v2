@@ -1,6 +1,5 @@
 {% extends 'index.html' %}
 {% load static %}
-<!--Para que herede todo de index.html -->
 
 {% block titulo %} Detalle Registro Hs {% endblock titulo %}
 
@@ -12,19 +11,19 @@
     <span class="info-box-icon bg-info my-2"><i class="fas fa-users"></i></span>
     <div class="info-box-content">
         <span class="info-box-number">{{ registro.proyecto_servicio }}</span>
-        <span class="info-box-text">PARTICIPANTE: <b>{{ registro.alumno }}</b> </span>
+        <span class="info-box-text">Registrar horas de varios alumnos, por Proyecto.</span>
     </div>
   </div>
 
   <div class="card card-primary">
-    <div class="card-header">CREAR REGISTRO</div>
+    <div class="card-header">CREAR REGISTRO DE HORAS PARA VARIOS ALUMNOS</div>
 
-    <form id="formRegistro" method="POST" class="mt-2">
+    <form id="formRegistroMasivo" method="POST" class="mt-2">
       {% csrf_token %}
-      {% if error %}
-        <h2>{{ error }}</h2>
-      {% else %}
-
+      <div class="card-body card-block col-12">
+        {% if error %}
+          <h2>{{ error }}</h2>
+        {% else %}
         {% if messages %}
           {% for message in messages %}
           <div class="mensaje alert alert-{{ message.tags }} alert-dismissable">
@@ -34,14 +33,36 @@
           {% endfor %}
         {% endif %}
         
+        {% comment %} Proyecto y alumnos {% endcomment %}
+        <div class="row">            
+          <div class="col-12 col-md-6">
+            <div class="form-group">
+              <label for="proyecto"> Proyecto: </label>
+              <input type="hidden" name="proyectoServicioSelectId" id="proyectoServicioSelectId" value="">
+              <select class="form-control select2" style="width: 100%;" id="selProyectoRegistro">
+                  <option value=""></option>
+                  {% for servicioProyecto in serviciosProyecto %}
+                      <option value="{{ servicioProyecto.id }}">{{ servicioProyecto.proyecto.nombre}} | {{servicioProyecto.servicio.nombre }}</option>
+                  {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <label for="proyecto"> Alumnos: </label>
+            <div id="checkAlumnosRegistro">
+              <div class="contenidoCheck">
+              </div>                
+            </div>
+          </div>
+        </div>
+
         <div class="row">
           <div class="form-group col-12 text-center registro-manual">
             <label class="control-label font-weight-bold mt-3" for="{{ form.comentario.auto_id }}"> {{ form.comentario.label }}: </label>
             {{ form.comentario }}
           </div>
         </div>
-
-        <div class="card-body card-block col-12">
+        
           <div class="row">
             <div class="text-center col-12">
               <small class="badge badge-warning px-2 py-3 mt-mb-3 mb-3" style="font-size: 0.8rem;"><label class="mb-0">Elija una de las dos opciones para crear <br class="d-md-none d-flex"> el registro de horas.</label></small>
@@ -59,7 +80,6 @@
               <input class="reservationtime form-control mx-auto w-75" name="fechaHora" >
 
               <button type="submit" class="btn btn-primary mt-4" id="crearRegistro" disabled >Crear</button>
-              {% comment %} <a href="#" class="btn btn-secondary mt-4" >Cancelar</a> {% endcomment %}
             </div>
 
             {% comment %} Registro cronometro {% endcomment %}
@@ -88,58 +108,9 @@
           
         {% endif %}
       </div>
+
       <div class="card-footer"></div>
     </form>
-  </div>    
-
-  <!-- Listado -->
-  <div class="table-stats order-table ov-h table-responsive">
-    {% if registrosDet %}
-      <table id="tablaDetalleRegistro" class="table table-bordered table-hover dataTable table-head-fixed text-nowrap bg-white">
-          <thead class="text-center bg-header-tabla">
-              <tr>
-                  <th class="">FECHA</th>
-                  <th class="">HORA INICIO</th>
-                  <th class="">HORA FIN</th>
-                  <th class="">CANTIDAD HORAS</th>
-                  <th class="">COMENTARIOS</th>
-                  <th class="">NÚM. FACTURA</th>
-                  <th class=""></th>
-              </tr>
-          </thead>
-          <tbody>
-
-              {% for det in registrosDet %}
-              <tr class="text-center">
-                  <td>{{ det.fechaHoraInicio | date:"m-d-Y" }}</td>
-                  <td>{{ det.fechaHoraInicio | date:"h:i a" }}</td>
-                  <td>{{ det.fechaHoraFin | date:"h:i a" }}</td>
-                  <td>{{ det.calcular_total_hs_detalle }}</td>
-
-                  <td>{{ det.comentario | default:'' }}</td>
-                  <td>{{ det.factura.id }}</td>
-                  
-                  <td>
-                      {% comment %} <a class="btn btn-primary btn-sm" href="{% url 'venta:editarDetalle' det.id %}" rel="editar"><icon class="fas fa-fas fa-pencil-alt"></icon></a> {% endcomment %}
-                      {% if det.factura.id == none %}
-                        <a class="btn btn-danger btn-sm" rel="eliminar" href="#" onClick="eliminarRegistro({{ det.id | slugify }}, '../eliminarRegistroDetalle/')" ><icon class="fa fa-trash"></icon></a> 
-                      {% endif %}
-                  </td>
-              </tr>
-              {% endfor %}
-
-          </tbody>
-          <tfoot>
-              <tr>
-                  <td></td>
-                  <td class="text-right text-bold"> TOTAL:</td>
-                  <td class="text-right text-bold text-center bg-gris-claro"> {{ registro.calcular_total_horas_por_alumno }} </td>
-              </tr>
-          </tfoot>
-      </table>
-    {% else %}
-      <h3 class="pl-2">No existen Horas registradas.</h3>
-    {% endif %}
   </div>
     
 {% endblock conteiner %}
