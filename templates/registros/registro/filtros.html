@@ -37,9 +37,10 @@
                     
                     <a class="btn btn-secondary" href="{% url 'registros:listarRegistro'%}">Limpiar filtros</a>
 
-                    <br><br>
-                    {% comment %} <button type="button" value="ok" class="btn btn-warning btn-sm btn-reportes" data-toggle="tooltip" data-placement="bottom" name="descargarExcelRegistros" onclick="descargarExcelListadoRegistros();" title="Descargar excel del listado" > <i class="fas fa-fas fa-print"></i> Descargar Excel </button> {% endcomment %}
-
+                    {% if user.is_staff %}
+                        <br><br>
+                        <button type="button" value="ok" class="btn btn-warning btn-sm btn-reportes" data-toggle="tooltip" data-placement="bottom" name="descargarExcelRegistros" onclick="descargarExcelListadoRegistros();" title="Descargar excel del listado" > <i class="fas fa-fas fa-print"></i> Descargar Excel </button>
+                    {% endif %}
                     
                 </form>
             </div>

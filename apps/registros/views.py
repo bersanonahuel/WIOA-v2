@@ -812,14 +812,20 @@ class PrintPdf(View):
         }
 
         html_template = template.render(context)
-        #css_url = os.path.join(settings.BASE_DIR, 'static/lib/adminlte-3.1.0/css/adminlte.css')
-        #pdf = HTML(string=html_template, base_url=request.build_absolute_uri()).write_pdf(stylesheets=[CSS(css_url)])
+        
         pdf = HTML(string=html_template, base_url=request.build_absolute_uri()).write_pdf()
 
         return HttpResponse(pdf, content_type='application/pdf')
 
 class DescargarExcelRegistros(TemplateView):
     def get(self, request, *args, **kwargs):
+        registro_filter = RegistroFilter(request.GET, queryset=Registro.objects.all(), request=self.request)
+        
+        registrosDetalle = RegistroDetalle.objects.filter(registro__in=registro_filter.qs).order_by('registro', 'fechaHoraInicio')
+        
+        diffMiliseg = registrosDetalle.values('registro_id').order_by('registro_id').annotate(timesDif = ExpressionWrapper( (F("fechaHoraFin") - F("fechaHoraInicio")), output_field=DecimalField()) )
+        sumaTiempoPorRegistro = diffMiliseg.values('registro_id', 'registro__alumno__nombre', 'registro__alumno__apellidoPaterno', 'registro__alumno__apellidoMaterno', 'timesDif', 'fechaHoraInicio', 'fechaHoraFin', servicio=F('registro__proyecto_servicio__servicio__nombre'), proyecto=F('registro__proyecto_servicio__proyecto__nombre'), escuela=F('registro__alumno__escuela__nombre')).order_by('registro__alumno__nombre')
+        
         #Creamos el libro de trabajo
         wb = Workbook()
         #Definimos como nuestra hoja de trabajo, la hoja activa, por defecto la primera del libro
@@ -827,25 +833,48 @@ class DescargarExcelRegistros(TemplateView):
         #En la celda B1 ponemos el titulo
         ws['B1'] = 'LISTADO REGISTROS POR PARTICIPANTES (HS)'
         #Juntamos las celdas desde la B1 hasta el final, formando una sola celda
-        ws.merge_cells('B1:C1')
-        #Creamos los encabezados desde la celda B3 hasta la E3
-        ws['B3'] = 'FECHA'
-        ws['C3'] = 'VENTA'
+        ws.merge_cells('B1:I1')
+        #Creamos los encabezados desde la celda B3 hasta la H3
+        ws['B3'] = 'REGISTRO ID'
+        ws['C3'] = 'PROYECTO'
+        ws['D3'] = 'SERVICIO'
+        ws['E3'] = 'ESCUELA'
+        ws['F3'] = 'ALUMNO'
+        ws['G3'] = 'INICIO'
+        ws['H3'] = 'FIN'
+        ws['I3'] = 'TIEMPO'
         
-        #ws.column_dimensions['B'].width = 12
-        #ws.column_dimensions['C'].width = 25
+        ws.column_dimensions['B'].width = 12
+        ws.column_dimensions['C'].width = 40
+        ws.column_dimensions['D'].width = 25
+        ws.column_dimensions['E'].width = 50
+        ws.column_dimensions['F'].width = 30
+        ws.column_dimensions['G'].width = 25
+        ws.column_dimensions['H'].width = 25
+        ws.column_dimensions['I'].width = 25
         
-        # for col in range(2,10):
-        #     ws.cell(row=3,column=2).fill = PatternFill (patternType = "solid", start_color = "A6A6A6")
-        #     ws.cell(row=3,column=3).fill = PatternFill (patternType = "solid", start_color = "A6A6A6")
+        for col in range(2,10):
+            ws.cell(row=3,column=2).fill = PatternFill (patternType = "solid", start_color = "EFC95D")
+            ws.cell(row=3,column=3).fill = PatternFill (patternType = "solid", start_color = "EFC95D")
+            ws.cell(row=3,column=4).fill = PatternFill (patternType = "solid", start_color = "EFC95D")
+            ws.cell(row=3,column=5).fill = PatternFill (patternType = "solid", start_color = "EFC95D")
+            ws.cell(row=3,column=6).fill = PatternFill (patternType = "solid", start_color = "EFC95D")
+            ws.cell(row=3,column=7).fill = PatternFill (patternType = "solid", start_color = "EFC95D")
+            ws.cell(row=3,column=8).fill = PatternFill (patternType = "solid", start_color = "EFC95D")
+            ws.cell(row=3,column=9).fill = PatternFill (patternType = "solid", start_color = "EFC95D")
 
         row = 4
-        #Recorremos el conjunto de ventas y vamos escribiendo cada uno de los datos en las celdas
-        # for venta in sumaVentasPorDia:
-        #     ws.cell(row=row,column=2).value = venta['venta__fechaCreacion__date'] 
-        #     ws.cell(row=row,column=3).value = round(venta['sum'],2)
-
-        #     row = row + 1
+        #Recorremos el conjunto de registros de alumnos y vamos escribiendo cada uno de los datos en las celdas
+        for reg in sumaTiempoPorRegistro:
+            ws.cell(row=row,column=2).value = reg['registro_id']
+            ws.cell(row=row,column=3).value = reg['proyecto']
+            ws.cell(row=row,column=4).value = reg['servicio']
+            ws.cell(row=row,column=5).value = reg['escuela']
+            ws.cell(row=row,column=6).value = reg['registro__alumno__nombre'] + ' ' + reg['registro__alumno__apellidoPaterno'] + ' ' + reg['registro__alumno__apellidoMaterno']
+            ws.cell(row=row,column=7).value = reg['fechaHoraInicio']
+            ws.cell(row=row,column=8).value = reg['fechaHoraFin']
+            ws.cell(row=row,column=9).value = convertir_tiempo(reg['timesDif']/1000000)
+            row = row + 1
 
         # Establecemos el nombre del archivo
         nombre_archivo = 'Default'
@@ -853,6 +882,7 @@ class DescargarExcelRegistros(TemplateView):
             nombre_archivo ="Listado registros por participante.xlsx"
         elif request.GET['accionDesde'] == 'listarRegistroPorProyecto':
             nombre_archivo ="Listado registros por proyectos.xlsx"
+
         # Definimos que el tipo de respuesta a devolver es un archivo de microsoft excel
         response = HttpResponse(content_type="application/ms-excel") 
         contenido = "attachment; filename={0}".format(nombre_archivo)
