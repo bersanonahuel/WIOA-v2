@@ -91,24 +91,26 @@ WSGI_APPLICATION = 'WIOA.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# Configuración para PostgreSQL en Producción
+# Se usará PostgreSQL si no está en modo DEBUG local o si la base existe.
+if not DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'wioa_db',
+            'USER': 'wioa_user',
+            'PASSWORD': 'wioa_secure_123',
+            'HOST': 'localhost', # o el hostname que use Lorenzo si está en otro contenedor
+            'PORT': '5432',
+        }
     }
-}
-
-# Configuración para PostgreSQL en Producción (Descomentar y completar o usar variables de entorno)
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'wioa_db',          # Nombre de tu base de datos postgres
-#         'USER': 'postgres',         # Tu usuario postgres
-#         'PASSWORD': 'password',     # Tu contraseña postgres
-#         'HOST': 'localhost',        # o el nombre del contenedor de la BD (ej: 'db')
-#         'PORT': '5432',
-#     }
-# }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation

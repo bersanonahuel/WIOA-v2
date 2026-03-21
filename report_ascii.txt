@@ -1,0 +1,11 @@
+load_data.py:10:1: E402 module level import not at top of file
+load_data.py:11:1: E402 module level import not at top of file
+load_data.py:12:1: E402 module level import not at top of file
+load_data.py:12:80: E501 line too long (81 > 79 characters)
+load_data.py:13:1: E402 module level import not at top of file
+load_data.py:51:1: W293 blank line contains whitespace
+load_data.py:52:80: E501 line too long (168 > 79 characters)
+load_data.py:64:80: E501 line too long (82 > 79 characters)
+load_data.py:82:80: E501 line too long (94 > 79 characters)
+load_data.py:83:1: W293 blank line contains whitespace
+load_data.py:89:80: E501 line too long (80 > 79 characters)

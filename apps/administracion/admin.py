@@ -16,9 +16,7 @@ class AlumnoAdmin(ImportExportModelAdmin, ExportActionMixin):
     search_fields=['apellidoPaterno', 'apellidoMaterno', 'nombre']
     list_display = ('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno', 'nivelEscolar', 'direccion', 'email', 'telefono', 'escuela', 'tipoEncargado', 'nombreEncargado', 'emailEncargado', 'telefonoEncargado')
     list_filter = ('escuela',)
-    
-    change_list_template  = "admin/import_export/change_list_import.html"
-    
+
    
     #Para excluir formatos que no se utilizan.
     def get_export_formats(self):
