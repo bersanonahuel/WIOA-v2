@@ -25,9 +25,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-dz$znx1th&d_3b=80g74e7r(gbzqpj&(js^pr4+$eqhgblpxfv'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['192.168.0.126', '127.0.0.1']
+ALLOWED_HOSTS = ['wioav2.nserver.space', 'localhost', '127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['https://wioav2.nserver.space']
+
+# Confía en el encabezado del proxy reverso de Lorenzo para saber que estamos usando HTTPS
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 # Application definition
@@ -53,6 +57,7 @@ SILENCED_SYSTEM_CHECKS = ["security.W019"]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -88,14 +93,22 @@ WSGI_APPLICATION = 'WIOA.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'wioa',
-        'USER':'root',
-        'PASSWORD':'root',
-        'HOST': 'localhost',
-        'PORT':3307,
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# Configuración para PostgreSQL en Producción (Descomentar y completar o usar variables de entorno)
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'wioa_db',          # Nombre de tu base de datos postgres
+#         'USER': 'postgres',         # Tu usuario postgres
+#         'PASSWORD': 'password',     # Tu contraseña postgres
+#         'HOST': 'localhost',        # o el nombre del contenedor de la BD (ej: 'db')
+#         'PORT': '5432',
+#     }
+# }
 
 
 # Password validation
@@ -142,6 +155,9 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
+
+# Compresión y manejo de caché de archivos estáticos en producción usando WhiteNoise
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
