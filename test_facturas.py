@@ -1,6 +1,10 @@
 import os
 import sys
 from unittest.mock import MagicMock
+
+# Mock whitenoise and weasyprint for testing environment
+sys.modules["whitenoise"] = MagicMock()
+sys.modules["whitenoise.middleware"] = MagicMock()
 sys.modules["weasyprint"] = MagicMock()
 
 base_dir = os.path.dirname(os.path.abspath(__file__))

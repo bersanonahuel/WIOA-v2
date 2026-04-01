@@ -51,7 +51,7 @@ class CrearRegistro(CreateView):
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        if request.is_ajax():
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             data = {}
             try:
                 action = request.POST['action']
@@ -125,7 +125,7 @@ class ListarRegistro(ListView):
         else:
             registro_filter = RegistroFilter(request.GET, queryset=Registro.objects.filter(usuario=self.request.user), request=self.request)
         
-        if request.is_ajax():
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             data = {}
             try:
                 action = request.GET['action']
@@ -199,7 +199,7 @@ class ListarRegistroPorProyecto(ListView):
 
             i = i + 1
 
-        if request.is_ajax():
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             data = {}
             try:
                 action = request.GET['action']
@@ -343,7 +343,7 @@ class EliminarRegistroDetalle(DeleteView):
     model = RegistroDetalle
 
     def delete(self, request, *args, **kwargs):
-        if request.is_ajax():
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             registroDetalle = self.get_object()
 
             registroDetalle.delete()
@@ -365,7 +365,7 @@ class CrearRegistroDetalleMasivo(CreateView):
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        if request.is_ajax():
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             data = {}
             try:
                 action = request.POST['action']
@@ -491,7 +491,7 @@ class CrearFactura(CreateView):
         error = None
         mensaje = None
         
-        if request.is_ajax():
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             data = {}
             try:
                 action = request.POST['action']

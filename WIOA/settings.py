@@ -25,7 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-dz$znx1th&d_3b=80g74e7r(gbzqpj&(js^pr4+$eqhgblpxfv'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+# Autodetecta el entorno: si es Windows (local) DEBUG=True, si es Linux (servidor) DEBUG=False
+import os
+DEBUG = os.environ.get('DEBUG', str(os.name == 'nt')) == 'True'
 
 ALLOWED_HOSTS = ['wioav2.nserver.space', 'localhost', '127.0.0.1']
 CSRF_TRUSTED_ORIGINS = ['https://wioav2.nserver.space']
@@ -159,7 +161,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
 
 # Compresión y manejo de caché de archivos estáticos en producción usando WhiteNoise
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
