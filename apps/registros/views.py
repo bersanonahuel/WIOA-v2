@@ -542,6 +542,10 @@ class CrearFactura(CreateView):
                     hsFacturadasServicio = 0
 
                     sp = ServiciosProyecto.objects.filter(proyecto=proyectoSelId, servicio=serv).first()
+                    if not sp:
+                         messages.error(self.request, f'No se encontró el servicio con ID {serv} para el proyecto seleccionado.')
+                         return render(request, CREAR_FACTURA_FILE, {'form':form, 'proyectos': Proyecto.objects.all()})
+
                     totalHorasSP = (sp.total_horas * sp.cantidad_participantes * 3600)
 
                     hsFacturadasServicio = calcular_horas_facturadas_proyecto(proyectoSelId, serv)
@@ -639,18 +643,18 @@ class PrintPdf(View):
         registrosDetalle = dict()
         registrosDetalle = RegistroDetalle.objects.filter(factura=facturaInstance.id).order_by('usuario', 'registro', 'fechaHoraInicio')
         
-        diffMiliseg = registrosDetalle.values('registro_id').order_by('registro_id').annotate(timesDif = ExpressionWrapper( (F("fechaHoraFin") - F("fechaHoraInicio")), output_field=DecimalField()) )
-        #diffMiliseg = registrosDetalle.values('registro_id').order_by('registro_id').annotate(timesDif = ExpressionWrapper( (F("fechaHoraFin") - F("fechaHoraInicio"))/1000, output_field=DecimalField()) )
-        #sumaTiempoPorRegistro = diffMiliseg.values('registro_id', 'registro__alumno__nombre', 'registro__alumno__apellidoPaterno', 'registro__alumno__apellidoMaterno', servicio=F('registro__proyecto_servicio__servicio__nombre'), escuela=F('registro__alumno__escuela__nombre')).order_by('registro_id').annotate(tiempo= ExpressionWrapper((((Sum('timesDif'))/3600)/1000), output_field=FloatField())).order_by('registro__alumno__nombre')
-        sumaTiempoPorRegistro = diffMiliseg.values('registro_id', 'registro__alumno__nombre', 'registro__alumno__apellidoPaterno', 'registro__alumno__apellidoMaterno', servicio=F('registro__proyecto_servicio__servicio__nombre'), escuela=F('registro__alumno__escuela__nombre')).order_by('registro_id').annotate(tiempo= ExpressionWrapper(Sum('timesDif'), output_field=DecimalField())).order_by('registro__alumno__nombre')
+        # Usar DurationField para cálculos de tiempo internos
+        diffMiliseg = registrosDetalle.values('registro_id').order_by('registro_id').annotate(timesDif = ExpressionWrapper( (F("fechaHoraFin") - F("fechaHoraInicio")), output_field=models.DurationField()) )
+        sumaTiempoPorRegistro = diffMiliseg.values('registro_id', 'registro__alumno__nombre', 'registro__alumno__apellidoPaterno', 'registro__alumno__apellidoMaterno', servicio=F('registro__proyecto_servicio__servicio__nombre'), escuela=F('registro__alumno__escuela__nombre')).order_by('registro_id').annotate(tiempo= Sum('timesDif')).order_by('registro__alumno__nombre')
         
         usuariosList = RegistroDetalle.objects.filter(factura=facturaInstance.id).values('usuario', 'usuario__first_name', 'usuario__last_name').distinct()
         
         #Total participantes Matriculados
         #totalParticipantesMatriculados = facturaInstance.proyectosServicios.all().aggregate(total=Sum('cantidad_participantes'))
         totalParticipantesMatriculados = 0
-        if facturaInstance.proyectosServicios.all().first():
-            totalParticipantesMatriculados = facturaInstance.proyectosServicios.all().first().cantidad_participantes    
+        sp_first = facturaInstance.proyectosServicios.all().first()
+        if sp_first:
+            totalParticipantesMatriculados = sp_first.cantidad_participantes    
         
         # ······ Detalle de Hs por MES
         registrosPorMes = dict()
@@ -785,7 +789,8 @@ class PrintPdf(View):
         subtotal = regDetServicio['tutoriaPrecio'] + regDetServicio['mentoriaPrecio'] + regDetServicio['conserjeriaPrecio'] + regDetServicio['jsPrecio'] + regDetServicio['seguimientoPrecio']
 
         tax = Decimal(0.0)
-        tax = facturaInstance.impuesto.porcentaje
+        if facturaInstance.impuesto:
+            tax = facturaInstance.impuesto.porcentaje
         
         precioTax = round(subtotal * (tax/100), 2)
         total = subtotal + precioTax
@@ -813,9 +818,14 @@ class PrintPdf(View):
 
         html_template = template.render(context)
         
-        pdf = HTML(string=html_template, base_url=request.build_absolute_uri()).write_pdf()
-
-        return HttpResponse(pdf, content_type='application/pdf')
+        try:
+            pdf = HTML(string=html_template, base_url=request.build_absolute_uri()).write_pdf()
+            return HttpResponse(pdf, content_type='application/pdf')
+        except Exception as e:
+            import traceback
+            error_msg = f"Error al generar el PDF: {str(e)}\n{traceback.format_exc()}"
+            print(error_msg)
+            return HttpResponse(f"Ha ocurrido un error al generar el PDF. Informe al administrador.\nDetalle: {str(e)}", status=500)
 
 class DescargarExcelRegistros(TemplateView):
     def get(self, request, *args, **kwargs):
@@ -823,7 +833,8 @@ class DescargarExcelRegistros(TemplateView):
         
         registrosDetalle = RegistroDetalle.objects.filter(registro__in=registro_filter.qs).order_by('registro', 'fechaHoraInicio')
         
-        diffMiliseg = registrosDetalle.values('registro_id').order_by('registro_id').annotate(timesDif = ExpressionWrapper( (F("fechaHoraFin") - F("fechaHoraInicio")), output_field=DecimalField()) )
+        # Usar DurationField para cálculos de tiempo internos
+        diffMiliseg = registrosDetalle.values('registro_id').order_by('registro_id').annotate(timesDif = ExpressionWrapper( (F("fechaHoraFin") - F("fechaHoraInicio")), output_field=models.DurationField()) )
         sumaTiempoPorRegistro = diffMiliseg.values('registro_id', 'registro__alumno__nombre', 'registro__alumno__apellidoPaterno', 'registro__alumno__apellidoMaterno', 'timesDif', 'fechaHoraInicio', 'fechaHoraFin', servicio=F('registro__proyecto_servicio__servicio__nombre'), proyecto=F('registro__proyecto_servicio__proyecto__nombre'), escuela=F('registro__alumno__escuela__nombre')).order_by('registro__alumno__nombre')
         
         #Creamos el libro de trabajo
@@ -873,7 +884,7 @@ class DescargarExcelRegistros(TemplateView):
             ws.cell(row=row,column=6).value = reg['registro__alumno__nombre'] + ' ' + reg['registro__alumno__apellidoPaterno'] + ' ' + reg['registro__alumno__apellidoMaterno']
             ws.cell(row=row,column=7).value = reg['fechaHoraInicio']
             ws.cell(row=row,column=8).value = reg['fechaHoraFin']
-            ws.cell(row=row,column=9).value = convertir_tiempo(reg['timesDif']/1000000)
+            ws.cell(row=row,column=9).value = convertir_tiempo(reg['timesDif'])
             row = row + 1
 
         # Establecemos el nombre del archivo

@@ -72,8 +72,8 @@ class ServiciosProyecto(models.Model):
 
     #Para el detalle de la factura multiplica la cant de participantes matriculados por el precio x hs.
     def calcular_precio_total(self):
-        total = self.cantidad_participantes * self.precio_por_hora
-        return round(total, 2)
+        total = self.cantidad_participantes * self.precio_por_hora_participante
+        return round(float(total), 2)
     
     #Para el detalle de la factura multiplica la cant de participantes servidos por el precio x hs.
     def calcular_precio_total_participantes(cantPart, precioPorHora):
@@ -93,4 +93,6 @@ class ServiciosProyecto(models.Model):
     
     #Cuando la facturacion es por participante, pero no completo sus horas totales del proyecto, hay sacar el calculo de cada participante por hora.
     def calcular_precio_por_hora(self):
+        if self.total_horas == 0:
+            return Decimal(0.0)
         return round(self.precio_por_hora_participante / self.total_horas, 2)

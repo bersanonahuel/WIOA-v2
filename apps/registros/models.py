@@ -61,14 +61,12 @@ class Registro(models.Model):
 
     usuario = models.ForeignKey(User, on_delete=models.PROTECT, blank=False, null=False)
 
-    def calcular_total_horas_por_alumno(self):
-        segundos = 0
-        for det in RegistroDetalle.objects.filter(registro=self):
-            timediff = (det.fechaHoraFin - det.fechaHoraInicio)
-            segundos+=timediff.seconds
-        
-        tiempo = convertir_tiempo(segundos)
+    def __str__(self):
+        return f"{self.proyecto_servicio} - {self.alumno}"
 
+    def calcular_total_horas_por_alumno(self):
+        segundos = self.calcular_total_horas_registradas_por_alumno()
+        tiempo = convertir_tiempo(segundos)
         return tiempo
 
     def calcular_total_horas_faltantes_por_alumno(self):
@@ -89,7 +87,7 @@ class Registro(models.Model):
         segundosRegistrado = 0
         for det in RegistroDetalle.objects.filter(registro=self):
             timediff = (det.fechaHoraFin - det.fechaHoraInicio)
-            segundosRegistrado+=timediff.seconds
+            segundosRegistrado += int(timediff.total_seconds())
         
         return segundosRegistrado
     
@@ -103,46 +101,46 @@ class RegistroDetalle(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.PROTECT, blank=False, null=False)
     comentario = models.CharField(max_length=400, blank=True, null=True)
 
+    def __str__(self):
+        return f"{self.registro}"
 
     def calcular_total_hs_detalle(self):
         timediff = (self.fechaHoraFin - self.fechaHoraInicio)
-        segundos = timediff.seconds
-
+        segundos = int(timediff.total_seconds())
         tiempo = convertir_tiempo(segundos)
-
         return tiempo
     
     def calcular_total_hs_segundos_detalle(self):
         timediff = (self.fechaHoraFin - self.fechaHoraInicio)
-        segundos = timediff.seconds
-
+        segundos = int(timediff.total_seconds())
         return segundos
 
-#Convierte segundos al formato hh:mm:ss
+# Convierte segundos o timedelta al formato hh:mm:ss
 def convertir_tiempo(segundos):
+    if segundos is None:
+        return '00:00'
+    
+    if hasattr(segundos, 'total_seconds'):
+        segundos = int(segundos.total_seconds())
+    
     horas = segundos // 3600
-    if horas < 10:
-        horas = '0'+horas.__str__()
+    horas_str = str(horas).zfill(2)
 
     minutos = (segundos % 3600) // 60
-    if minutos < 10:
-        minutos = '0'+minutos.__str__()
+    minutos_str = str(minutos).zfill(2)
 
-    segundos = segundos % 60
-    if segundos < 10:
-        segundos = '0'+segundos.__str__()
+    seg_restantes = segundos % 60
+    seg_str = str(seg_restantes).zfill(2)
 
-    tiempo = horas.__str__()+':'+minutos.__str__() #+':'+segundos.__str__()
-
+    tiempo = f"{horas_str}:{minutos_str}" #+':'+seg_str
     return tiempo
 
-#Convertir segundos a hs con decimales, para multiplicar por precio.
+# Convertir segundos a hs con decimales, para multiplicar por precio.
 def convertir_tiempo_decimal(segundos):
-    horas = segundos // 3600
-    minutos = (segundos % 3600) // 60
+    if segundos is None:
+        return Decimal(0.0)
     
-    minutos = minutos / 60
-
-    suma = horas + minutos
-
-    return Decimal(suma)
+    if hasattr(segundos, 'total_seconds'):
+        segundos = segundos.total_seconds()
+        
+    return Decimal(segundos) / Decimal(3600)
