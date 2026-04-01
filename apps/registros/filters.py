@@ -36,7 +36,8 @@ class RegistroFilter(django_filters.FilterSet):
     )
     
     class Meta:
-        model: Registro
+        model = Registro
+        fields = []
 
 class FacturaFilter(django_filters.FilterSet):
     fechaCreacion = django_filters.DateTimeFromToRangeFilter(
@@ -49,6 +50,6 @@ class FacturaFilter(django_filters.FilterSet):
         label='Rango de Fechas'
     )
     
-    
     class Meta:
-        model: Factura
+        model = Factura
+        fields = []
