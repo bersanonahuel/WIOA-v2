@@ -1,0 +1,56 @@
+
+[*] Command: echo 'c0i1uhIPrEpu' | sudo -S systemctl status gunicorn
+STDOUT:
+× gunicorn.service - gunicorn daemon
+     Loaded: loaded (/etc/systemd/system/gunicorn.service; enabled; preset: enabled)
+     Active: failed (Result: exit-code) since Sat 2026-03-21 02:31:02 UTC; 14min ago
+   Duration: 5.217s
+    Process: 37498 ExecStart=/var/www/wioa/venv/bin/gunicorn --access-logfile - --workers 3 --bind unix:/run/gunicorn.sock WIOA.wsgi:application (code=exited, status=1/FAILURE)
+   Main PID: 37498 (code=exited, status=1/FAILURE)
+        CPU: 214ms
+
+Mar 21 02:30:57 wioav2 systemd[1]: Started gunicorn.service - gunicorn daemon.
+Mar 21 02:30:57 wioav2 gunicorn[37498]: [2026-03-21 02:30:57 +0000] [37498] [INFO] Starting gunicorn 25.1.0
+Mar 21 02:30:57 wioav2 gunicorn[37498]: [2026-03-21 02:30:57 +0000] [37498] [ERROR] connection to /run/gunicorn.sock failed: [Errno 13] Permission denied
+Mar 21 02:30:58 wioav2 gunicorn[37498]: [2026-03-21 02:30:58 +0000] [37498] [ERROR] connection to /run/gunicorn.sock failed: [Errno 13] Permission denied
+Mar 21 02:30:59 wioav2 gunicorn[37498]: [2026-03-21 02:30:59 +0000] [37498] [ERROR] connection to /run/gunicorn.sock failed: [Errno 13] Permission denied
+Mar 21 02:31:00 wioav2 gunicorn[37498]: [2026-03-21 02:31:00 +0000] [37498] [ERROR] connection to /run/gunicorn.sock failed: [Errno 13] Permission denied
+Mar 21 02:31:01 wioav2 gunicorn[37498]: [2026-03-21 02:31:01 +0000] [37498] [ERROR] connection to /run/gunicorn.sock failed: [Errno 13] Permission denied
+Mar 21 02:31:02 wioav2 gunicorn[37498]: [2026-03-21 02:31:02 +0000] [37498] [ERROR] Can't connect to /run/gunicorn.sock
+Mar 21 02:31:02 wioav2 systemd[1]: gunicorn.service: Main process exited, code=exited, status=1/FAILURE
+Mar 21 02:31:02 wioav2 systemd[1]: gunicorn.service: Failed with result 'exit-code'.
+STDERR:
+Could not chdir to home directory /home/wioa: No such file or directory
+[sudo] password for wioa:
+----------------------------------------
+
+[*] Command: echo 'c0i1uhIPrEpu' | sudo -S journalctl -u gunicorn -n 100 --no-pager
+STDOUT:
+Mar 21 02:30:57 wioav2 systemd[1]: Started gunicorn.service - gunicorn daemon.
+Mar 21 02:30:57 wioav2 gunicorn[37498]: [2026-03-21 02:30:57 +0000] [37498] [INFO] Starting gunicorn 25.1.0
+Mar 21 02:30:57 wioav2 gunicorn[37498]: [2026-03-21 02:30:57 +0000] [37498] [ERROR] connection to /run/gunicorn.sock failed: [Errno 13] Permission denied
+Mar 21 02:30:58 wioav2 gunicorn[37498]: [2026-03-21 02:30:58 +0000] [37498] [ERROR] connection to /run/gunicorn.sock failed: [Errno 13] Permission denied
+Mar 21 02:30:59 wioav2 gunicorn[37498]: [2026-03-21 02:30:59 +0000] [37498] [ERROR] connection to /run/gunicorn.sock failed: [Errno 13] Permission denied
+Mar 21 02:31:00 wioav2 gunicorn[37498]: [2026-03-21 02:31:00 +0000] [37498] [ERROR] connection to /run/gunicorn.sock failed: [Errno 13] Permission denied
+Mar 21 02:31:01 wioav2 gunicorn[37498]: [2026-03-21 02:31:01 +0000] [37498] [ERROR] connection to /run/gunicorn.sock failed: [Errno 13] Permission denied
+Mar 21 02:31:02 wioav2 gunicorn[37498]: [2026-03-21 02:31:02 +0000] [37498] [ERROR] Can't connect to /run/gunicorn.sock
+Mar 21 02:31:02 wioav2 systemd[1]: gunicorn.service: Main process exited, code=exited, status=1/FAILURE
+Mar 21 02:31:02 wioav2 systemd[1]: gunicorn.service: Failed with result 'exit-code'.
+STDERR:
+Could not chdir to home directory /home/wioa: No such file or directory
+[sudo] password for wioa:
+----------------------------------------
+
+[*] Command: ls -la /run/gunic*
+STDERR:
+Could not chdir to home directory /home/wioa: No such file or directory
+ls: cannot access '/run/gunic*': No such file or directory
+----------------------------------------
+
+[*] Command: ls -la /var/www/wioa/venv/bin/guni*
+STDOUT:
+-rwxrwxr-x 1 wioa wioa 179 Mar 21 02:26 /var/www/wioa/venv/bin/gunicorn
+-rwxrwxr-x 1 wioa wioa 177 Mar 21 02:26 /var/www/wioa/venv/bin/gunicornc
+STDERR:
+Could not chdir to home directory /home/wioa: No such file or directory
+----------------------------------------

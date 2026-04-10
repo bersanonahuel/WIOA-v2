@@ -1,4 +1,6 @@
 var date_range=null;
+var last_start_date = null;
+var last_end_date = null;
 
 function set_fechas(inicio, fin){
   if (inicio != null){
@@ -11,11 +13,18 @@ function set_fechas(inicio, fin){
 
 $(function() {
   
+  var stored_start = localStorage.getItem('last_start_date');
+  var stored_end = localStorage.getItem('last_end_date');
+  if(stored_start) last_start_date = moment(stored_start);
+  if(stored_end) last_end_date = moment(stored_end);
+
   //##### DATE TIME PICKER REGISTRO HORAS #####
-  $('.reservationtime').daterangepicker({
+  var $reservationTime = $('.reservationtime');
+  
+  $reservationTime.daterangepicker({
     timePicker: true,
-    startDate: moment(),
-    endDate: moment().add(1, 'hour'),
+    startDate: last_start_date ? last_start_date : moment(),
+    endDate: last_end_date ? last_end_date : moment().add(1, 'hour'),
     autoUpdateInput: false,
     locale: {
       format: 'MM-DD-YYYY hh:mm a',
@@ -23,9 +32,21 @@ $(function() {
       cancelLabel:'<i class="fa fa-times"></i> Cancelar',
     }
   });
-  $('.reservationtime').on('apply.daterangepicker', function(ev, picker) {
+
+  if (last_start_date && last_end_date) {
+    $reservationTime.val(last_start_date.format('MM-DD-YYYY hh:mm a') + ' - ' + last_end_date.format('MM-DD-YYYY hh:mm a'));
+    set_fechas(last_start_date.format('YYYY-MM-DD HH:mm'), last_end_date.format('YYYY-MM-DD HH:mm'));
+  }
+
+  $reservationTime.on('apply.daterangepicker', function(ev, picker) {
       $(this).val(picker.startDate.format('MM-DD-YYYY hh:mm a') + ' - ' + picker.endDate.format('MM-DD-YYYY hh:mm a'));
       date_range = picker;
+      // Recordar ultima fecha usada
+      last_start_date = picker.startDate.clone();
+      last_end_date = picker.endDate.clone();
+      localStorage.setItem('last_start_date', picker.startDate.toISOString());
+      localStorage.setItem('last_end_date', picker.endDate.toISOString());
+      
       set_fechas(date_range.startDate.format('YYYY-MM-DD HH:mm'), date_range.endDate.format('YYYY-MM-DD HH:mm'));
       //Desp que selecciona la fecha habilito el boton para crear.
       let inicio = date_range.startDate.format('YYYY-MM-DD');
@@ -165,10 +186,23 @@ $(function() {
       }
       else{         
         var selectAlumnosFilter = selectAlumnos.classList.contains('alumnoRegistroFilter');
-        //var idPS = $('#id_proyecto_servicio.proyectoServicioFilter').val();
         var idProy = $('#id_proyecto_servicio__proyecto.proyectoRegistroFilter').val();
         if(selectAlumnosFilter){ //Para el Filtro en listarRegistros. Para que liste solo los alumnos del Proyecto seleccionado.
-          if(idProy) getAlumnosDelProyecto(null, idProy, 'GET');
+          if(idProy) {
+             getAlumnosDelProyecto(null, idProy, 'GET');
+          } else {
+             // Limpiar posibles duplicados nativos en el HTML del filtro si no hay ningun proyecto
+             var seen = {};
+             $('#id_alumno option').each(function() {
+                 var txt = $(this).text().trim();
+                 if(txt === '---------') return;
+                 if (seen[txt]) {
+                     $(this).remove();
+                 } else {
+                     seen[txt] = true;
+                 }
+             });
+          }
         }
       }
     }
@@ -188,14 +222,25 @@ $(function() {
   function cargarCombo(combo, datos){
     var $combo = $(combo);
     var nombre = '';
+    var setNombres = new Set();
+    // Primero vaciar para evitar duplicados
+    $combo.find('option:not(:first)').remove();
     
     for(var i=0; i < datos.length; i++){
-      nombre = datos[i].nombre +' '+ datos[i].apellidoPaterno;
+      nombre = datos[i].nombre;
+      if (datos[i].apellidoPaterno) {
+        nombre = nombre + ' ' + datos[i].apellidoPaterno;
+      }
       if(datos[i].apellidoMaterno){
         nombre = nombre +' '+ datos[i].apellidoMaterno;
       }
-      // Use the Select2 documented way to add options dynamically
-      $combo.append(new Option(nombre, datos[i].id, false, false));
+      nombre = nombre.trim();
+      
+      if (!setNombres.has(nombre)) {
+        setNombres.add(nombre);
+        // Use the Select2 documented way to add options dynamically
+        $combo.append(new Option(nombre, datos[i].id, false, false));
+      }
     }
     // This trigger('change') tells Select2 to re-read the underlying select element
     $combo.trigger('change');

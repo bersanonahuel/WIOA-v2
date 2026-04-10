@@ -1,0 +1,133 @@
+
+[*] Command: echo 'c0i1uhIPrEpu' | sudo -S -u postgres psql -d wioa_db -c "SELECT count(*) FROM auth_user;"
+STDOUT:
+count 
+-------
+    14
+(1 row)
+STDERR:
+Could not chdir to home directory /home/wioa: No such file or directory
+[sudo] password for wioa:
+----------------------------------------
+
+[*] Command: cd /var/www/wioa && source venv/bin/activate && python manage.py showmigrations
+STDOUT:
+admin
+ [X] 0001_initial
+ [X] 0002_logentry_remove_auto_add
+ [X] 0003_logentry_add_action_flag_choices
+admin_interface
+ [X] 0001_initial
+ [X] 0002_add_related_modal
+ [X] 0003_add_logo_color
+ [X] 0004_rename_title_color
+ [X] 0005_add_recent_actions_visible
+ [X] 0006_bytes_to_str
+ [X] 0007_add_favicon
+ [X] 0008_change_related_modal_background_opacity_type
+ [X] 0009_add_enviroment
+ [X] 0010_add_localization
+ [X] 0011_add_environment_options
+ [X] 0012_update_verbose_names
+ [X] 0013_add_related_modal_close_button
+ [X] 0014_name_unique
+ [X] 0015_add_language_chooser_active
+ [X] 0016_add_language_chooser_display
+ [X] 0017_change_list_filter_dropdown
+ [X] 0018_theme_list_filter_sticky
+ [X] 0019_add_form_sticky
+ [X] 0020_module_selected_colors
+ [X] 0021_file_extension_validator
+ [X] 0022_add_logo_max_width_and_height
+ [X] 0023_theme_foldable_apps
+ [X] 0024_remove_theme_css
+ [X] 0025_theme_language_chooser_control
+ [X] 0026_theme_list_filter_highlight
+ [X] 0027_theme_list_filter_removal_links
+ [X] 0028_theme_show_fieldsets_as_tabs_and_more
+ [X] 0029_theme_css_generic_link_active_color
+ [X] 0030_theme_collapsible_stacked_inlines_and_more
+ [X] 0031_theme_form_actions_sticky
+ [X] 0032_alter_theme_defaults
+administracion
+ [X] 0001_initial
+ [X] 0002_cliente_proveedor
+ [X] 0003_maestro_usuario
+ [X] 0004_auto_20211119_1413
+ [X] 0005_maestro_cargo
+ [X] 0006_auto_20211119_1417
+ [X] 0007_remove_alumno_escargado_legal
+ [X] 0008_delete_encargadolegal
+ [X] 0009_auto_20211119_1424
+ [X] 0010_auto_20220110_0954
+ [X] 0011_centrogestion
+ [X] 0012_cliente_centrogestion
+ [X] 0013_auto_20220131_0847
+ [X] 0014_auto_20220211_0915
+ [X] 0015_auto_20220317_1043
+auth
+ [X] 0001_initial
+ [X] 0002_alter_permission_name_max_length
+ [X] 0003_alter_user_email_max_length
+ [X] 0004_alter_user_username_opts
+ [X] 0005_alter_user_last_login_null
+ [X] 0006_require_contenttypes_0002
+ [X] 0007_alter_validators_add_error_messages
+ [X] 0008_alter_user_username_max_length
+ [X] 0009_alter_user_last_name_max_length
+ [X] 0010_alter_group_name_max_length
+ [X] 0011_update_proxy_permissions
+ [X] 0012_alter_user_first_name_max_length
+contenttypes
+ [X] 0001_initial
+ [X] 0002_remove_content_type_name
+proyecto
+ [X] 0001_initial
+ [X] 0002_proyecto_serviciosproyecto
+ [X] 0003_auto_20211029_1651
+ [X] 0004_delete_centrogestion
+ [X] 0005_serviciosproyecto_partidapresupuestaria
+ [X] 0006_auto_20220112_0739
+ [X] 0007_auto_20220112_0743
+ [X] 0008_remove_serviciosproyecto_partida_presupuestaria
+ [X] 0009_auto_20220113_0842
+ [X] 0010_auto_20220201_0859
+ [X] 0011_proyecto_logocliente
+ [X] 0012_auto_20220209_1332
+ [X] 0013_auto_20220209_1403
+ [X] 0014_auto_20220215_1135
+ [X] 0015_auto_20220224_0830
+ [X] 0016_auto_20220317_1043
+ [X] 0017_auto_20220906_1016
+ [X] 0018_auto_20220906_1025
+registros
+ [X] 0001_initial
+ [X] 0002_auto_20211029_0956
+ [X] 0003_auto_20211029_1733
+ [X] 0004_auto_20211102_0925
+ [X] 0005_factura
+ [X] 0006_auto_20211126_0931
+ [X] 0007_auto_20211126_1004
+ [X] 0008_factura_proveedor
+ [X] 0009_auto_20211126_1029
+ [X] 0010_auto_20211129_1525
+ [X] 0011_registrodetalle_usuario
+ [X] 0012_auto_20211130_0805
+ [X] 0013_auto_20220110_0954
+ [X] 0014_registrodetalle_comentario
+ [X] 0015_auto_20220110_1118
+ [X] 0016_factura_proyecto_servicio
+ [X] 0017_auto_20220112_0832
+ [X] 0018_auto_20220113_0842
+ [X] 0019_auto_20220131_0847
+ [X] 0020_factura_impuesto
+ [X] 0021_auto_20220131_0940
+ [X] 0022_auto_20220201_0859
+ [X] 0023_auto_20220209_1403
+session
+ (no migrations)
+sessions
+ [X] 0001_initial
+STDERR:
+Could not chdir to home directory /home/wioa: No such file or directory
+----------------------------------------

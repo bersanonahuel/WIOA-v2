@@ -74,7 +74,7 @@ class CrearRegistro(CreateView):
                         if serviciosProyectoSelectId:
                             alumnosConRegistroCreado = Registro.objects.filter(proyecto_servicio=serviciosProyectoSelectId).values_list('alumno_id', flat=True)
 
-                        alumnos = p.alumnos.exclude(pk__in=alumnosConRegistroCreado).values('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno')
+                        alumnos = p.alumnos.exclude(pk__in=alumnosConRegistroCreado).values('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno').distinct()
 
                     else:
                         data['error'] = 'No se seleccionó ningún Proyecto'
@@ -229,10 +229,10 @@ def get_alumnos_del_proyecto(servicioProyectoId, proyectoId, data):
     
     if int(proyecto) > 0:
         p = Proyecto.objects.get(id=proyecto)
-        alumnos = p.alumnos.values('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno')
+        alumnos = p.alumnos.values('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno').distinct()
     else:
         #data['error'] = 'No se seleccionó ningún Proyecto'
-        alumnos = Alumno.objects.all().values('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno')
+        alumnos = Alumno.objects.all().values('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno').distinct()
 
     if alumnos:
         data = { 'alumnos': list(alumnos) }
@@ -350,12 +350,17 @@ class EliminarRegistroDetalle(DeleteView):
 
     def post(self, request, *args, **kwargs):
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            registroDetalle = self.get_object()
-            registroDetalle.delete()
-            res = {
-                'mensaje': 'El detalle se eliminó con éxito.'
-            }
-            return JsonResponse(res, safe=False)
+            try:
+                registroDetalle = self.get_object()
+                registroDetalle.delete()
+                res = {
+                    'mensaje': 'El detalle se eliminó con éxito.'
+                }
+                return JsonResponse(res, safe=False)
+            except django_models.ProtectedError:
+                return JsonResponse({'error': 'No se puede eliminar porque ya se encuentra facturado o protegido.'}, status=400)
+            except Exception as e:
+                return JsonResponse({'error': f'Error al eliminar el registro: {str(e)}'}, status=500)
         return super().post(request, *args, **kwargs)
 
 
@@ -385,7 +390,7 @@ class CrearRegistroDetalleMasivo(CreateView):
                         
                         p = Proyecto.objects.get(id=proyectoId)
                         
-                        alumnos = p.alumnos.values('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno')
+                        alumnos = p.alumnos.values('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno').distinct()
                     
                         if alumnos:
                             data = { 'alumnos': list(alumnos) }

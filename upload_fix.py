@@ -1,0 +1,11 @@
+﻿import paramiko
+client = paramiko.SSHClient()
+client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+client.connect('wioav2.nserver.space', port=2223, username='wioa', password='c0i1uhIPrEpu')
+sftp = client.open_sftp()
+print('Uploading filters.py')
+sftp.put(r'c:\s\Sistema\wiao\wioa\apps\registros\filters.py', '/var/www/wioa/apps/registros/filters.py')
+sftp.close()
+stdin, stdout, stderr = client.exec_command('echo \'c0i1uhIPrEpu\' | sudo -S systemctl restart gunicorn')
+print(stdout.read().decode())
+client.close()

@@ -19,7 +19,7 @@
   <div class="card card-primary">
     <div class="card-header">CREAR REGISTRO</div>
 
-    <form id="formRegistro" method="POST" class="mt-2">
+    <form id="formRegistro" method="POST" class="mt-2" onsubmit="document.getElementById('crearRegistro').disabled = true;">
       {% csrf_token %}
       {% if error %}
         <h2>{{ error }}</h2>

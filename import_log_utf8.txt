@@ -1,0 +1,64 @@
+﻿[DRY-RUN] Arrancando importaci¾n...
+[*] Creando entidades genÚricas...
+
+--> Parseando Estudiante: am3492985@gmail.com
+    [NUEVO] Alumno am3492985@gmail.com  
+
+--> Parseando Estudiante: angeljcasulcruz@gmail.com
+    [NUEVO] Alumno angeljcasulcruz@gmail.com  
+
+--> Parseando Estudiante: crosadorodriguez.08@gmail.com
+    [NUEVO] Alumno crosadorodriguez.08@gmail.com  
+
+--> Parseando Estudiante: hernandezjoc33@gmail.com 
+    [NUEVO] Alumno hernandezjoc33@gmail.com  
+
+--> Parseando Estudiante: jamiletechevarria@gmail.com
+    [NUEVO] Alumno jamiletechevarria@gmail.com  
+
+--> Parseando Estudiante: jennieliz08@gmail.com
+    [NUEVO] Alumno jennieliz08@gmail.com  
+
+--> Parseando Estudiante: mlaraicelis@gmail.com 
+    [NUEVO] Alumno mlaraicelis@gmail.com  
+
+--> Parseando Estudiante: Smarie1215@icloud.com 
+    [NUEVO] Alumno Smarie1215@icloud.com  
+
+--> Parseando Estudiante: sheyleantorres14@gmail.com
+    [NUEVO] Alumno sheyleantorres14@gmail.com  
+
+--> Parseando Estudiante: solmarisrivera22@gmail.com
+    [NUEVO] Alumno solmarisrivera22@gmail.com  
+
+--> Parseando Estudiante: camachotati10@gmail.com 
+    [NUEVO] Alumno camachotati10@gmail.com  
+
+--> Parseando Estudiante: yaritza533@icloud.com
+    [NUEVO] Alumno yaritza533@icloud.com  
+
+--> Parseando Estudiante: 19 de febrero de 2026
+    [NUEVO] Alumno 19 de febrero de 2026
+
+--> Parseando Estudiante: 24 de febrero de 2026
+    [NUEVO] Alumno 24 de febrero de 2026
+
+--> Parseando Estudiante: 26 de febrero de 2026
+    [NUEVO] Alumno 26 de febrero de 2026
+
+--> Parseando Estudiante: 3 de marzo de 2026
+    [NUEVO] Alumno 3 de marzo de 2026
+
+--> Parseando Estudiante: 5 de marzo de 2026
+    [NUEVO] Alumno 5 de marzo de 2026
+
+--> Parseando Estudiante: 10 de marzo de 2026
+    [NUEVO] Alumno 10 de marzo de 2026
+
+--> Parseando Estudiante: 12 de marzo de 2026
+    [NUEVO] Alumno 12 de marzo de 2026
+
+[OK] Analizados 19 estudiantes.
+[OK] Se insertarÝan/insertaron 609 sesiones (RegistroDetalle).
+
+[INFO] DRY RUN finalizado con Úxito. Se revertirßn los cambios. Ejecute con --commit para guardar localmente.

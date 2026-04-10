@@ -1,0 +1,68 @@
+GUNICORN:
+● gunicorn.service - gunicorn daemon
+     Loaded: loaded (/etc/systemd/system/gunicorn.service; enabled; preset: enabled)
+     Active: active (running) since Wed 2026-04-01 22:41:34 UTC; 1min 14s ago
+   Main PID: 119032 (gunicorn)
+      Tasks: 5 (limit: 19095)
+     Memory: 154.2M (peak: 154.5M)
+        CPU: 2.939s
+     CGroup: /system.slice/gunicorn.service
+             ├─119032 /var/www/wioa/venv/bin/python3 /var/www/wioa/venv/bin/gunicorn --access-logfile - --workers 3 --bind unix:/run/gunicorn/gunicorn.sock WIOA.wsgi:application
+             ├─119034 /var/www/wioa/venv/bin/python3 /var/www/wioa/venv/bin/gunicorn --access-logfile - --workers 3 --bind unix:/run/gunicorn/gunicorn.sock WIOA.wsgi:application
+             ├─119035 /var/www/wioa/venv/bin/python3 /var/www/wioa/venv/bin/gunicorn --access-logfile - --workers 3 --bind unix:/run/gunicorn/gunicorn.sock WIOA.wsgi:application
+             └─119036 /var/www/wioa/venv/bin/python3 /var/www/wioa/venv/bin/gunicorn --access-logfile - --workers 3 --bind unix:/run/gunicorn/gunicorn.sock WIOA.wsgi:application
+
+Apr 01 22:41:34 wioav2 systemd[1]: Started gunicorn.service - gunicorn daemon.
+Apr 01 22:41:34 wioav2 gunicorn[119032]: [2026-04-01 22:41:34 +0000] [119032] [INFO] Starting gunicorn 25.1.0
+Apr 01 22:41:34 wioav2 gunicorn[119032]: [2026-04-01 22:41:34 +0000] [119032] [INFO] Listening at: unix:/run/gunicorn/gunicorn.sock (119032)
+Apr 01 22:41:34 wioav2 gunicorn[119032]: [2026-04-01 22:41:34 +0000] [119032] [INFO] Using worker: sync
+Apr 01 22:41:34 wioav2 gunicorn[119032]: [2026-04-01 22:41:34 +0000] [119032] [INFO] Control socket listening at /var/www/wioa/gunicorn.ctl
+Apr 01 22:41:35 wioav2 gunicorn[119035]: [2026-04-01 22:41:35 +0000] [119035] [INFO] Booting worker with pid: 119035
+Apr 01 22:41:35 wioav2 gunicorn[119036]: [2026-04-01 22:41:35 +0000] [119036] [INFO] Booting worker with pid: 119036
+Apr 01 22:42:26 wioav2 gunicorn[119036]:  - - [01/Apr/2026:18:42:26 -0400] "GET / HTTP/1.0" 302 0 "-" "Python-urllib/3.14"
+Apr 01 22:42:26 wioav2 gunicorn[119036]:  - - [01/Apr/2026:18:42:26 -0400] "GET /accounts/login/?next=/ HTTP/1.0" 500 145 "-" "Python-urllib/3.14"
+
+NGINX:
+● nginx.service - A high performance web server and a reverse proxy server
+     Loaded: loaded (/usr/lib/systemd/system/nginx.service; enabled; preset: enabled)
+     Active: active (running) since Tue 2026-03-24 06:55:04 UTC; 1 week 1 day ago
+       Docs: man:nginx(8)
+    Process: 61165 ExecStartPre=/usr/sbin/nginx -t -q -g daemon on; master_process on; (code=exited, status=0/SUCCESS)
+    Process: 61167 ExecStart=/usr/sbin/nginx -g daemon on; master_process on; (code=exited, status=0/SUCCESS)
+   Main PID: 61168 (nginx)
+      Tasks: 7 (limit: 19095)
+     Memory: 13.0M (peak: 15.4M)
+        CPU: 1.001s
+     CGroup: /system.slice/nginx.service
+             ├─61168 "nginx: master process /usr/sbin/nginx -g daemon on; master_process on;"
+             ├─61169 "nginx: worker process"
+             ├─61170 "nginx: worker process"
+             ├─61172 "nginx: worker process"
+             ├─61173 "nginx: worker process"
+             ├─61174 "nginx: worker process"
+             └─61175 "nginx: worker process"
+
+Mar 24 06:55:03 wioav2 systemd[1]: Starting nginx.service - A high performance web server and a reverse proxy server...
+Mar 24 06:55:04 wioav2 systemd[1]: Started nginx.service - A high performance web server and a reverse proxy server.
+
+JOURNAL:
+Apr 01 22:38:02 wioav2 gunicorn[118789]: [2026-04-01 22:38:02 +0000] [118789] [INFO] Booting worker with pid: 118789
+Apr 01 22:41:04 wioav2 systemd[1]: Stopping gunicorn.service - gunicorn daemon...
+Apr 01 22:41:04 wioav2 gunicorn[118789]: [2026-04-01 18:41:04 -0400] [118789] [INFO] Worker exiting (pid: 118789)
+Apr 01 22:41:04 wioav2 gunicorn[118788]: [2026-04-01 18:41:04 -0400] [118788] [INFO] Worker exiting (pid: 118788)
+Apr 01 22:41:04 wioav2 gunicorn[118785]: [2026-04-01 22:41:04 +0000] [118785] [INFO] Handling signal: term
+Apr 01 22:41:04 wioav2 gunicorn[118785]: [2026-04-01 22:41:04 +0000] [118785] [INFO] Worker (pid:118788) was sent SIGTERM!
+Apr 01 22:41:04 wioav2 gunicorn[118785]: [2026-04-01 22:41:04 +0000] [118785] [INFO] Worker (pid:118789) was sent SIGTERM!
+Apr 01 22:41:34 wioav2 gunicorn[118785]: [2026-04-01 22:41:34 +0000] [118785] [INFO] Shutting down: Master
+Apr 01 22:41:34 wioav2 systemd[1]: gunicorn.service: Deactivated successfully.
+Apr 01 22:41:34 wioav2 systemd[1]: Stopped gunicorn.service - gunicorn daemon.
+Apr 01 22:41:34 wioav2 systemd[1]: gunicorn.service: Consumed 1.692s CPU time.
+Apr 01 22:41:34 wioav2 systemd[1]: Started gunicorn.service - gunicorn daemon.
+Apr 01 22:41:34 wioav2 gunicorn[119032]: [2026-04-01 22:41:34 +0000] [119032] [INFO] Starting gunicorn 25.1.0
+Apr 01 22:41:34 wioav2 gunicorn[119032]: [2026-04-01 22:41:34 +0000] [119032] [INFO] Listening at: unix:/run/gunicorn/gunicorn.sock (119032)
+Apr 01 22:41:34 wioav2 gunicorn[119032]: [2026-04-01 22:41:34 +0000] [119032] [INFO] Using worker: sync
+Apr 01 22:41:34 wioav2 gunicorn[119032]: [2026-04-01 22:41:34 +0000] [119032] [INFO] Control socket listening at /var/www/wioa/gunicorn.ctl
+Apr 01 22:41:35 wioav2 gunicorn[119035]: [2026-04-01 22:41:35 +0000] [119035] [INFO] Booting worker with pid: 119035
+Apr 01 22:41:35 wioav2 gunicorn[119036]: [2026-04-01 22:41:35 +0000] [119036] [INFO] Booting worker with pid: 119036
+Apr 01 22:42:26 wioav2 gunicorn[119036]:  - - [01/Apr/2026:18:42:26 -0400] "GET / HTTP/1.0" 302 0 "-" "Python-urllib/3.14"
+Apr 01 22:42:26 wioav2 gunicorn[119036]:  - - [01/Apr/2026:18:42:26 -0400] "GET /accounts/login/?next=/ HTTP/1.0" 500 145 "-" "Python-urllib/3.14"

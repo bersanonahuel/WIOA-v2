@@ -1,0 +1,4 @@
+Could not chdir to home directory /home/wioa: No such file or directory
+[sudo] password for wioa: 2026/03/21 02:29:53 [emerg] 37367#37367: unexpected end of file, expecting ";" or "}" in /etc/nginx/sites-enabled/wioa:2
+nginx: configuration file /etc/nginx/nginx.conf test failed
+

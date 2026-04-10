@@ -70,8 +70,12 @@ function eliminarRegistro(id, url){
                   Swal.hideLoading();
               },
               error: function(jqXHR, textStatus, errorThrown) {
+                  var errorMsg = "Algo salió mal, inténtalo de nuevo más tarde";
+                  if(jqXHR.responseJSON && jqXHR.responseJSON.error) {
+                      errorMsg = jqXHR.responseJSON.error;
+                  }
                   Swal.hideLoading();
-                  Swal.fire("!Opps ", "Algo salió mal, inténtalo de nuevo más tarde", "error");
+                  Swal.fire("¡Opps! ", errorMsg, "error");
               }
           });
       }
@@ -96,4 +100,14 @@ $(document).on('select2:open', (e) => {
     ) {
         value.focus()
     })
+});
+
+// **** MENU PRINCIPAL - TOGGLE SUB-MENUS ****
+$(document).ready(function(){
+    $('#btn-registro').on('click', function(){
+        $('#sub-menu-registro').slideToggle(200);
+    });
+    $('#btn-factura').on('click', function(){
+        $('#sub-menu-factura').slideToggle(200);
+    });
 });

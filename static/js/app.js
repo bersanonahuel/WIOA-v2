@@ -70,8 +70,12 @@ function eliminarRegistro(id, url){
                   Swal.hideLoading();
               },
               error: function(jqXHR, textStatus, errorThrown) {
+                  var errorMsg = "Algo salió mal, inténtalo de nuevo más tarde";
+                  if(jqXHR.responseJSON && jqXHR.responseJSON.error) {
+                      errorMsg = jqXHR.responseJSON.error;
+                  }
                   Swal.hideLoading();
-                  Swal.fire("!Opps ", "Algo salió mal, inténtalo de nuevo más tarde", "error");
+                  Swal.fire("¡Opps! ", errorMsg, "error");
               }
           });
       }

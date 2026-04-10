@@ -1,0 +1,226 @@
+STDOUT:
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	WIOA/__pycache__/__init__.cpython-312.pyc
+	WIOA/__pycache__/settings.cpython-312.pyc
+	WIOA/__pycache__/urls.cpython-312.pyc
+	apps/__pycache__/__init__.cpython-312.pyc
+	apps/administracion/__pycache__/__init__.cpython-312.pyc
+	apps/administracion/__pycache__/admin.cpython-312.pyc
+	apps/administracion/__pycache__/apps.cpython-312.pyc
+	apps/administracion/__pycache__/models.cpython-312.pyc
+	apps/administracion/__pycache__/resources.cpython-312.pyc
+	apps/administracion/__pycache__/urls.cpython-312.pyc
+	apps/administracion/__pycache__/views.cpython-312.pyc
+	apps/administracion/migrations/__pycache__/0001_initial.cpython-312.pyc
+	apps/administracion/migrations/__pycache__/0002_cliente_proveedor.cpython-312.pyc
+	apps/administracion/migrations/__pycache__/0003_maestro_usuario.cpython-312.pyc
+	apps/administracion/migrations/__pycache__/0004_auto_20211119_1413.cpython-312.pyc
+	apps/administracion/migrations/__pycache__/0005_maestro_cargo.cpython-312.pyc
+	apps/administracion/migrations/__pycache__/0006_auto_20211119_1417.cpython-312.pyc
+	apps/administracion/migrations/__pycache__/0007_remove_alumno_escargado_legal.cpython-312.pyc
+	apps/administracion/migrations/__pycache__/0008_delete_encargadolegal.cpython-312.pyc
+	apps/administracion/migrations/__pycache__/0009_auto_20211119_1424.cpython-312.pyc
+	apps/administracion/migrations/__pycache__/0010_auto_20220110_0954.cpython-312.pyc
+	apps/administracion/migrations/__pycache__/0011_centrogestion.cpython-312.pyc
+	apps/administracion/migrations/__pycache__/0012_cliente_centrogestion.cpython-312.pyc
+	apps/administracion/migrations/__pycache__/0013_auto_20220131_0847.cpython-312.pyc
+	apps/administracion/migrations/__pycache__/0014_auto_20220211_0915.cpython-312.pyc
+	apps/administracion/migrations/__pycache__/0015_auto_20220317_1043.cpython-312.pyc
+	apps/administracion/migrations/__pycache__/__init__.cpython-312.pyc
+	apps/proyecto/__pycache__/__init__.cpython-312.pyc
+	apps/proyecto/__pycache__/admin.cpython-312.pyc
+	apps/proyecto/__pycache__/apps.cpython-312.pyc
+	apps/proyecto/__pycache__/models.cpython-312.pyc
+	apps/proyecto/migrations/__pycache__/0001_initial.cpython-312.pyc
+	apps/proyecto/migrations/__pycache__/0002_proyecto_serviciosproyecto.cpython-312.pyc
+	apps/proyecto/migrations/__pycache__/0003_auto_20211029_1651.cpython-312.pyc
+	apps/proyecto/migrations/__pycache__/0004_delete_centrogestion.cpython-312.pyc
+	apps/proyecto/migrations/__pycache__/0005_serviciosproyecto_partidapresupuestaria.cpython-312.pyc
+	apps/proyecto/migrations/__pycache__/0006_auto_20220112_0739.cpython-312.pyc
+	apps/proyecto/migrations/__pycache__/0007_auto_20220112_0743.cpython-312.pyc
+	apps/proyecto/migrations/__pycache__/0008_remove_serviciosproyecto_partida_presupuestaria.cpython-312.pyc
+	apps/proyecto/migrations/__pycache__/0009_auto_20220113_0842.cpython-312.pyc
+	apps/proyecto/migrations/__pycache__/0010_auto_20220201_0859.cpython-312.pyc
+	apps/proyecto/migrations/__pycache__/0011_proyecto_logocliente.cpython-312.pyc
+	apps/proyecto/migrations/__pycache__/0012_auto_20220209_1332.cpython-312.pyc
+	apps/proyecto/migrations/__pycache__/0013_auto_20220209_1403.cpython-312.pyc
+	apps/proyecto/migrations/__pycache__/0014_auto_20220215_1135.cpython-312.pyc
+	apps/proyecto/migrations/__pycache__/0015_auto_20220224_0830.cpython-312.pyc
+	apps/proyecto/migrations/__pycache__/0016_auto_20220317_1043.cpython-312.pyc
+	apps/proyecto/migrations/__pycache__/0017_auto_20220906_1016.cpython-312.pyc
+	apps/proyecto/migrations/__pycache__/0018_auto_20220906_1025.cpython-312.pyc
+	apps/proyecto/migrations/__pycache__/__init__.cpython-312.pyc
+	apps/registros/__pycache__/__init__.cpython-312.pyc
+	apps/registros/__pycache__/admin.cpython-312.pyc
+	apps/registros/__pycache__/apps.cpython-312.pyc
+	apps/registros/__pycache__/filters.cpython-312.pyc
+	apps/registros/__pycache__/forms.cpython-312.pyc
+	apps/registros/__pycache__/models.cpython-312.pyc
+	apps/registros/__pycache__/urls.cpython-312.pyc
+	apps/registros/__pycache__/views.cpython-312.pyc
+	apps/registros/migrations/__pycache__/0001_initial.cpython-312.pyc
+	apps/registros/migrations/__pycache__/0002_auto_20211029_0956.cpython-312.pyc
+	apps/registros/migrations/__pycache__/0003_auto_20211029_1733.cpython-312.pyc
+	apps/registros/migrations/__pycache__/0004_auto_20211102_0925.cpython-312.pyc
+	apps/registros/migrations/__pycache__/0005_factura.cpython-312.pyc
+	apps/registros/migrations/__pycache__/0006_auto_20211126_0931.cpython-312.pyc
+	apps/registros/migrations/__pycache__/0007_auto_20211126_1004.cpython-312.pyc
+	apps/registros/migrations/__pycache__/0008_factura_proveedor.cpython-312.pyc
+	apps/registros/migrations/__pycache__/0009_auto_20211126_1029.cpython-312.pyc
+	apps/registros/migrations/__pycache__/0010_auto_20211129_1525.cpython-312.pyc
+	apps/registros/migrations/__pycache__/0011_registrodetalle_usuario.cpython-312.pyc
+	apps/registros/migrations/__pycache__/0012_auto_20211130_0805.cpython-312.pyc
+	apps/registros/migrations/__pycache__/0013_auto_20220110_0954.cpython-312.pyc
+	apps/registros/migrations/__pycache__/0014_registrodetalle_comentario.cpython-312.pyc
+	apps/registros/migrations/__pycache__/0015_auto_20220110_1118.cpython-312.pyc
+	apps/registros/migrations/__pycache__/0016_factura_proyecto_servicio.cpython-312.pyc
+	apps/registros/migrations/__pycache__/0017_auto_20220112_0832.cpython-312.pyc
+	apps/registros/migrations/__pycache__/0018_auto_20220113_0842.cpython-312.pyc
+	apps/registros/migrations/__pycache__/0019_auto_20220131_0847.cpython-312.pyc
+	apps/registros/migrations/__pycache__/0020_factura_impuesto.cpython-312.pyc
+	apps/registros/migrations/__pycache__/0021_auto_20220131_0940.cpython-312.pyc
+	apps/registros/migrations/__pycache__/0022_auto_20220201_0859.cpython-312.pyc
+	apps/registros/migrations/__pycache__/0023_auto_20220209_1403.cpython-312.pyc
+	apps/registros/migrations/__pycache__/__init__.cpython-312.pyc
+	apps/session/__pycache__/__init__.cpython-312.pyc
+	apps/session/__pycache__/admin.cpython-312.pyc
+	apps/session/__pycache__/apps.cpython-312.pyc
+	apps/session/__pycache__/forms.cpython-312.pyc
+	apps/session/__pycache__/models.cpython-312.pyc
+	apps/session/__pycache__/views.cpython-312.pyc
+	apps/session/migrations/__pycache__/__init__.cpython-312.pyc
+	staticfiles/admin/css/dark_mode.css
+	staticfiles/admin/js/filters.js
+	staticfiles/admin/js/theme.js
+	staticfiles/admin_interface/collapsible-inlines/
+	staticfiles/admin_interface/css/
+	staticfiles/admin_interface/dropdown-filter/
+	staticfiles/admin_interface/favico/favico-env.js
+	staticfiles/admin_interface/language-chooser/
+	staticfiles/admin_interface/related-modal/related-modal.css
+	staticfiles/admin_interface/tabbed-changeform/
+	staticfiles/ckeditor/ckeditor/skins/light/images/hidpi/close.829b1540f684.png
+	staticfiles/ckeditor/ckeditor/skins/light/images/hidpi/lock-open.5d74f87d9094.png
+	staticfiles/ckeditor/ckeditor/skins/light/images/hidpi/lock.432ce2e547c5.png
+	staticfiles/ckeditor/ckeditor/skins/light/images/hidpi/refresh.b2b0dd629761.png
+	staticfiles/colorfield/coloris/
+	staticfiles/img/firma.png
+	staticfiles/import_export/export.css
+	staticfiles/import_export/export_selectable_fields.js
+	staticfiles/import_export/guess_format.js
+	staticfiles/js/admin.js
+	staticfiles/js/registros/reportes.js
+	staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.be84a1412b0a.css
+	staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css.0c10f5e44b64.map
+	staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.3cb2830f8f8a.css
+	staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css.4a625d7ca5b5.map
+	staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.c21e99f64f74.js
+	staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js.0052c79a7285.map
+	staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.eb92a6feac1a.js
+	staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js.d27b7403f598.map
+	staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-switch/css/bootstrap2/bootstrap-switch.e6600efaa90f.css
+	staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-switch/css/bootstrap2/bootstrap-switch.min.f0384ffc3eaa.css
+	staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-switch/css/bootstrap3/bootstrap-switch.bd7a6aa6c77c.css
+	staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-switch/css/bootstrap3/bootstrap-switch.min.17fc6e5330ed.css
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/af.4f6fcd73488c.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/ar.65aa8e36bf5d.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/az.270c257daf81.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/bg.39b8be30d4f0.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/bn.6d42b4dd5665.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/bs.91624382358e.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/build.c9fb9399ed17.txt
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/ca.a166b745933a.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/cs.4f43e8e7d33a.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/da.766346afe4dd.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/de.8a1c222b0204.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/dsb.56372c92d2f1.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/el.27097f071856.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/en.cf932ba09a98.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/es.66dbc2652fb1.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/et.2b96fd98289d.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/eu.adfe5c97b72c.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/fa.3b5bd1961cfd.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/fi.614ec42aa9ba.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/fr.05e0542fcfe6.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/gl.d99b1fedaa86.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/he.e420ff6cd3ed.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/hi.70640d41628f.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/hr.a2b092cc1147.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/hsb.fa3b55265efe.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/hu.6ec6039cb8a3.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/hy.c7babaeef5a6.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/id.04debded514d.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/is.3ddd9a6a97e9.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/it.be4fe8d365b5.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/ja.170ae885d74f.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/ka.2083264a54f0.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/km.c23089cb06ca.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/ko.e7be6c20e673.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/lt.23c7ce903300.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/lv.08e62128eac1.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/mk.dabbb9087130.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/ms.4ba82c9a51ce.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/nb.da2fce143f27.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/ne.3d79fd3f08db.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/nl.997868a37ed8.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/pl.6031b4f16452.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/ps.38dfa47af9e0.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/pt-BR.e1b294433e7f.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/pt.33b4a3b44d43.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/ro.f75cb460ec3b.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/ru.934aa95f5b5f.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/sk.33d02cef8d11.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/sl.131a78bc0752.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/sq.5636b60d29c9.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/sr-Cyrl.f254bb8c4c7c.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/sr.5ed85a48f483.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/sv.7a9c2f71e777.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/th.f38c20b0221b.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/tk.7c572a68c78f.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/tr.b5a0643d1545.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/uk.8cede7f4803c.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/vi.097a5b75b3e1.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/zh-CN.2cff662ec5f9.js
+	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/zh-TW.04554a227c2b.js
+	staticfiles/streamfield/
+	venv/
+
+nothing added to commit but untracked files present (use "git add" to track)
+total 452
+drwxr-xr-x 1 wioa wioa    682 Mar 21 02:27 .
+drwxr-xr-x 1 root root     38 Mar 21 02:21 ..
+drwxrwxr-x 1 wioa wioa    176 Mar 21 02:27 .git
+-rw-rw-r-- 1 wioa wioa     46 Mar 21 02:26 .gitignore
+drwxrwxr-x 1 wioa wioa     22 Mar 21 02:26 .vscode
+-rw-rw-r-- 1 wioa wioa     24 Mar 21 02:26 README.md
+drwxrwxr-x 1 wioa wioa    108 Mar 21 02:26 WIOA
+drwxrwxr-x 1 wioa wioa    120 Mar 21 02:26 apps
+-rw-rw-r-- 1 wioa wioa    842 Mar 21 02:27 clean_junk.py
+-rw-rw-r-- 1 wioa wioa    969 Mar 21 02:27 clean_junk_all.py
+-rw-rw-r-- 1 wioa wioa    728 Mar 21 02:27 clean_numeric_schools.py
+-rw-rw-r-- 1 wioa wioa    579 Mar 21 02:27 create_admin.py
+-rw-rw-r-- 1 wioa wioa 385024 Mar 21 02:27 db.sqlite3
+-rw-rw-r-- 1 wioa wioa    420 Mar 21 02:27 debug_setup.py
+-rw-rw-r-- 1 wioa wioa   1536 Mar 21 02:27 flake8_report.txt
+-rw-rw-r-- 1 wioa wioa   1350 Mar 21 02:27 flake8_report2.txt
+-rw-rw-r-- 1 wioa wioa   1350 Mar 21 02:27 flake8_report3.txt
+-rw-rw-r-- 1 wioa wioa   1140 Mar 21 02:27 flake8_report4.txt
+-rw-rw-r-- 1 wioa wioa   4378 Mar 21 02:27 load_data.py
+-rw-rw-r-- 1 wioa wioa    827 Mar 21 02:27 manage.py
+drwxrwxr-x 1 wioa wioa     40 Mar 21 02:19 media
+-rw-rw-r-- 1 wioa wioa    663 Mar 21 02:27 report_ascii.txt
+-rw-rw-r-- 1 wioa wioa    560 Mar 21 02:27 report_ascii4.txt
+-rw-rw-r-- 1 wioa wioa    169 Mar 21 02:27 requerimientos.txt
+-rw-rw-r-- 1 wioa wioa    160 Mar 21 02:27 requirements.txt
+drwxrwxr-x 1 wioa wioa     42 Mar 21 02:19 static
+drwxrwxr-x 1 wioa wioa    166 Mar 21 02:27 staticfiles
+drwxrwxr-x 1 wioa wioa     90 Mar 21 02:27 templates
+-rw-rw-r-- 1 wioa wioa   3112 Mar 21 02:27 test_facturas.py
+drwxrwxr-x 1 wioa wioa     66 Mar 21 02:26 venv
+
+STDERR:
+Could not chdir to home directory /home/wioa: No such file or directory
