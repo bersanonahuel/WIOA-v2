@@ -348,16 +348,15 @@ class EliminarRegistroDetalle(DeleteView):
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
-    def delete(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             registroDetalle = self.get_object()
-
             registroDetalle.delete()
-            
             res = {
-                'mensaje': 'El detalle se elimino con éxito.'
+                'mensaje': 'El detalle se eliminó con éxito.'
             }
             return JsonResponse(res, safe=False)
+        return super().post(request, *args, **kwargs)
 
 
 class CrearRegistroDetalleMasivo(CreateView):
