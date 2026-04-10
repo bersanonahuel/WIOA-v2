@@ -15,6 +15,7 @@ from .models import *
 from .forms import RegistroForm, RegistroDetalleForm, FacturaForm
 from apps.proyecto.models import ServiciosProyecto, Proyecto, Servicio
 from apps.administracion import models
+from django.db import models as django_models
  
 from datetime import datetime, timedelta
 from decimal import Decimal
@@ -54,17 +55,17 @@ class CrearRegistro(CreateView):
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             data = {}
             try:
-                action = request.POST['action']
+                action = request.POST.get('action')
                 
                 if action == 'getAlumnosDelProyecto':
                     proyectoId = 0
-                    serviciosProyectoSelectId = request.POST['servicioProyectoId']
+                    serviciosProyectoSelectId = request.POST.get('servicioProyectoId')
                     serviciosProyecto = None
                     if serviciosProyectoSelectId:
                         serviciosProyecto = ServiciosProyecto.objects.get(id=serviciosProyectoSelectId)
                         proyectoId = serviciosProyecto.proyecto.id
-                    elif request.POST['proyectoId']:
-                        proyectoId = request.POST['proyectoId']
+                    elif request.POST.get('proyectoId'):
+                        proyectoId = request.POST.get('proyectoId')
                     
                     if proyectoId > 0:
                         p = Proyecto.objects.get(id=proyectoId)
@@ -128,11 +129,11 @@ class ListarRegistro(ListView):
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             data = {}
             try:
-                action = request.GET['action']
+                action = request.GET.get('action')
           
                 if action == 'getAlumnosDelProyecto':
 
-                    data = get_alumnos_del_proyecto(request.GET['servicioProyectoId'], request.GET['proyectoId'], data)
+                    data = get_alumnos_del_proyecto(request.GET.get('servicioProyectoId'), request.GET.get('proyectoId'), data)
 
                 else:
                     data['error'] = 'Ha ocurrido un error'
@@ -202,11 +203,11 @@ class ListarRegistroPorProyecto(ListView):
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             data = {}
             try:
-                action = request.GET['action']
+                action = request.GET.get('action')
           
                 if action == 'getAlumnosDelProyecto':
                                         
-                    data = get_alumnos_del_proyecto(request.GET['servicioProyectoId'], request.GET['proyectoId'], data)
+                    data = get_alumnos_del_proyecto(request.GET.get('servicioProyectoId'), request.GET.get('proyectoId'), data)
 
                 else:
                     data['error'] = 'Ha ocurrido un error'
@@ -231,7 +232,7 @@ def get_alumnos_del_proyecto(servicioProyectoId, proyectoId, data):
         alumnos = p.alumnos.values('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno')
     else:
         #data['error'] = 'No se seleccionó ningún Proyecto'
-        alumnos = Alumnos.objects.all().values('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno')
+        alumnos = Alumno.objects.all().values('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno')
 
     if alumnos:
         data = { 'alumnos': list(alumnos) }
@@ -309,7 +310,7 @@ class CrearRegistroDetalle(CreateView):
             timediff = (fin - inicio)
             hsRegistroActual = timediff.seconds
             
-            if (hsRegistradasAlumno + hsRegistroActual) > totalHorasSP:
+            if sp.total_horas > 0 and (hsRegistradasAlumno + hsRegistroActual) > totalHorasSP:
                 error = 'Las horas que quiere registrar para el participante se exceden del Total de Horas ('+str(sp.total_horas)+') permitidas para este Proyecto y Servicio.'
                 messages.error(self.request, error)
                 context = {
@@ -342,6 +343,11 @@ class CrearRegistroDetalle(CreateView):
 class EliminarRegistroDetalle(DeleteView):
     model = RegistroDetalle
 
+    @method_decorator(csrf_exempt)
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
     def delete(self, request, *args, **kwargs):
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             registroDetalle = self.get_object()
@@ -368,11 +374,11 @@ class CrearRegistroDetalleMasivo(CreateView):
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             data = {}
             try:
-                action = request.POST['action']
+                action = request.POST.get('action')
                 
                 if action == 'getAlumnosDelProyecto':
                     proyectoId = 0
-                    serviciosProyectoSelectId = request.POST['servicioProyectoId']
+                    serviciosProyectoSelectId = request.POST.get('servicioProyectoId')
                     serviciosProyecto = None
                     if serviciosProyectoSelectId:
                         serviciosProyecto = ServiciosProyecto.objects.get(id=serviciosProyectoSelectId)
@@ -449,7 +455,7 @@ class CrearRegistroDetalleMasivo(CreateView):
                 timediff = (fin - inicio)
                 hsRegistroActual = timediff.seconds
                 
-                if (hsRegistradasAlumno + hsRegistroActual) > totalHorasSP:
+                if sp.total_horas > 0 and (hsRegistradasAlumno + hsRegistroActual) > totalHorasSP:
                     error = 'Las horas que quiere registrar para el participante '+ alumnoInstance.nombre + ' ' + alumnoInstance.apellidoPaterno +' se exceden del Total de Horas ('+str(sp.total_horas)+') permitidas para este Proyecto y Servicio.'
                     messages.error(self.request, error)
                     context = {
@@ -494,11 +500,11 @@ class CrearFactura(CreateView):
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             data = {}
             try:
-                action = request.POST['action']
+                action = request.POST.get('action')
                 
                 if action == 'getServiciosDelProyecto':
 
-                    p = Proyecto.objects.get(id=request.POST['proyectoId'])
+                    p = Proyecto.objects.get(id=request.POST.get('proyectoId'))
                     serviciosProyecto = ServiciosProyecto.objects.filter(proyecto=p.id)
                     
                     servicioIds = serviciosProyecto.values_list('servicio_id', flat=True) #.values('id', 'nombre')
@@ -559,7 +565,7 @@ class CrearFactura(CreateView):
                     
                     hsAFacturarServicio = seg
                     
-                    if (hsFacturadasServicio + hsAFacturarServicio) > totalHorasSP:
+                    if sp.total_horas > 0 and sp.cantidad_participantes > 0 and (hsFacturadasServicio + hsAFacturarServicio) > totalHorasSP:
                         error = 'Las horas que quiere facturar se exceden del Total de horas permitidas para el Proyecto "'+ sp.proyecto.nombre +'" y el Servicio "'+ sp.servicio.nombre+'".'
                         messages.error(self.request, error)
                     
@@ -644,7 +650,7 @@ class PrintPdf(View):
         registrosDetalle = RegistroDetalle.objects.filter(factura=facturaInstance.id).order_by('usuario', 'registro', 'fechaHoraInicio')
         
         # Usar DurationField para cálculos de tiempo internos
-        diffMiliseg = registrosDetalle.values('registro_id').order_by('registro_id').annotate(timesDif = ExpressionWrapper( (F("fechaHoraFin") - F("fechaHoraInicio")), output_field=models.DurationField()) )
+        diffMiliseg = registrosDetalle.values('registro_id').order_by('registro_id').annotate(timesDif = ExpressionWrapper( (F("fechaHoraFin") - F("fechaHoraInicio")), output_field=django_models.DurationField()) )
         sumaTiempoPorRegistro = diffMiliseg.values('registro_id', 'registro__alumno__nombre', 'registro__alumno__apellidoPaterno', 'registro__alumno__apellidoMaterno', servicio=F('registro__proyecto_servicio__servicio__nombre'), escuela=F('registro__alumno__escuela__nombre')).order_by('registro_id').annotate(tiempo= Sum('timesDif')).order_by('registro__alumno__nombre')
         
         usuariosList = RegistroDetalle.objects.filter(factura=facturaInstance.id).values('usuario', 'usuario__first_name', 'usuario__last_name').distinct()
@@ -834,7 +840,7 @@ class DescargarExcelRegistros(TemplateView):
         registrosDetalle = RegistroDetalle.objects.filter(registro__in=registro_filter.qs).order_by('registro', 'fechaHoraInicio')
         
         # Usar DurationField para cálculos de tiempo internos
-        diffMiliseg = registrosDetalle.values('registro_id').order_by('registro_id').annotate(timesDif = ExpressionWrapper( (F("fechaHoraFin") - F("fechaHoraInicio")), output_field=models.DurationField()) )
+        diffMiliseg = registrosDetalle.values('registro_id').order_by('registro_id').annotate(timesDif = ExpressionWrapper( (F("fechaHoraFin") - F("fechaHoraInicio")), output_field=django_models.DurationField()) )
         sumaTiempoPorRegistro = diffMiliseg.values('registro_id', 'registro__alumno__nombre', 'registro__alumno__apellidoPaterno', 'registro__alumno__apellidoMaterno', 'timesDif', 'fechaHoraInicio', 'fechaHoraFin', servicio=F('registro__proyecto_servicio__servicio__nombre'), proyecto=F('registro__proyecto_servicio__proyecto__nombre'), escuela=F('registro__alumno__escuela__nombre')).order_by('registro__alumno__nombre')
         
         #Creamos el libro de trabajo

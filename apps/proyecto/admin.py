@@ -13,7 +13,12 @@ class ProyectoAdmin(admin.ModelAdmin):
     def participantes(self, obj):
         return ", ".join([a.nombre +' '+ a.apellidoPaterno for a in obj.alumnos.all()])
 
+from django.db import models
+
 class ServiciosProyectoAdmin(admin.ModelAdmin):
+    formfield_overrides = {
+        models.IntegerField: {'widget': admin.widgets.AdminIntegerFieldWidget(attrs={'min': '0'})},
+    }
     class Media:
         js = (
             '//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js', # jquery

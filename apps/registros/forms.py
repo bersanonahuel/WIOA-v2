@@ -85,6 +85,21 @@ class FacturaForm(forms.ModelForm):
         model = Factura
         fields = '__all__'
 
+    def clean(self):
+        cleaned_data = super().clean()
+        terminosPago = cleaned_data.get('terminosPago')
+        terminosPagoOtro = cleaned_data.get('terminosPagoOtro')
+
+        if terminosPago == 'Other':
+            if not terminosPagoOtro:
+                self.add_error('terminosPagoOtro', 'Este campo es requerido cuando selecciona la opción "Other".')
+        else:
+            cleaned_data['terminosPagoOtro'] = ''
+            if 'terminosPagoOtro' in self._errors:
+                del self._errors['terminosPagoOtro']
+                
+        return cleaned_data
+
         widgets={
             'descripcion': forms.Textarea(
                 attrs = {

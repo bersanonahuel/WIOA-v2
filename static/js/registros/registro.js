@@ -178,22 +178,27 @@ $(function() {
   // **************** FUNCIONES GENERALES **************** //
   function vaciarCombo(combo){
     if(combo){
-      for (var i = combo.length - 1; i > 0; --i) {
-          combo.remove(i);
-      }
+      var $combo = $(combo);
+      // Empty all options except the placeholder and reset the value
+      $combo.find('option:not(:first)').remove();
+      $combo.val(null).trigger('change');
     }
   }
 
   function cargarCombo(combo, datos){
+    var $combo = $(combo);
     var nombre = '';
     
     for(var i=0; i < datos.length; i++){
-      nombre = datos[i].nombre +' '+ datos[i].apellidoPaterno 
+      nombre = datos[i].nombre +' '+ datos[i].apellidoPaterno;
       if(datos[i].apellidoMaterno){
-        nombre = nombre +' '+ datos[i].apellidoMaterno
+        nombre = nombre +' '+ datos[i].apellidoMaterno;
       }
-      combo.add(new Option(nombre, datos[i].id, false, false));
+      // Use the Select2 documented way to add options dynamically
+      $combo.append(new Option(nombre, datos[i].id, false, false));
     }
+    // This trigger('change') tells Select2 to re-read the underlying select element
+    $combo.trigger('change');
   }
   
 });

@@ -97,3 +97,13 @@ $(document).on('select2:open', (e) => {
         value.focus()
     })
 });
+
+// **** MENU PRINCIPAL - TOGGLE SUB-MENUS ****
+$(document).ready(function(){
+    $('#btn-registro').on('click', function(){
+        $('#sub-menu-registro').slideToggle(200);
+    });
+    $('#btn-factura').on('click', function(){
+        $('#sub-menu-factura').slideToggle(200);
+    });
+});
