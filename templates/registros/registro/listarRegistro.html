@@ -45,14 +45,23 @@
                     <td>{{ registro.proyecto_servicio }}</td>
                     <td>{{ registro.alumno }}</td>
                     <td>{{ registro.alumno.escuela.nombre }}</td>
-                    <td class="text-center">{{ registro.proyecto_servicio.total_horas }}</td>
+                    <td class="text-center">
+                        {% if registro.proyecto_servicio.total_horas == 0 %}
+                            ---
+                        {% else %}
+                            {{ registro.proyecto_servicio.total_horas }}
+                        {% endif %}
+                    </td>
                     <td class="text-center">{{ registro.calcular_total_horas_por_alumno}}</td>
                     <td class="text-center">
-                        {% if registro.calcular_total_horas_faltantes_por_alumno == '00:00' %}
+                        {% if registro.proyecto_servicio.total_horas == 0 %}
+                            ---
+                        {% elif registro.calcular_total_horas_faltantes_por_alumno == '00:00' %}
                         <b>100%</b>
                         {% else %}
-                        {{ registro.calcular_total_horas_faltantes_por_alumno }}</td>
+                        {{ registro.calcular_total_horas_faltantes_por_alumno }}
                         {% endif %}
+                    </td>
                     <td> 
                         <a class="btn btn-success btn-sm" href="{% url 'registros:crearRegistroDetalle' registro.id%}"><i class="fa fa-list"></i></a>
                     </td>

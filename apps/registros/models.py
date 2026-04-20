@@ -71,11 +71,10 @@ class Registro(models.Model):
 
     def calcular_total_horas_faltantes_por_alumno(self):
         segundosRegistrado = self.calcular_total_horas_registradas_por_alumno()
-        # for det in RegistroDetalle.objects.filter(registro=self):
-        #     timediff = (det.fechaHoraFin - det.fechaHoraInicio)
-        #     segundosRegistrado+=timediff.seconds
         
         totalHs = self.proyecto_servicio.total_horas
+        if totalHs == 0:
+            return '---'
 
         totalHsEnSegundos = totalHs * 3600
         hsFaltantes = totalHsEnSegundos - segundosRegistrado
