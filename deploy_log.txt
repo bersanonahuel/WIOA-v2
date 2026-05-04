@@ -2,11 +2,531 @@ STDOUT:
 On branch main
 Your branch is up to date with 'origin/main'.
 
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   staticfiles/admin/css/base.css.gz
+	modified:   staticfiles/admin/css/changelists.css.gz
+	modified:   staticfiles/admin/css/forms.css.gz
+	modified:   staticfiles/admin/css/responsive.css.gz
+	modified:   staticfiles/admin/css/vendor/select2/select2.css.gz
+	modified:   staticfiles/admin/css/vendor/select2/select2.min.css.gz
+	modified:   staticfiles/admin/css/widgets.css.gz
+	modified:   staticfiles/admin/js/SelectFilter2.js.gz
+	modified:   staticfiles/admin/js/actions.js.gz
+	modified:   staticfiles/admin/js/admin/DateTimeShortcuts.js.gz
+	modified:   staticfiles/admin/js/admin/RelatedObjectLookups.js.gz
+	modified:   staticfiles/admin/js/calendar.js.gz
+	modified:   staticfiles/admin/js/core.js.gz
+	modified:   staticfiles/admin/js/inlines.js.gz
+	modified:   staticfiles/admin/js/vendor/jquery/jquery.js.gz
+	modified:   staticfiles/admin/js/vendor/jquery/jquery.min.js.gz
+	modified:   staticfiles/admin/js/vendor/select2/select2.full.js.gz
+	modified:   staticfiles/admin/js/vendor/select2/select2.full.min.js.gz
+	modified:   staticfiles/admin/js/vendor/xregexp/xregexp.js.gz
+	modified:   staticfiles/admin/js/vendor/xregexp/xregexp.min.js.gz
+	modified:   staticfiles/admin_interface/css/admin-interface.css.gz
+	modified:   staticfiles/admin_interface/css/changelist.css.gz
+	modified:   staticfiles/admin_interface/css/file-upload.css.gz
+	modified:   staticfiles/admin_interface/css/header.css.gz
+	modified:   staticfiles/admin_interface/css/jquery.ui.tabs.css.gz
+	modified:   staticfiles/admin_interface/css/modules.css.gz
+	modified:   staticfiles/admin_interface/css/third-party/streamfield.css.gz
+	modified:   staticfiles/admin_interface/css/widgets.css.gz
+	modified:   staticfiles/admin_interface/dropdown-filter/dropdown-filter.js.gz
+	modified:   staticfiles/admin_interface/favico/favico-0.3.10-patched.js.gz
+	modified:   staticfiles/admin_interface/favico/favico-0.3.10-patched.min.js.gz
+	modified:   staticfiles/admin_interface/favico/favico-env.js.gz
+	modified:   staticfiles/admin_interface/foldable-apps/foldable-apps.css.gz
+	modified:   staticfiles/admin_interface/foldable-apps/foldable-apps.js.gz
+	modified:   staticfiles/admin_interface/magnific-popup/jquery.magnific-popup.js.gz
+	modified:   staticfiles/admin_interface/magnific-popup/magnific-popup.css.gz
+	modified:   staticfiles/admin_interface/related-modal/related-modal.js.gz
+	modified:   staticfiles/admin_interface/tabbed-changeform/tabbed-changeform.js.gz
+	modified:   staticfiles/ckeditor/ckeditor/skins/light/dialog.css.gz
+	modified:   staticfiles/ckeditor/ckeditor/skins/light/editor.css.gz
+	modified:   staticfiles/ckeditor/ckeditor/skins/light/editor_gecko.css.gz
+	modified:   staticfiles/ckeditor/ckeditor/skins/light/editor_ie.css.gz
+	modified:   staticfiles/ckeditor/ckeditor/skins/light/editor_ie7.css.gz
+	modified:   staticfiles/ckeditor/ckeditor/skins/light/editor_ie8.css.gz
+	modified:   staticfiles/ckeditor/ckeditor/skins/light/skin.js.gz
+	modified:   staticfiles/colorfield/colorfield.js.gz
+	modified:   staticfiles/colorfield/coloris/coloris.css.gz
+	modified:   staticfiles/colorfield/coloris/coloris.js.gz
+	modified:   staticfiles/colorfield/coloris/coloris.min.css.gz
+	modified:   staticfiles/colorfield/coloris/coloris.min.js.gz
+	modified:   staticfiles/css/main.css.br
+	modified:   staticfiles/css/main.css.gz
+	modified:   staticfiles/css/pdf.css.br
+	modified:   staticfiles/css/pdf.css.gz
+	modified:   staticfiles/excel/insert_participantes.xlsx.gz
+	modified:   staticfiles/fonts/Gilroy-ExtraBold.otf.gz
+	modified:   staticfiles/fonts/Gilroy-Light.otf.gz
+	modified:   staticfiles/import_export/export_selectable_fields.js.gz
+	modified:   staticfiles/import_export/guess_format.js.gz
+	modified:   staticfiles/js/admin.js.br
+	modified:   staticfiles/js/admin.js.gz
+	modified:   staticfiles/js/app.js.br
+	modified:   staticfiles/js/app.js.gz
+	modified:   staticfiles/js/factura/factura.js.br
+	modified:   staticfiles/js/factura/factura.js.gz
+	modified:   staticfiles/js/registros/registro.js.br
+	modified:   staticfiles/js/registros/registro.js.gz
+	modified:   staticfiles/js/registros/reportes.js.br
+	modified:   staticfiles/js/registros/reportes.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/css/adminlte.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/css/adminlte.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/css/adminlte.css.map.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/css/adminlte.min.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/css/adminlte.min.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/css/adminlte.min.css.map.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/css/alt/adminlte.components.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/css/alt/adminlte.components.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/css/alt/adminlte.components.css.map.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/css/alt/adminlte.components.min.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/css/alt/adminlte.components.min.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/css/alt/adminlte.components.min.css.map.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/css/alt/adminlte.core.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/css/alt/adminlte.core.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/css/alt/adminlte.core.css.map.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/css/alt/adminlte.core.min.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/css/alt/adminlte.core.min.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/css/alt/adminlte.core.min.css.map.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/css/alt/adminlte.extra-components.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/css/alt/adminlte.extra-components.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/css/alt/adminlte.extra-components.css.map.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/css/alt/adminlte.extra-components.min.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/css/alt/adminlte.extra-components.min.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/css/alt/adminlte.extra-components.min.css.map.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/css/alt/adminlte.pages.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/css/alt/adminlte.pages.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/css/alt/adminlte.pages.css.map.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/css/alt/adminlte.pages.min.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/css/alt/adminlte.pages.min.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/css/alt/adminlte.pages.min.css.map.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/css/alt/adminlte.plugins.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/css/alt/adminlte.plugins.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/css/alt/adminlte.plugins.css.map.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/css/alt/adminlte.plugins.min.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/css/alt/adminlte.plugins.min.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/css/alt/adminlte.plugins.min.css.map.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/js/adminlte.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/js/adminlte.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/js/adminlte.js.map.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/js/adminlte.min.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/js/adminlte.min.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/js/adminlte.min.js.map.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/js/demo.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/js/demo.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/js/pages/dashboard.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/js/pages/dashboard.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/js/pages/dashboard2.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/js/pages/dashboard2.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/js/pages/dashboard3.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/js/pages/dashboard3.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css.map.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css.map.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js.map.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js.map.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-slider/bootstrap-slider.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-slider/bootstrap-slider.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-slider/bootstrap-slider.min.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-slider/bootstrap-slider.min.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-slider/css/bootstrap-slider.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-slider/css/bootstrap-slider.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-slider/css/bootstrap-slider.min.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-slider/css/bootstrap-slider.min.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-switch/css/bootstrap2/bootstrap-switch.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-switch/css/bootstrap2/bootstrap-switch.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-switch/css/bootstrap2/bootstrap-switch.min.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-switch/css/bootstrap2/bootstrap-switch.min.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-switch/css/bootstrap3/bootstrap-switch.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-switch/css/bootstrap3/bootstrap-switch.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-switch/css/bootstrap3/bootstrap-switch.min.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-switch/css/bootstrap3/bootstrap-switch.min.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-switch/js/bootstrap-switch.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-switch/js/bootstrap-switch.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-switch/js/bootstrap-switch.min.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-switch/js/bootstrap-switch.min.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap/js/bootstrap.bundle.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap/js/bootstrap.bundle.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap/js/bootstrap.bundle.js.map.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap/js/bootstrap.bundle.min.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap/js/bootstrap.bundle.min.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap/js/bootstrap.bundle.min.js.map.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap/js/bootstrap.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap/js/bootstrap.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap/js/bootstrap.js.map.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap/js/bootstrap.min.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap/js/bootstrap.min.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap/js/bootstrap.min.js.map.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/daterangepicker/daterangepicker.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/daterangepicker/daterangepicker.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/daterangepicker/daterangepicker.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/daterangepicker/daterangepicker.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/css/all.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/css/all.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/css/all.min.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/css/all.min.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/css/brands.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/css/brands.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/css/brands.min.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/css/brands.min.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/css/fontawesome.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/css/fontawesome.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/css/fontawesome.min.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/css/fontawesome.min.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/css/regular.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/css/regular.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/css/regular.min.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/css/regular.min.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/css/solid.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/css/solid.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/css/solid.min.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/css/solid.min.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/css/svg-with-js.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/css/svg-with-js.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/css/svg-with-js.min.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/css/svg-with-js.min.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/css/v4-shims.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/css/v4-shims.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/css/v4-shims.min.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/css/v4-shims.min.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/webfonts/fa-brands-400.eot.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/webfonts/fa-brands-400.svg.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/webfonts/fa-brands-400.svg.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/webfonts/fa-brands-400.ttf.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/webfonts/fa-regular-400.eot.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/webfonts/fa-regular-400.svg.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/webfonts/fa-regular-400.svg.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/webfonts/fa-regular-400.ttf.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/webfonts/fa-solid-900.eot.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/webfonts/fa-solid-900.svg.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/webfonts/fa-solid-900.svg.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/fontawesome-free/webfonts/fa-solid-900.ttf.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/jquery/jquery.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/jquery/jquery.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/jquery/jquery.min.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/jquery/jquery.min.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/jquery/jquery.min.map.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/jquery/jquery.slim.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/jquery/jquery.slim.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/jquery/jquery.slim.min.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/jquery/jquery.slim.min.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/jquery/jquery.slim.min.map.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/af.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/ar-dz.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/ar-kw.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/ar-ly.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/ar-ma.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/ar-sa.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/ar-tn.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/ar.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/az.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/be.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/bg.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/bm.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/bn-bd.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/bn.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/bo.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/br.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/bs.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/ca.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/cs.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/cv.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/cy.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/da.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/de-at.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/de-ch.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/de.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/dv.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/en-SG.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/en-au.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/en-ca.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/en-gb.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/en-ie.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/en-il.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/en-in.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/en-nz.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/eo.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/es-do.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/es-mx.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/es-us.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/es.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/et.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/eu.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/fa.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/fi.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/fil.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/fo.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/fr-ca.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/fr-ch.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/fr.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/fy.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/ga.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/gd.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/gl.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/gom-deva.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/gom-latn.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/gu.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/he.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/hi.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/hr.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/hu.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/hy-am.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/id.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/is.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/it-ch.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/it.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/ja.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/jv.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/ka.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/kk.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/km.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/kn.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/ko.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/ku.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/ky.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/lb.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/lo.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/lt.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/lv.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/me.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/mi.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/mk.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/ml.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/mn.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/mr.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/ms-my.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/ms.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/mt.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/my.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/nb.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/ne.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/nl-be.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/nl.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/nn.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/oc-lnc.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/pa-in.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/pl.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/pt-br.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/pt.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/ro.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/ru.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/sd.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/se.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/si.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/sk.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/sl.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/sq.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/sr-cyrl.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/sr.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/ss.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/sv.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/sw.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/ta.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/te.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/tet.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/tg.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/th.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/tk.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/tl-ph.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/tlh.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/tr.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/tzl.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/tzm-latn.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/tzm.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/ug-cn.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/uk.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/ur.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/uz-latn.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/uz.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/vi.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/x-pseudo.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/yo.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/zh-cn.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/zh-hk.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/zh-mo.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locale/zh-tw.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locales.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locales.min.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/locales.min.js.map.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/moment-with-locales.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/moment-with-locales.min.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/moment-with-locales.min.js.map.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/moment.min.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/moment/moment.min.js.map.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2-bootstrap4-theme/select2-bootstrap4.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2-bootstrap4-theme/select2-bootstrap4.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/css/select2.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/css/select2.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/css/select2.min.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/css/select2.min.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/af.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/af.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/ar.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/ar.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/az.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/az.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/bg.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/bg.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/bn.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/bn.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/bs.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/bs.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/build.txt.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/build.txt.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/ca.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/ca.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/cs.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/cs.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/da.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/da.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/de.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/de.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/dsb.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/dsb.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/el.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/el.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/en.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/en.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/es.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/es.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/et.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/et.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/eu.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/eu.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/fa.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/fa.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/fi.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/fi.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/fr.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/fr.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/gl.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/gl.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/he.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/he.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/hi.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/hi.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/hr.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/hr.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/hsb.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/hsb.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/hu.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/hu.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/hy.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/hy.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/id.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/id.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/is.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/is.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/it.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/it.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/ja.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/ja.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/ka.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/ka.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/km.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/km.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/ko.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/ko.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/lt.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/lt.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/lv.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/lv.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/mk.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/mk.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/ms.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/ms.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/nb.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/nb.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/ne.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/ne.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/nl.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/nl.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/pl.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/pl.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/ps.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/ps.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/pt-BR.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/pt-BR.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/pt.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/pt.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/ro.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/ro.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/ru.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/ru.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/sk.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/sk.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/sl.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/sl.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/sq.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/sq.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/sr-Cyrl.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/sr-Cyrl.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/sr.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/sr.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/sv.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/sv.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/th.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/th.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/tk.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/tk.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/tr.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/tr.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/uk.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/uk.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/vi.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/vi.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/zh-CN.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/zh-CN.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/zh-TW.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/zh-TW.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/select2.full.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/select2.full.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/select2.full.min.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/select2.full.min.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/select2.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/select2.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/select2.min.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/select2/js/select2.min.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/sweetalert2/sweetalert2.all.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/sweetalert2/sweetalert2.all.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/sweetalert2/sweetalert2.all.min.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/sweetalert2/sweetalert2.all.min.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/sweetalert2/sweetalert2.css.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/sweetalert2/sweetalert2.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/sweetalert2/sweetalert2.js.br
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/sweetalert2/sweetalert2.js.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/sweetalert2/sweetalert2.min.css.gz
+	modified:   staticfiles/lib/adminlte-3.1.0/plugins/sweetalert2/sweetalert2.min.js.gz
+	modified:   staticfiles/lib/timer/script.js.br
+	modified:   staticfiles/lib/timer/script.js.gz
+	modified:   staticfiles/lib/timer/style.css.br
+	modified:   staticfiles/lib/timer/style.css.gz
+
 Untracked files:
   (use "git add <file>..." to include in what will be committed)
 	WIOA/__pycache__/__init__.cpython-312.pyc
 	WIOA/__pycache__/settings.cpython-312.pyc
 	WIOA/__pycache__/urls.cpython-312.pyc
+	WIOA/__pycache__/wsgi.cpython-312.pyc
 	apps/__pycache__/__init__.cpython-312.pyc
 	apps/administracion/__pycache__/__init__.cpython-312.pyc
 	apps/administracion/__pycache__/admin.cpython-312.pyc
@@ -53,6 +573,8 @@ Untracked files:
 	apps/proyecto/migrations/__pycache__/0016_auto_20220317_1043.cpython-312.pyc
 	apps/proyecto/migrations/__pycache__/0017_auto_20220906_1016.cpython-312.pyc
 	apps/proyecto/migrations/__pycache__/0018_auto_20220906_1025.cpython-312.pyc
+	apps/proyecto/migrations/__pycache__/0019_alter_serviciosproyecto_precio_por_hora_participante_and_more.cpython-312.pyc
+	apps/proyecto/migrations/__pycache__/0020_alter_serviciosproyecto_cantidad_participantes_and_more.cpython-312.pyc
 	apps/proyecto/migrations/__pycache__/__init__.cpython-312.pyc
 	apps/registros/__pycache__/__init__.cpython-312.pyc
 	apps/registros/__pycache__/admin.cpython-312.pyc
@@ -93,27 +615,10 @@ Untracked files:
 	apps/session/__pycache__/models.cpython-312.pyc
 	apps/session/__pycache__/views.cpython-312.pyc
 	apps/session/migrations/__pycache__/__init__.cpython-312.pyc
-	staticfiles/admin/css/dark_mode.css
-	staticfiles/admin/js/filters.js
-	staticfiles/admin/js/theme.js
-	staticfiles/admin_interface/collapsible-inlines/
-	staticfiles/admin_interface/css/
-	staticfiles/admin_interface/dropdown-filter/
-	staticfiles/admin_interface/favico/favico-env.js
-	staticfiles/admin_interface/language-chooser/
-	staticfiles/admin_interface/related-modal/related-modal.css
-	staticfiles/admin_interface/tabbed-changeform/
 	staticfiles/ckeditor/ckeditor/skins/light/images/hidpi/close.829b1540f684.png
 	staticfiles/ckeditor/ckeditor/skins/light/images/hidpi/lock-open.5d74f87d9094.png
 	staticfiles/ckeditor/ckeditor/skins/light/images/hidpi/lock.432ce2e547c5.png
 	staticfiles/ckeditor/ckeditor/skins/light/images/hidpi/refresh.b2b0dd629761.png
-	staticfiles/colorfield/coloris/
-	staticfiles/img/firma.png
-	staticfiles/import_export/export.css
-	staticfiles/import_export/export_selectable_fields.js
-	staticfiles/import_export/guess_format.js
-	staticfiles/js/admin.js
-	staticfiles/js/registros/reportes.js
 	staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.be84a1412b0a.css
 	staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css.0c10f5e44b64.map
 	staticfiles/lib/adminlte-3.1.0/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.3cb2830f8f8a.css
@@ -186,41 +691,118 @@ Untracked files:
 	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/vi.097a5b75b3e1.js
 	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/zh-CN.2cff662ec5f9.js
 	staticfiles/lib/adminlte-3.1.0/plugins/select2/js/i18n/zh-TW.04554a227c2b.js
-	staticfiles/streamfield/
+	test_view.py
 	venv/
 
-nothing added to commit but untracked files present (use "git add" to track)
-total 452
-drwxr-xr-x 1 wioa wioa    682 Mar 21 02:27 .
-drwxr-xr-x 1 root root     38 Mar 21 02:21 ..
-drwxrwxr-x 1 wioa wioa    176 Mar 21 02:27 .git
--rw-rw-r-- 1 wioa wioa     46 Mar 21 02:26 .gitignore
-drwxrwxr-x 1 wioa wioa     22 Mar 21 02:26 .vscode
--rw-rw-r-- 1 wioa wioa     24 Mar 21 02:26 README.md
-drwxrwxr-x 1 wioa wioa    108 Mar 21 02:26 WIOA
-drwxrwxr-x 1 wioa wioa    120 Mar 21 02:26 apps
--rw-rw-r-- 1 wioa wioa    842 Mar 21 02:27 clean_junk.py
--rw-rw-r-- 1 wioa wioa    969 Mar 21 02:27 clean_junk_all.py
--rw-rw-r-- 1 wioa wioa    728 Mar 21 02:27 clean_numeric_schools.py
--rw-rw-r-- 1 wioa wioa    579 Mar 21 02:27 create_admin.py
--rw-rw-r-- 1 wioa wioa 385024 Mar 21 02:27 db.sqlite3
--rw-rw-r-- 1 wioa wioa    420 Mar 21 02:27 debug_setup.py
--rw-rw-r-- 1 wioa wioa   1536 Mar 21 02:27 flake8_report.txt
--rw-rw-r-- 1 wioa wioa   1350 Mar 21 02:27 flake8_report2.txt
--rw-rw-r-- 1 wioa wioa   1350 Mar 21 02:27 flake8_report3.txt
--rw-rw-r-- 1 wioa wioa   1140 Mar 21 02:27 flake8_report4.txt
--rw-rw-r-- 1 wioa wioa   4378 Mar 21 02:27 load_data.py
--rw-rw-r-- 1 wioa wioa    827 Mar 21 02:27 manage.py
-drwxrwxr-x 1 wioa wioa     40 Mar 21 02:19 media
--rw-rw-r-- 1 wioa wioa    663 Mar 21 02:27 report_ascii.txt
--rw-rw-r-- 1 wioa wioa    560 Mar 21 02:27 report_ascii4.txt
--rw-rw-r-- 1 wioa wioa    169 Mar 21 02:27 requerimientos.txt
--rw-rw-r-- 1 wioa wioa    160 Mar 21 02:27 requirements.txt
-drwxrwxr-x 1 wioa wioa     42 Mar 21 02:19 static
-drwxrwxr-x 1 wioa wioa    166 Mar 21 02:27 staticfiles
-drwxrwxr-x 1 wioa wioa     90 Mar 21 02:27 templates
--rw-rw-r-- 1 wioa wioa   3112 Mar 21 02:27 test_facturas.py
-drwxrwxr-x 1 wioa wioa     66 Mar 21 02:26 venv
+no changes added to commit (use "git add" and/or "git commit -a")
+total 5344
+drwxr-xr-x 1 wioa wioa    3092 Apr 10 02:54 .
+drwxr-xr-x 1 root root      38 Mar 21 02:21 ..
+drwxrwxr-x 1 wioa wioa     176 Apr 10 02:55 .git
+-rw-rw-r-- 1 wioa wioa      46 Apr 10 02:54 .gitignore
+drwxrwxr-x 1 wioa wioa      22 Apr 10 02:54 .vscode
+-rw-rw-r-- 1 wioa wioa      24 Apr 10 02:54 README.md
+drwxrwxr-x 1 wioa wioa     190 Apr 10 02:54 WIOA
+drwxrwxr-x 1 wioa wioa      66 Apr 10 02:54 __pycache__
+-rw-rw-r-- 1 wioa wioa    8242 Apr 10 02:54 _out.txt
+drwxrwxr-x 1 wioa wioa     120 Apr 10 02:54 apps
+-rw-rw-r-- 1 wioa wioa    1204 Apr 10 02:54 check_errors.py
+-rw-rw-r-- 1 wioa wioa    1072 Apr 10 02:54 check_factura_error.py
+-rw-rw-r-- 1 wioa wioa     687 Apr 10 02:54 check_html.py
+-rw-rw-r-- 1 wioa wioa     858 Apr 10 02:54 check_post_deploy.py
+-rw-rw-r-- 1 wioa wioa     872 Apr 10 02:54 check_validations.py
+-rw-rw-r-- 1 wioa wioa     438 Apr 10 02:54 check_validations2.py
+-rw-rw-r-- 1 wioa wioa     406 Apr 10 02:54 check_validations3.py
+-rw-rw-r-- 1 wioa wioa     743 Apr 10 02:54 check_validations4.py
+-rw-rw-r-- 1 wioa wioa     842 Apr 10 02:54 clean_junk.py
+-rw-rw-r-- 1 wioa wioa     969 Apr 10 02:54 clean_junk_all.py
+-rw-rw-r-- 1 wioa wioa     728 Apr 10 02:54 clean_numeric_schools.py
+-rw-rw-r-- 1 wioa wioa    3505 Apr 10 02:54 collect_out.txt
+-rw-rw-r-- 1 wioa wioa     280 Apr 10 02:54 convert_log.py
+-rw-rw-r-- 1 wioa wioa     579 Apr 10 02:54 create_admin.py
+-rw-rw-r-- 1 wioa wioa     572 Apr 10 02:54 create_test_admin.py
+-rw-rw-r-- 1 wioa wioa   64607 Apr 10 02:54 datadump.json
+-rw-rw-r-- 1 wioa wioa  258776 Apr 10 02:54 datadump_final.json
+-rw-rw-r-- 1 wioa wioa  386697 Apr 10 02:54 datadump_real_utf8.json
+-rw-rw-r-- 1 wioa wioa  257797 Apr 10 02:54 datadump_utf8.json
+-rw-rw-r-- 1 wioa wioa 1359783 Apr 10 02:54 datadump_wioa.json
+-rw-rw-r-- 1 wioa wioa 1679239 Apr 10 02:54 datadump_wioa_fixed.json
+-rw-rw-r-- 1 wioa wioa 1015808 Apr 10 02:54 db.sqlite3
+-rw-rw-r-- 1 wioa wioa    3999 Apr 10 02:54 db_status.txt
+-rw-rw-r-- 1 wioa wioa     420 Apr 10 02:54 debug_setup.py
+-rw-rw-r-- 1 wioa wioa    1576 Apr 10 02:54 deploy.py
+-rw-rw-r-- 1 wioa wioa     874 Apr 10 02:54 deploy_fix.py
+-rw-rw-r-- 1 wioa wioa    1265 Apr 10 02:54 deploy_fix2.py
+-rw-rw-r-- 1 wioa wioa    1229 Apr 10 02:54 deploy_fix3.py
+-rw-rw-r-- 1 wioa wioa   15081 Apr 10 02:54 deploy_log.txt
+-rw-rw-r-- 1 wioa wioa     915 Apr 10 02:54 diag_delete.py
+-rwxrwxrwx 1 wioa wioa       0 Apr  1 22:43 django_error.log
+-rw-rw-r-- 1 wioa wioa     280 Apr 10 02:54 dl_log.py
+-rw-rw-r-- 1 wioa wioa     644 Apr 10 02:54 do_deploy.py
+-rw-rw-r-- 1 wioa wioa     333 Apr 10 02:54 do_settings.py
+-rw-rw-r-- 1 wioa wioa    4250 Apr 10 02:54 excel_info.json
+-rw-rw-r-- 1 wioa wioa    1396 Apr 10 02:54 fetch_500_detailed.py
+-rw-rw-r-- 1 wioa wioa     920 Apr 10 02:54 fetch_remote_files.py
+-rw-rw-r-- 1 wioa wioa     348 Apr 10 02:54 fix_ajax.py
+-rw-rw-r-- 1 wioa wioa     444 Apr 10 02:54 fix_json.py
+-rw-rw-r-- 1 wioa wioa    1536 Apr 10 02:54 flake8_report.txt
+-rw-rw-r-- 1 wioa wioa    1350 Apr 10 02:54 flake8_report2.txt
+-rw-rw-r-- 1 wioa wioa    1350 Apr 10 02:54 flake8_report3.txt
+-rw-rw-r-- 1 wioa wioa    1140 Apr 10 02:54 flake8_report4.txt
+-rw-rw-r-- 1 wioa wioa     675 Apr 10 02:54 force_deploy.py
+-rw-rw-r-- 1 wioa wioa     364 Apr 10 02:54 get_err_log.py
+srw------- 1 wioa wioa       0 Apr 10 00:22 gunicorn.ctl
+-rw-rw-r-- 1 wioa wioa    4009 Apr 10 02:54 gunicorn_log.txt
+-rw-rw-r-- 1 wioa wioa   13101 Apr 10 02:54 import_excel_wioa.py
+-rw-rw-r-- 1 wioa wioa    4246 Apr 10 02:54 import_log.txt
+-rw-rw-r-- 1 wioa wioa    1818 Apr 10 02:54 import_log_final.txt
+-rw-rw-r-- 1 wioa wioa    1818 Apr 10 02:54 import_log_test.txt
+-rw-rw-r-- 1 wioa wioa    2066 Apr 10 02:54 import_log_utf8.txt
+-rw-rw-r-- 1 wioa wioa    6814 Apr 10 02:54 info.json
+-rw-rw-r-- 1 wioa wioa    9853 Apr 10 02:54 info2.json
+-rw-rw-r-- 1 wioa wioa    4378 Apr 10 02:54 load_data.py
+-rw-rw-r-- 1 wioa wioa     827 Apr 10 02:54 manage.py
+drwxrwxr-x 1 wioa wioa      40 Mar 21 02:19 media
+-rw-rw-r-- 1 wioa wioa     646 Apr 10 02:54 migrate_db.py
+-rw-rw-r-- 1 wioa wioa     917 Apr 10 02:54 my_status.py
+-rw-rw-r-- 1 wioa wioa     280 Apr 10 02:54 nginx_error.txt
+-rw-rw-r-- 1 wioa wioa     350 Apr 10 02:54 output.txt
+-rw-rw-r-- 1 wioa wioa      94 Apr 10 02:54 remote_key.txt
+-rw-rw-r-- 1 wioa wioa    9900 Apr 10 02:54 remote_settings.txt
+-rw-rw-r-- 1 wioa wioa    4790 Apr 10 02:54 remote_settings_now.txt
+-rw-rw-r-- 1 wioa wioa       0 Apr 10 02:54 remote_settings_utf8.txt
+-rw-rw-r-- 1 wioa wioa      38 Apr 10 02:54 remote_status.txt
+-rw-rw-r-- 1 wioa wioa     663 Apr 10 02:54 report_ascii.txt
+-rw-rw-r-- 1 wioa wioa     560 Apr 10 02:54 report_ascii4.txt
+-rw-rw-r-- 1 wioa wioa     169 Apr 10 02:54 requerimientos.txt
+-rw-rw-r-- 1 wioa wioa     160 Apr 10 02:54 requirements.txt
+-rw-rw-r-- 1 wioa wioa    1168 Apr 10 02:54 restart_server.py
+-rw-rw-r-- 1 wioa wioa     850 Apr 10 02:54 run_collectstatic.py
+-rw-rw-r-- 1 wioa wioa   22404 Apr 10 02:54 run_groups.txt
+drwxrwxr-x 1 wioa wioa      42 Mar 21 02:19 static
+drwxrwxr-x 1 wioa wioa     166 Mar 21 02:27 staticfiles
+-rw-rw-r-- 1 wioa wioa    5680 Apr 10 02:54 status_output.txt
+drwxrwxr-x 1 wioa wioa      90 Apr 10 02:54 templates
+-rw-rw-r-- 1 wioa wioa    1762 Apr 10 02:54 test_ajax_endpoint.py
+-rw-rw-r-- 1 wioa wioa     766 Apr 10 02:54 test_excel.py
+-rw-rw-r-- 1 wioa wioa     186 Apr 10 02:54 test_excel2.py
+-rw-rw-r-- 1 wioa wioa     611 Apr 10 02:54 test_excel3.py
+-rw-rw-r-- 1 wioa wioa     804 Apr 10 02:54 test_excel4.py
+-rw-rw-r-- 1 wioa wioa     629 Apr 10 02:54 test_excel5.py
+-rw-rw-r-- 1 wioa wioa    1038 Apr 10 02:54 test_excel_view.py
+-rw-rw-r-- 1 wioa wioa    3261 Apr 10 02:54 test_facturas.py
+-rw-rw-r-- 1 wioa wioa     983 Apr 10 02:54 test_pdf.py
+-rw-rw-r-- 1 wioa wioa     538 Apr  1 22:56 test_view.py
+-rw-rw-r-- 1 wioa wioa    1580 Apr 10 02:54 test_view2.py
+-rw-rw-r-- 1 wioa wioa    2073 Apr 10 02:54 theme_dump.json
+-rw-rw-r-- 1 wioa wioa    2072 Apr 10 02:54 theme_utf8.json
+-rw-rw-r-- 1 wioa wioa    1024 Apr 10 02:54 trace_500.py
+-rw-rw-r-- 1 wioa wioa    3038 Apr 10 02:54 traceback.html
+-rw-rw-r-- 1 wioa wioa    1498 Apr 10 02:54 update_admin.py
+-rw-rw-r-- 1 wioa wioa     527 Apr 10 02:54 upload_fix.py
+-rw-rw-r-- 1 wioa wioa     673 Apr 10 02:54 upload_settings.py
+-rw-rw-r-- 1 wioa wioa     797 Apr 10 02:54 upload_views_fix.py
+drwxrwxr-x 1 wioa wioa      66 Mar 21 02:26 venv
 
 STDERR:
 Could not chdir to home directory /home/wioa: No such file or directory

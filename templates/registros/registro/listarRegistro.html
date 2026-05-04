@@ -31,7 +31,7 @@
                     <th>PROYECTO || COMPONENTE</th>
                     <th>PARTICIPANTE</th>
                     <th>ESCUELA</th>
-                    <th>TOTAL HORAS DEL PROYECTO</th>
+                    <th>LÍMITE DE HORAS DEL PROYECTO</th>
                     <th>CANTIDAD HORAS REGISTRADAS</th>
                     <th>CANTIDAD HORAS FALTANTES</th>
                     <th></th>
@@ -47,7 +47,7 @@
                     <td>{{ registro.alumno.escuela.nombre }}</td>
                     <td class="text-center">
                         {% if registro.proyecto_servicio.total_horas == 0 %}
-                            ---
+                            0
                         {% else %}
                             {{ registro.proyecto_servicio.total_horas }}
                         {% endif %}
@@ -55,7 +55,7 @@
                     <td class="text-center">{{ registro.calcular_total_horas_por_alumno}}</td>
                     <td class="text-center">
                         {% if registro.proyecto_servicio.total_horas == 0 %}
-                            ---
+                            Ilimitado
                         {% elif registro.calcular_total_horas_faltantes_por_alumno == '00:00' %}
                         <b>100%</b>
                         {% else %}

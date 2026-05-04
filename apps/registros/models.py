@@ -74,7 +74,7 @@ class Registro(models.Model):
         
         totalHs = self.proyecto_servicio.total_horas
         if totalHs == 0:
-            return '---'
+            return 'Ilimitado'
 
         totalHsEnSegundos = totalHs * 3600
         hsFaltantes = totalHsEnSegundos - segundosRegistrado

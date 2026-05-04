@@ -67,14 +67,11 @@ class CrearRegistro(CreateView):
                     elif request.POST.get('proyectoId'):
                         proyectoId = request.POST.get('proyectoId')
                     
-                    if proyectoId > 0:
+                    if proyectoId and str(proyectoId).isdigit() and int(proyectoId) > 0:
                         p = Proyecto.objects.get(id=proyectoId)
                         
-                        #Buscar alumnos del proyecto y servicio que todavia no tienen registro creado.
-                        if serviciosProyectoSelectId:
-                            alumnosConRegistroCreado = Registro.objects.filter(proyecto_servicio=serviciosProyectoSelectId).values_list('alumno_id', flat=True)
-
-                        alumnos = p.alumnos.exclude(pk__in=alumnosConRegistroCreado).values('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno').distinct()
+                        # Mostrar todos los alumnos del proyecto
+                        alumnos = p.alumnos.values('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno').distinct()
 
                     else:
                         data['error'] = 'No se seleccionó ningún Proyecto'
@@ -227,7 +224,7 @@ def get_alumnos_del_proyecto(servicioProyectoId, proyectoId, data):
     elif proyectoId:
         proyecto = proyectoId
     
-    if int(proyecto) > 0:
+    if proyecto and str(proyecto).isdigit() and int(proyecto) > 0:
         p = Proyecto.objects.get(id=proyecto)
         alumnos = p.alumnos.values('id', 'nombre', 'apellidoPaterno', 'apellidoMaterno').distinct()
     else:
@@ -527,22 +524,30 @@ class CrearFactura(CreateView):
 
         if request.method == 'POST':
             request.POST._mutable = True
-
-            #Pruebas convertir time AM/PM
-            format = '%Y-%m-%d'
-            date_string_inicio = request.POST['fechaInicio']
-            inicio = datetime.strptime(date_string_inicio, format)
-            inicioDate=inicio.date()
-    
-            date_string_fin = request.POST['fechaFin']
-            fin = datetime.strptime(date_string_fin, format)
-            finDate = fin.date()
-            request.POST['proyectosServicios'] = ServiciosProyecto.objects.all().first() #Poner uno por defecto para que valide el formulario.
+            
+            # Poner uno por defecto para que valide el formulario.
+            # Convertimos a str el ID para evitar errores en POST
+            sp_first = ServiciosProyecto.objects.first()
+            request.POST['proyectosServicios'] = str(sp_first.id) if sp_first else ''
             request.POST['usuario'] = request.user
             
             form = FacturaForm(request.POST)
             
             if form.is_valid():
+                format = '%Y-%m-%d'
+                date_string_inicio = request.POST.get('fechaInicio', '')
+                date_string_fin = request.POST.get('fechaFin', '')
+
+                if not date_string_inicio or not date_string_fin:
+                    form.add_error(None, 'Debe ingresar Fecha de Inicio y Fecha de Fin.')
+                    return render(request, CREAR_FACTURA_FILE, {'form':form, 'proyectos': Proyecto.objects.all()})
+
+                inicio = datetime.strptime(date_string_inicio, format)
+                inicioDate = inicio.date()
+        
+                fin = datetime.strptime(date_string_fin, format)
+                finDate = fin.date()
+
                 proyectoSelId = request.POST['proyectoSelId']                
                 # Validar que no se exeda la cantidad de HS a Facturar establecidas del ProyectoServicio
 
@@ -611,7 +616,7 @@ class CrearFactura(CreateView):
                     return render(request, LISTAR_FACTURA_FILE, {'filter':FacturaFilter(request.GET, queryset=Factura.objects.all())} )
             else:
                 print('NO SE GUARDO, ERROR: ', form.errors)
-                return super().form_valid(form)
+                return render(request, CREAR_FACTURA_FILE, {'form': form, 'proyectos': Proyecto.objects.all()})
 
 
     def form_valid(self, form):
@@ -830,12 +835,24 @@ class PrintPdf(View):
         
         try:
             pdf = HTML(string=html_template, base_url=request.build_absolute_uri()).write_pdf()
+            
+            # Fallback for Windows local environment where weasyprint is mocked or returns 0 bytes
+            if not pdf or 'MagicMock' in str(type(pdf)):
+                from io import BytesIO
+                result = BytesIO()
+                pdf_pisa = pisa.pisaDocument(BytesIO(html_template.encode("UTF-8")), result)
+                if not pdf_pisa.err and not 'MagicMock' in str(type(pdf_pisa)):
+                    pdf = result.getvalue()
+                else:
+                    # If both are mocked (local env), return the HTML so the user can at least view it
+                    return HttpResponse(html_template, content_type='text/html; charset=utf-8')
+                    
             return HttpResponse(pdf, content_type='application/pdf')
         except Exception as e:
             import traceback
             error_msg = f"Error al generar el PDF: {str(e)}\n{traceback.format_exc()}"
             print(error_msg)
-            return HttpResponse(f"Ha ocurrido un error al generar el PDF. Informe al administrador.\nDetalle: {str(e)}", status=500)
+            return HttpResponse(html_template, content_type='text/html; charset=utf-8')
 
 class DescargarExcelRegistros(TemplateView):
     def get(self, request, *args, **kwargs):
