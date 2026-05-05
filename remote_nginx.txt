@@ -1,0 +1,19 @@
+server {
+    listen 80;
+    server_name wioav2.nserver.space localhost 127.0.0.1;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    
+    location /static/ {
+        alias /var/www/wioa/staticfiles/;
+    }
+    
+    location /media/ {
+        alias /var/www/wioa/media/;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/run/gunicorn/gunicorn.sock;
+    }
+}
